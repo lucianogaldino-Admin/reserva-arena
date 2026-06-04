@@ -762,6 +762,8 @@ function ProfessorView({ usuario }) {
   const [filtroGrade, setFiltroGrade]     = useState("meus");
   const [filtroEspacoGrade, setFiltroEspacoGrade] = useState("");
   const [modoVisu, setModoVisu]   = useState("semana");
+  const [modoCard, setModoCard]   = useState("calendario");
+  const [semanaInicio, setSemanaInicio] = useState(()=>getSegunda(fmt(today)));
   const [diaMesSel, setDiaMesSel] = useState(null);
   const [salvando, setSalvando]   = useState(false);
   const [sucesso, setSucesso]     = useState(false);
@@ -971,44 +973,60 @@ function ProfessorView({ usuario }) {
           </div>
         ) : (
         <>
-        {/* Header verde — só a faixa do topo */}
-        <div style={{ background:"#1a6b47", padding:"12px 16px", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
-          <div>
+        {/* Header verde — faixa do topo */}
+        <div style={{ background:"#1a6b47", padding:"10px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
+          {/* Linha 1: label + pendentes + modo calendário/agenda */}
+          <div style={{ display:"flex", alignItems:"center", gap:10, width:"100%", flexWrap:"wrap" }}>
             <p style={{ fontSize:11, fontWeight:700, color:"rgba(255,255,255,.75)", textTransform:"uppercase", letterSpacing:".5px" }}>Agendamentos</p>
             {pendentes.length>0&&<span style={{ fontSize:11, background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:20, padding:"2px 9px", color:"#fff" }}>⚠️ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
-          </div>
-          <div style={{ display:"flex", gap:6, alignItems:"center", flexWrap:"wrap" }}>
-            <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"#fff", fontWeight:600, fontSize:11.5, cursor:"pointer", outline:"none", padding:"5px 8px", maxWidth:130 }}>
-              <option value="" style={{ background:"#1a6b47" }}>Todos espaços</option>
-              {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
-            </select>
-            <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-              {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
-                <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-              ))}
-            </div>
-            <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-              {[{id:"meus",label:"Só meus"},{id:"todos",label:"Todos"}].map(op=>(
-                <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+            <div style={{ marginLeft:"auto", display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
+              {[{id:"calendario",label:"📅 Calendário"},{id:"agenda",label:"☰ Agenda"}].map(op=>(
+                <button key={op.id} onClick={()=>setModoCard(op.id)} style={{ padding:"5px 12px", borderRadius:6, border:"none", background:modoCard===op.id?"#fff":"transparent", color:modoCard===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:11.5, cursor:"pointer" }}>{op.label}</button>
               ))}
             </div>
           </div>
+          {/* Linha 2: navegação semana/mês + filtros (só no modo calendário) */}
+          {modoCard==="calendario"&&(
+            <div style={{ display:"flex", alignItems:"center", gap:6, width:"100%", flexWrap:"wrap" }}>
+              {/* Navegação semana */}
+              {modoVisu==="semana"&&(
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <button onClick={()=>setSemanaInicio(s=>addDays(s,-7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
+                  <div style={{ textAlign:"center" }}>
+                    <p style={{ fontSize:12, fontWeight:700, color:"#fff" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}–${db}/${mb}/${semanaInicio.split("-")[0]}`:`${da}/${ma} – ${db}/${mb}`; })()}</p>
+                  </div>
+                  <button onClick={()=>setSemanaInicio(s=>addDays(s,7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
+                  <button onClick={()=>setSemanaInicio(getSegunda(fmt(today)))} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"rgba(255,255,255,.85)", fontSize:11, fontWeight:700, padding:"4px 10px", cursor:"pointer" }}>Hoje</button>
+                </div>
+              )}
+              <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
+                {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
+                  <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+                ))}
+              </div>
+              <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
+                {[{id:"meus",label:"Só meus"},{id:"todos",label:"Todos"}].map(op=>(
+                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+                ))}
+              </div>
+              <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"#fff", fontWeight:600, fontSize:11.5, cursor:"pointer", outline:"none", padding:"5px 8px", maxWidth:140 }}>
+                <option value="" style={{ background:"#1a6b47" }}>Todos espaços</option>
+                {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
+              </select>
+            </div>
+          )}
         </div>
         {/* Corpo branco */}
         <div style={{ padding:"14px 16px" }}>
 
-        {/* Modo SEMANA */}
-        {modoVisu==="semana"&&(()=>{
-          const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sexta"];
-          // CORREÇÃO: guarda r?.professor
-          const fonte=(filtroGrade==="meus"
-            ?semanaReservas.filter(r=>r?.professor)
-            :todasSemana.filter(r=>r?.professor)
-          ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
+        {/* Modo CALENDÁRIO */}
+        {modoCard==="calendario"&&modoVisu==="semana"&&(()=>{
+          const diasSemana=Array.from({length:5},(_,i)=>addDays(semanaInicio,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sex."];
           const todasFonte=(filtroGrade==="meus"
             ?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado")
             :todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")
           ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
+          const fonte=todasFonte.filter(r=>diasSemana.includes(r.data));
           const porDataSemana={};
           todasFonte.forEach(r=>{ if(!porDataSemana[r.data])porDataSemana[r.data]=[]; porDataSemana[r.data].push(r); });
           return (
@@ -1085,7 +1103,7 @@ function ProfessorView({ usuario }) {
         })()}
 
         {/* Modo MÊS */}
-        {modoVisu==="mes"&&(()=>{
+        {modoCard==="calendario"&&modoVisu==="mes"&&(()=>{
           // CORREÇÃO: guarda r?.professor + NÃO desestrutura no .map() (era o bug principal)
           const fonte=(filtroGrade==="meus"
             ?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado")
@@ -1161,23 +1179,53 @@ function ProfessorView({ usuario }) {
             </div>
           );
         })()}
+
+        {/* Modo AGENDA */}
+        {modoCard==="agenda"&&(
+          <div className="fade-in">
+            {futuras.length===0&&passadas.length===0?(
+              <p style={{ fontSize:13, color:C.textMuted, textAlign:"center", padding:"24px 0" }}>Nenhum agendamento encontrado.</p>
+            ):(
+              <>
+                {futuras.length>0&&Object.entries(porData).map(([data,rs])=>{ const [ano,mes,dia]=data.split("-"); const isHoje=data===hoje; return (
+                  <div key={data} style={{ marginBottom:14 }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                      <span style={{ fontSize:11, fontWeight:700, color:isHoje?C.green:C.textMid, background:isHoje?C.greenBg:"transparent", padding:isHoje?"2px 8px":"0", borderRadius:isHoje?20:0 }}>{isHoje?"📌 Hoje":`${dia}/${mes}`}</span>
+                      <div style={{ flex:1, height:1, background:C.borderLight }} />
+                      <span style={{ fontSize:10, color:C.textMuted }}>{rs.length} reserva{rs.length!==1?"s":""}</span>
+                    </div>
+                    {rs.map(r=><RRow key={r.id} r={r} />)}
+                  </div>
+                ); })}
+                {passadas.length>0&&(
+                  <div style={{ marginTop:10, opacity:.55 }}>
+                    <p style={{ fontSize:10, fontWeight:700, color:C.textMuted, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Histórico · {passadas.length}</p>
+                    {passadas.slice(0,5).map(r=><RRow key={r.id} r={r} />)}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
         </div>{/* fim corpo branco */}
         </>
         )}{/* fim diaMesSel ternário */}
       </div>
 
-      {/* Meus próximos */}
-      {futuras.length>0&&(
+      {/* Meus próximos — só aparece no modo calendário */}
+      {modoCard==="calendario"&&futuras.length>0&&(
         <div style={{ marginBottom:20, background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
-          <div style={{ padding:"10px 16px", borderBottom:`1px solid ${C.border}` }}>
+          <div style={{ padding:"10px 16px", borderBottom:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
             <p style={{ fontSize:13, fontWeight:800, color:C.navy }}>Meus próximos · {futuras.length}</p>
+            {pendentes.length>0&&<span style={{ fontSize:11, fontWeight:700, background:C.amberBg, color:C.amber, border:`1px solid ${C.amberBorder}`, borderRadius:20, padding:"2px 9px" }}>⏳ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
           </div>
           <div style={{ padding:"12px 16px" }}>
             {Object.entries(porData).map(([data,rs])=>{ const [ano,mes,dia]=data.split("-"); const isHoje=data===hoje; return (
               <div key={data} style={{ marginBottom:12 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                  <span style={{ fontSize:11.5, fontWeight:700, color:isHoje?"#40b07a":C.textMid, fontFamily:"'DM Mono',monospace" }}>{isHoje?"📌 Hoje":`${dia}/${mes}/${ano}`}</span>
+                  <span style={{ fontSize:11, fontWeight:700, color:isHoje?C.green:C.textMid, background:isHoje?C.greenBg:"transparent", padding:isHoje?"2px 8px":"0", borderRadius:isHoje?20:0 }}>{isHoje?"📌 Hoje":`${dia}/${mes}`}</span>
                   <div style={{ flex:1, height:1, background:C.borderLight }} />
+                  <span style={{ fontSize:10, color:C.textMuted }}>{rs.length} reserva{rs.length!==1?"s":""}</span>
                 </div>
                 {rs.map(r=><RRow key={r.id} r={r} />)}
               </div>
