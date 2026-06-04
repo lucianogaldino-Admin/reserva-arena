@@ -856,7 +856,7 @@ function ProfessorView({ usuario }) {
   const [semanaInicio, setSemanaInicio] = useState(()=>getSegunda(fmt(today)));
   const [diaMesSel, setDiaMesSel] = useState(null);
   const [salvando, setSalvando]   = useState(false);
-  const [sucesso, setSucesso]     = useState(false);
+  const [sucesso, setSucesso]     = useState(null); // null | {status:"confirmado"|"pendente", motivo:"urgente"|"fimSemana"|null}
   const [erro, setErro]           = useState("");
 
   const keyRef = useRef(0);
@@ -912,12 +912,16 @@ function ProfessorView({ usuario }) {
         const urgente=isUrgente(dataSel,b.horario);
         await addDoc(collection(db,"reservas"),{ professor:usuario.nome, professorId:usuario.uid, professorEmail:usuario.email, turma:b.turma, espaco:espacoSel, data:dataSel, horario:b.horario, conteudo:b.conteudo, paginas:b.paginas||"", laboratorista:b.laboratorista||"", quantidade:eo?.tipo==="equipamento"?Number(b.quantidade):null, status:urgente?"pendente":"confirmado", criadoEm:Timestamp.now() });
       }
-      setSucesso(true); setMostrarResumo(false);
+      const algumUrgente=blocos.some(b=>isUrgente(dataSel,b.horario));
+      const dowFinal=new Date(Date.UTC(...dataSel.split("-").map(Number).map((v,i)=>i===1?v-1:v))).getUTCDay();
+      const ehFimSemana=dowFinal===0||dowFinal===6;
+      const motivoPendente=algumUrgente&&ehFimSemana?"ambos":algumUrgente?"urgente":ehFimSemana?"fimSemana":null;
+      setSucesso({status:motivoPendente?"pendente":"confirmado", motivo:motivoPendente}); setMostrarResumo(false);
     } catch { setErro("Erro ao salvar. Tente novamente."); setSalvando(false); setMostrarResumo(false); }
     finally { setSalvando(false); }
   };
 
-  const resetForm=()=>{ setEspacoSel(""); setDataSel(""); setBlocos([blocoVazio()]); setSucesso(false); setErro(""); };
+  const resetForm=()=>{ setEspacoSel(""); setDataSel(""); setBlocos([blocoVazio()]); setSucesso(null); setErro(""); };
   const hoje = fmt(today);
 
   const semanaReservas = useMemo(()=>{
@@ -973,15 +977,46 @@ function ProfessorView({ usuario }) {
     </div>
   );
 
-  if (sucesso) return (
+  if (sucesso!==null) return (
     <div style={{ maxWidth:600, margin:"0 auto", padding:"24px 16px" }}>
-      <div className="fade-in" style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:16, padding:"40px 28px", textAlign:"center" }}>
-        <div style={{ width:64,height:64,borderRadius:"50%",background:"#1a6b47",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,margin:"0 auto 16px" }}>✓</div>
-        <h3 style={{ fontSize:20, fontWeight:800, color:C.green, marginBottom:6 }}>{blocos.length>1?`${blocos.length} agendamentos salvos!`:"Agendamento confirmado!"}</h3>
-        <p style={{ fontSize:13.5, color:C.green, marginBottom:8 }}>📍 {espacoSel} · 📅 {dataSel.split("-").reverse().join("/")}</p>
-        {blocos.map((b,i)=><p key={i} style={{ fontSize:13, color:C.green, opacity:.8 }}>🕐 {b.horario} · {b.turma}</p>)}
-        <button onClick={resetForm} style={{ marginTop:24, padding:"11px 24px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, cursor:"pointer", fontSize:14 }}>Voltar ao início</button>
-      </div>
+      {sucesso.status==="pendente" ? (
+        <div className="fade-in">
+          {/* Card âmbar — pendente */}
+          <div style={{ background:C.amberBg, border:`1.5px solid ${C.amberBorder}`, borderRadius:16, padding:"28px 24px", marginBottom:16 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:16 }}>
+              <div style={{ width:52,height:52,borderRadius:"50%",background:"#f97316",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0 }}>⏳</div>
+              <div>
+                <h3 style={{ fontSize:18, fontWeight:800, color:C.amber }}>Agendamento registrado como pendente</h3>
+                <p style={{ fontSize:13, color:C.amber, opacity:.85, marginTop:2 }}>
+                  {sucesso.motivo==="fimSemana"?"Agendamento em fim de semana":sucesso.motivo==="urgente"?"Menos de 24h de antecedência":"Fim de semana e menos de 24h"}
+                </p>
+              </div>
+            </div>
+            <div style={{ background:"rgba(255,255,255,.6)", borderRadius:10, padding:"12px 16px", marginBottom:14 }}>
+              <p style={{ fontSize:13, fontWeight:700, color:C.navy, marginBottom:6 }}>📍 {espacoSel} · 📅 {dataSel.split("-").reverse().join("/")}</p>
+              {blocos.map((b,i)=><p key={i} style={{ fontSize:12.5, color:C.textMid }}>🕐 {b.horario} · {b.turma}</p>)}
+            </div>
+            <div style={{ borderTop:`1px solid ${C.amberBorder}`, paddingTop:14 }}>
+              <p style={{ fontSize:13, fontWeight:800, color:C.amber, marginBottom:8 }}>⚠️ O que você precisa fazer agora:</p>
+              <p style={{ fontSize:13, color:"#92400e", lineHeight:1.65 }}>
+                {sucesso.motivo==="fimSemana"
+                  ? "Este agendamento está pendente pois ocorre em um fim de semana. Ele só será confirmado após aprovação do administrador — aguarde o retorno antes de usar o espaço."
+                  : "Como o agendamento tem menos de 24 horas de antecedência, ele ficou como pendente. Você deve entrar em contato imediatamente com a administração do colégio (pessoalmente, por WhatsApp ou e-mail) para confirmar a disponibilidade e garantir o uso do espaço."
+                }
+              </p>
+            </div>
+          </div>
+          <button onClick={resetForm} style={{ width:"100%", padding:"13px", borderRadius:10, border:`1.5px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:700, cursor:"pointer", fontSize:14 }}>← Voltar ao início</button>
+        </div>
+      ) : (
+        <div className="fade-in" style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:16, padding:"40px 28px", textAlign:"center" }}>
+          <div style={{ width:64,height:64,borderRadius:"50%",background:"#1a6b47",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,margin:"0 auto 16px" }}>✓</div>
+          <h3 style={{ fontSize:20, fontWeight:800, color:C.green, marginBottom:6 }}>{blocos.length>1?`${blocos.length} agendamentos confirmados!`:"Agendamento confirmado!"}</h3>
+          <p style={{ fontSize:13.5, color:C.green, marginBottom:8 }}>📍 {espacoSel} · 📅 {dataSel.split("-").reverse().join("/")}</p>
+          {blocos.map((b,i)=><p key={i} style={{ fontSize:13, color:C.green, opacity:.8 }}>🕐 {b.horario} · {b.turma}</p>)}
+          <button onClick={resetForm} style={{ marginTop:24, padding:"11px 24px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, cursor:"pointer", fontSize:14 }}>Voltar ao início</button>
+        </div>
+      )}
     </div>
   );
 
