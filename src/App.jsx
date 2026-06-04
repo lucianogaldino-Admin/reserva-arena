@@ -993,7 +993,7 @@ function ProfessorView({ usuario }) {
                 <div style={{ display:"flex", alignItems:"center", gap:6 }}>
                   <button onClick={()=>setSemanaInicio(s=>addDays(s,-7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
                   <div style={{ textAlign:"center" }}>
-                    <p style={{ fontSize:12, fontWeight:700, color:"#fff" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}–${db}/${mb}/${semanaInicio.split("-")[0]}`:`${da}/${ma} – ${db}/${mb}`; })()}</p>
+                    <p style={{ fontSize:12, fontWeight:700, color:"#fff" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}–${db}/${mb}`:`${da}/${ma} – ${db}/${mb}`; })()}</p>
                   </div>
                   <button onClick={()=>setSemanaInicio(s=>addDays(s,7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
 
@@ -1005,7 +1005,7 @@ function ProfessorView({ usuario }) {
                 ))}
               </div>
               <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-                {[{id:"meus",label:"Só meus"},{id:"todos",label:"Todos"}].map(op=>(
+                {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
                   <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
                 ))}
               </div>
