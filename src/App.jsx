@@ -43,24 +43,24 @@ const fmt = (d) => d.toISOString().split("T")[0];
 const ADMIN_EMAIL = "luciano.galdino@colegioarena.com.br";
 
 const LIGHT = {
-  navy:"#0f2044", navyMid:"#1a3460", blue:"#0d7a5f", blueMid:"#0d9e78",
-  bg:"#f0f7f4", surface:"#ffffff", border:"#d0e8e0", borderLight:"#e8f4ef",
-  text:"#0f2044", textMid:"#3d5280", textMuted:"#7a8aaa",
-  green:"#166534", greenBg:"#dcfce7", greenBorder:"#86efac",
-  amber:"#854d0e", amberBg:"#fef9c3", amberBorder:"#fde68a",
-  red:"#991b1b", redBg:"#fef2f2", redBorder:"#fca5a5",
-  logoBg:"#ffffff", headerBg:"#ffffff", headerBorder:"1px solid #d0e8e0",
-  cardShadow:"0 1px 4px rgba(13,158,120,.07)", inputBg:"#ffffff", inputBorder:"#d0e8e0",
+  navy:"#132318", navyMid:"#1a6b47", blue:"#1a6b47", blueMid:"#40b07a",
+  bg:"#f8faf8", surface:"#ffffff", border:"#c7dfd4", borderLight:"#e2f0eb",
+  text:"#132318", textMid:"#3d5c45", textMuted:"#607060",
+  green:"#0f4c2b", greenBg:"#e2f4ea", greenBorder:"#6ee7a0",
+  amber:"#7c2d12", amberBg:"#fff7ed", amberBorder:"#fed7aa",
+  red:"#7f1d1d", redBg:"#fef2f2", redBorder:"#fca5a5",
+  logoBg:"#ffffff", headerBg:"#ffffff", headerBorder:"1px solid #c7dfd4",
+  cardShadow:"0 1px 6px rgba(26,107,71,.09)", inputBg:"#ffffff", inputBorder:"#c7dfd4",
 };
 const DARK = {
-  navy:"#e2e8f0", navyMid:"#cbd5e1", blue:"#34d399", blueMid:"#10b981",
-  bg:"#0f1f1a", surface:"#162520", border:"#1e3d33", borderLight:"#1a3028",
-  text:"#f1f5f9", textMid:"#cbd5e1", textMuted:"#64748b",
-  green:"#4ade80", greenBg:"#052e16", greenBorder:"#166534",
-  amber:"#fbbf24", amberBg:"#1c1408", amberBorder:"#854d0e",
+  navy:"#d1fae5", navyMid:"#a7f3d0", blue:"#34d399", blueMid:"#10b981",
+  bg:"#0a1a12", surface:"#0f2318", border:"#1a3d27", borderLight:"#142d1e",
+  text:"#ecfdf5", textMid:"#a7f3d0", textMuted:"#6b9e80",
+  green:"#6ee7b7", greenBg:"#052e16", greenBorder:"#065f46",
+  amber:"#fbbf24", amberBg:"#1c1408", amberBorder:"#7c2d12",
   red:"#f87171", redBg:"#1a0505", redBorder:"#7f1d1d",
-  logoBg:"#162520", headerBg:"#162520", headerBorder:"1px solid #1e3d33",
-  cardShadow:"0 1px 4px rgba(0,0,0,.3)", inputBg:"#0f1f1a", inputBorder:"#1e3d33",
+  logoBg:"#0f2318", headerBg:"#0f2318", headerBorder:"1px solid #1a3d27",
+  cardShadow:"0 1px 6px rgba(0,0,0,.35)", inputBg:"#0a1a12", inputBorder:"#1a3d27",
 };
 
 function GlobalStyle({ dark }) {
@@ -76,17 +76,17 @@ function GlobalStyle({ dark }) {
     ::-webkit-scrollbar-track { background:${C.bg}; }
     ::-webkit-scrollbar-thumb { background:${C.border}; border-radius:3px; }
     .slot-btn { transition:all .2s cubic-bezier(.34,1.56,.64,1); }
-    .slot-btn:not(:disabled):hover { transform:translateY(-3px) scale(1.04); box-shadow:0 8px 20px rgba(37,99,235,.25); }
+    .slot-btn:not(:disabled):hover { transform:translateY(-3px) scale(1.04); box-shadow:0 8px 20px rgba(26,107,71,.25); }
     .slot-btn:not(:disabled):active { transform:translateY(0) scale(.98); }
     .card-hover { transition:all .25s ease; }
-    .card-hover:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(15,32,68,.12) !important; }
+    .card-hover:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(19,35,24,.10) !important; }
     .btn-hover { transition:all .2s cubic-bezier(.34,1.56,.64,1); }
-    .btn-hover:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 16px rgba(37,99,235,.3); }
+    .btn-hover:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 16px rgba(26,107,71,.3); }
     .btn-hover:active:not(:disabled) { transform:translateY(0); }
     .kpi-hover { transition:all .25s ease; cursor:default; }
     .kpi-hover:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,.1); }
     .logo-hover { transition:all .3s cubic-bezier(.34,1.56,.64,1); }
-    .logo-hover:hover { transform:scale(1.1) rotate(-3deg); box-shadow:0 8px 24px rgba(15,32,68,.2); }
+    .logo-hover:hover { transform:scale(1.1) rotate(-3deg); box-shadow:0 8px 24px rgba(19,35,24,.15); }
     .row-hover { transition:all .15s ease; }
     .row-hover:hover { transform:translateX(3px); border-left-width:5px !important; }
     .fade-in { animation:fadeIn .3s ease forwards; }
@@ -110,20 +110,20 @@ function Logo({ size=34 }) {
 
 function Avatar({ nome, size=36, variant="blue" }) {
   const C = useC();
-  const v = { blue:{bg:"#dbeafe",c:C.blueMid}, navy:{bg:"#c7d7f5",c:C.navy}, purple:{bg:"#ede9fe",c:"#6d28d9"} }[variant] || {bg:"#dbeafe",c:C.blueMid};
+  const v = { blue:{bg:"#e2f0eb",c:C.blueMid}, navy:{bg:"#c7d7f5",c:C.navy}, purple:{bg:"#ede9fe",c:"#6d28d9"} }[variant] || {bg:"#e2f0eb",c:C.blueMid};
   const initials = nome ? nome.split(" ").map((n)=>n[0]).filter(Boolean).slice(0,2).join("").toUpperCase() : "?";
   return <div style={{ width:size, height:size, borderRadius:"50%", background:v.bg, color:v.c, fontWeight:800, fontSize:size*0.36, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>{initials}</div>;
 }
 
 function Badge({ status }) {
-  const cfg = { confirmado:{bg:"#dcfce7",c:"#166534",label:"Confirmado"}, pendente:{bg:"#fef9c3",c:"#854d0e",label:"Pendente"}, recusado:{bg:"#fef2f2",c:"#991b1b",label:"Recusado"} };
+  const cfg = { confirmado:{bg:"#e2f4ea",c:"#0f4c2b",label:"Confirmado"}, pendente:{bg:"#fff7ed",c:"#7c2d12",label:"Pendente"}, recusado:{bg:"#fef2f2",c:"#7f1d1d",label:"Recusado"} };
   const s = cfg[status]||cfg.pendente;
   return <span style={{ background:s.bg, color:s.c, fontSize:11, fontWeight:700, padding:"3px 9px", borderRadius:20, whiteSpace:"nowrap" }}>{s.label}</span>;
 }
 
 function Btn({ children, onClick, disabled, variant="primary", size="md", style={}, className="" }) {
   const C = useC();
-  const V = { primary:{bg:C.blueMid,c:"#fff",b:C.blueMid}, navy:{bg:C.navy,c:"#fff",b:C.navy}, danger:{bg:"#dc2626",c:"#fff",b:"#dc2626"}, success:{bg:"#16a34a",c:"#fff",b:"#16a34a"}, ghost:{bg:"transparent",c:C.textMid,b:C.border}, amber:{bg:"#d97706",c:"#fff",b:"#d97706"} }[variant]||{bg:C.blueMid,c:"#fff",b:C.blueMid};
+  const V = { primary:{bg:C.blueMid,c:"#fff",b:C.blueMid}, navy:{bg:C.navy,c:"#fff",b:C.navy}, danger:{bg:"#dc2626",c:"#fff",b:"#dc2626"}, success:{bg:"#1a6b47",c:"#fff",b:"#1a6b47"}, ghost:{bg:"transparent",c:C.textMid,b:C.border}, amber:{bg:"#d97706",c:"#fff",b:"#d97706"} }[variant]||{bg:C.blueMid,c:"#fff",b:C.blueMid};
   const S = {sm:{p:"5px 12px",f:12},md:{p:"9px 18px",f:13.5},lg:{p:"12px 24px",f:14.5}}[size];
   return <button onClick={onClick} disabled={disabled} className={"btn-hover "+className} style={{ background:disabled?"#cbd5e1":V.bg, color:disabled?"#94a3b8":V.c, border:`1.5px solid ${disabled?"#cbd5e1":V.b}`, borderRadius:8, fontWeight:700, cursor:disabled?"not-allowed":"pointer", padding:S.p, fontSize:S.f, transition:"all .2s", ...style }}>{children}</button>;
 }
@@ -231,7 +231,7 @@ const getSegunda = (dateStr) => {
   const diff = dow===0 ? -6 : 1-dow;
   return addDays(dateStr, diff);
 };
-const statusColorCal = (s) => ({ confirmado:{ bg:"#dcfce7", border:"#86efac", text:"#166534" }, pendente:{ bg:"#fef9c3", border:"#fde68a", text:"#854d0e" }, recusado:{ bg:"#fef2f2", border:"#fca5a5", text:"#991b1b" } }[s]||{ bg:"#f0f4f9", border:"#dde3ed", text:"#3d5280" });
+const statusColorCal = (s) => ({ confirmado:{ bg:"#e2f4ea", border:"#6ee7a0", text:"#0f4c2b" }, pendente:{ bg:"#fff7ed", border:"#fed7aa", text:"#7c2d12" }, recusado:{ bg:"#fef2f2", border:"#fca5a5", text:"#7f1d1d" } }[s]||{ bg:"#e8f0ec", border:"#c7dfd4", text:"#3d5c45" });
 const tipoIcon = (tipo) => ({ espaco:"🏛️", laboratorio:"🔬", equipamento:"💻" }[tipo]||"📍");
 const extraInfo = (r) => {
   if (!r) return "";
@@ -274,7 +274,7 @@ function CelulaCal({ reserva, isPast, C, onClick }) {
           <p style={{ fontSize:9, color:sc.text, opacity:.65, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", lineHeight:1.2 }}>{reserva.turma}</p>
         </div>
       ) : (
-        <div onClick={onClick} style={{ height:"100%", borderRadius:6, border:`1.5px dashed ${hover?C.blueMid:C.borderLight}`, background:hover?"rgba(37,99,235,.05)":"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all .15s" }}>
+        <div onClick={onClick} style={{ height:"100%", borderRadius:6, border:`1.5px dashed ${hover?C.blueMid:C.borderLight}`, background:hover?"rgba(26,107,71,.05)":"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all .15s" }}>
           {hover&&<span style={{ fontSize:11, color:C.blueMid, fontWeight:700 }}>+ Reservar</span>}
         </div>
       )}
@@ -337,7 +337,7 @@ function GradePorDiaCal({ reservas, semanaInicio, filtroEspaco, C, onCelulaClick
             {diasSemana.map(d=>{
               const { diaSemana, dia, mes } = fmtDia(d); const isHoje = d===hoje;
               return (
-                <th key={d} style={{ padding:"8px 4px", textAlign:"center", background:isHoje?"rgba(37,99,235,.07)":C.surface, borderBottom:`2px solid ${isHoje?C.blueMid:C.border}`, borderLeft:`1px solid ${C.borderLight}` }}>
+                <th key={d} style={{ padding:"8px 4px", textAlign:"center", background:isHoje?"rgba(26,107,71,.07)":C.surface, borderBottom:`2px solid ${isHoje?C.blueMid:C.border}`, borderLeft:`1px solid ${C.borderLight}` }}>
                   <div style={{ fontSize:10, fontWeight:700, color:isHoje?C.blueMid:C.textMuted, textTransform:"uppercase" }}>{diaSemana}</div>
                   <div style={{ fontSize:17, fontWeight:900, color:isHoje?C.blueMid:C.navy, lineHeight:1.1, marginTop:1 }}>{dia}</div>
                   <div style={{ fontSize:9.5, color:C.textMuted }}>{mes}</div>
@@ -410,9 +410,9 @@ function CalMensalAdmin({ reservas, filtroEspaco, hoje, C, onNovaReserva }) {
           const confDia=rsdia.filter(r=>r.status==="confirmado");
           const dow=new Date(Date.UTC(mesCal.a,mesCal.m,d)).getUTCDay();
           return (
-            <div key={i} onClick={()=>setDiaSel(isSel?null:dateStr)} style={{ minHeight:80, borderRight:`1px solid ${C.borderLight}`, borderBottom:`1px solid ${C.borderLight}`, padding:"5px 6px", cursor:"pointer", background:isSel?"rgba(13,158,120,.08)":isHoje?"rgba(13,158,120,.04)":isPast?"rgba(0,0,0,.015)":"transparent", transition:"background .15s" }}>
+            <div key={i} onClick={()=>setDiaSel(isSel?null:dateStr)} style={{ minHeight:80, borderRight:`1px solid ${C.borderLight}`, borderBottom:`1px solid ${C.borderLight}`, padding:"5px 6px", cursor:"pointer", background:isSel?"rgba(26,107,71,.08)":isHoje?"rgba(26,107,71,.04)":isPast?"rgba(0,0,0,.015)":"transparent", transition:"background .15s" }}>
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:3 }}>
-                <span style={{ fontSize:13, fontWeight:isHoje?900:500, color:isSel?"#0d9e78":isHoje?"#0d9e78":isPast?C.textMuted:dow===0||dow===6?"#ef4444":C.navy, width:24,height:24,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:isHoje?"rgba(13,158,120,.15)":"transparent" }}>{d}</span>
+                <span style={{ fontSize:13, fontWeight:isHoje?900:500, color:isSel?"#40b07a":isHoje?"#40b07a":isPast?C.textMuted:dow===0||dow===6?"#ef4444":C.navy, width:24,height:24,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:isHoje?"rgba(26,107,71,.15)":"transparent" }}>{d}</span>
                 {rsdia.length>0&&<span style={{ fontSize:9.5, fontWeight:700, color:urgDia.length>0?"#c2410c":pendDia.length>0?C.amber:C.green, background:urgDia.length>0?"#fff7ed":pendDia.length>0?C.amberBg:C.greenBg, borderRadius:6, padding:"1px 4px" }}>{rsdia.length}</span>}
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:2 }}>
@@ -435,7 +435,7 @@ function CalMensalAdmin({ reservas, filtroEspaco, hoje, C, onNovaReserva }) {
           {(porData[diaSel]||[]).length===0
             ? <p style={{ fontSize:13, color:C.textMuted }}>🎉 Nenhum agendamento.</p>
             : [...(porData[diaSel]||[])].sort((a,b)=>a.horario>b.horario?1:-1).map(r=>{
-                const urg=isUrgente2(r); const bc=r.status==="confirmado"?"#16a34a":r.status==="pendente"?"#d97706":"#dc2626";
+                const urg=isUrgente2(r); const bc=r.status==="confirmado"?"#1a6b47":r.status==="pendente"?"#d97706":"#dc2626";
                 return (
                   <div key={r.id} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 12px", borderRadius:9, marginBottom:6, background:urg?"#fff7ed":C.surface, border:`1px solid ${urg?"#f97316":C.border}`, borderLeft:`4px solid ${urg?"#f97316":bc}` }}>
                     <span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, color:urg?"#c2410c":C.blueMid, fontSize:13, minWidth:42 }}>{r.horario}</span>
@@ -515,7 +515,7 @@ function CalendarioSemanal({ onNovaReserva }) {
           </div>
         </div>
         <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:14 }}>
-          {[{label:"Esta semana",val:stats.total,bg:"#dbeafe",c:C.blueMid},{label:"Confirmadas",val:stats.confirmadas,bg:"#dcfce7",c:"#166534"},{label:"Pendentes",val:stats.pendentes,bg:"#fef9c3",c:"#854d0e"},{label:"Ocupação",val:stats.ocupacao+"%",bg:"#f3e8ff",c:"#6d28d9"}].map(k=>(
+          {[{label:"Esta semana",val:stats.total,bg:"#e2f0eb",c:C.blueMid},{label:"Confirmadas",val:stats.confirmadas,bg:"#e2f4ea",c:"#0f4c2b"},{label:"Pendentes",val:stats.pendentes,bg:"#fff7ed",c:"#7c2d12"},{label:"Ocupação",val:stats.ocupacao+"%",bg:"#f3e8ff",c:"#6d28d9"}].map(k=>(
             <div key={k.label} style={{ background:k.bg, borderRadius:8, padding:"7px 14px", display:"flex", gap:8, alignItems:"center" }}>
               <span style={{ fontSize:18, fontWeight:900, color:k.c }}>{k.val}</span>
               <span style={{ fontSize:11, fontWeight:700, color:k.c, opacity:.75 }}>{k.label}</span>
@@ -560,7 +560,7 @@ function CalendarioSemanal({ onNovaReserva }) {
         }
       </div>
       <div style={{ display:"flex", gap:16, marginTop:12, flexWrap:"wrap", alignItems:"center" }}>
-        {[{label:"Confirmado",bg:"#dcfce7",border:"#86efac"},{label:"Pendente",bg:"#fef9c3",border:"#fde68a"},{label:"Disponível",bg:"transparent",border:C.borderLight,dashed:true},{label:"Passado",bg:C.bg,border:C.borderLight}].map(l=>(
+        {[{label:"Confirmado",bg:"#e2f4ea",border:"#6ee7a0"},{label:"Pendente",bg:"#fff7ed",border:"#fed7aa"},{label:"Disponível",bg:"transparent",border:C.borderLight,dashed:true},{label:"Passado",bg:C.bg,border:C.borderLight}].map(l=>(
           <div key={l.label} style={{ display:"flex", alignItems:"center", gap:6 }}>
             <div style={{ width:16, height:16, borderRadius:4, background:l.bg, border:`1.5px ${l.dashed?"dashed":"solid"} ${l.border}` }} />
             <span style={{ fontSize:11.5, color:C.textMuted, fontWeight:600 }}>{l.label}</span>
@@ -659,9 +659,9 @@ function CalendarioMensal({ reservasPorData, onSelectDia, dataSelecionada }) {
             const temReserva=reservasPorData?.[dateStr]?.length>0;
             const dow=new Date(Date.UTC(mes.a,mes.m,d)).getUTCDay(), isFimSemana=dow===0||dow===6;
             return (
-              <button key={i} onClick={()=>!isPast&&onSelectDia(dateStr)} disabled={isPast} style={{ aspectRatio:"1", borderRadius:8, border:"none", cursor:isPast?"not-allowed":"pointer", background:isSel?"#0d9e78":isHoje?"rgba(13,158,120,.12)":"transparent", color:isSel?"#fff":isPast?"#cbd5e1":isFimSemana?"#ef4444":C.navy, fontWeight:isHoje||isSel?800:500, fontSize:13.5, position:"relative", transition:"all .15s", opacity:isPast?.4:1 }}>
+              <button key={i} onClick={()=>!isPast&&onSelectDia(dateStr)} disabled={isPast} style={{ aspectRatio:"1", borderRadius:8, border:"none", cursor:isPast?"not-allowed":"pointer", background:isSel?"#40b07a":isHoje?"rgba(26,107,71,.12)":"transparent", color:isSel?"#fff":isPast?"#cbd5e1":isFimSemana?"#ef4444":C.navy, fontWeight:isHoje||isSel?800:500, fontSize:13.5, position:"relative", transition:"all .15s", opacity:isPast?.4:1 }}>
                 {d}
-                {temReserva&&!isSel&&<div style={{ position:"absolute", bottom:3, left:"50%", transform:"translateX(-50%)", width:4, height:4, borderRadius:"50%", background:"#0d9e78" }} />}
+                {temReserva&&!isSel&&<div style={{ position:"absolute", bottom:3, left:"50%", transform:"translateX(-50%)", width:4, height:4, borderRadius:"50%", background:"#40b07a" }} />}
               </button>
             );
           })}
@@ -680,7 +680,7 @@ function BlocoAgendamento({ idx, espaco, data, bloco, onChange, onRemove, ocupad
     <div style={{ background:C.bg, border:`1.5px solid ${bloco.horario?C.blueMid+"55":C.border}`, borderRadius:12, padding:"16px 16px 12px", position:"relative", transition:"border-color .2s" }}>
       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
         <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-          <div style={{ width:24, height:24, borderRadius:"50%", background:bloco.horario?"#0d9e78":"#cbd5e1", color:"#fff", fontWeight:800, fontSize:12, display:"flex", alignItems:"center", justifyContent:"center" }}>{idx+1}</div>
+          <div style={{ width:24, height:24, borderRadius:"50%", background:bloco.horario?"#40b07a":"#cbd5e1", color:"#fff", fontWeight:800, fontSize:12, display:"flex", alignItems:"center", justifyContent:"center" }}>{idx+1}</div>
           <span style={{ fontSize:13, fontWeight:700, color:C.navy }}>{bloco.horario ? `Turma ${idx+1} · ${bloco.horario}` : `Turma ${idx+1} — selecione o horário`}</span>
           {bloco.horario&&bloco.turma&&<span style={{ fontSize:11, color:C.textMuted }}>· {bloco.turma}</span>}
         </div>
@@ -720,7 +720,7 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.6)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:"1rem" }}>
       <div className="fade-in" style={{ background:C.surface, borderRadius:16, padding:28, width:"100%", maxWidth:480, maxHeight:"90vh", overflowY:"auto", boxShadow:"0 24px 60px rgba(0,0,0,.3)" }}>
         <div style={{ textAlign:"center", marginBottom:20 }}>
-          <div style={{ width:52, height:52, borderRadius:"50%", background:"#dcfce7", display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, margin:"0 auto 12px" }}>📋</div>
+          <div style={{ width:52, height:52, borderRadius:"50%", background:"#e2f4ea", display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, margin:"0 auto 12px" }}>📋</div>
           <h3 style={{ fontSize:17, fontWeight:800, color:C.navy }}>Confirmar agendamentos</h3>
           <p style={{ fontSize:13, color:C.textMuted, marginTop:4 }}>Revise antes de salvar</p>
         </div>
@@ -731,8 +731,8 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
         </div>
         <div style={{ display:"grid", gap:8, marginBottom:20 }}>
           {blocos.map((b,i)=>(
-            <div key={i} style={{ display:"flex", gap:12, alignItems:"flex-start", padding:"10px 14px", background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, borderLeft:`3px solid #0d9e78` }}>
-              <span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#0d9e78", fontSize:13, minWidth:42 }}>{b.horario}</span>
+            <div key={i} style={{ display:"flex", gap:12, alignItems:"flex-start", padding:"10px 14px", background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, borderLeft:`3px solid #40b07a` }}>
+              <span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#40b07a", fontSize:13, minWidth:42 }}>{b.horario}</span>
               <div>
                 <p style={{ fontSize:13, fontWeight:700, color:C.navy }}>{b.turma}</p>
                 <p style={{ fontSize:12, color:C.textMuted, marginTop:2 }}>{b.conteudo}</p>
@@ -744,7 +744,7 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
         </div>
         <div style={{ display:"flex", gap:10 }}>
           <button onClick={onCancelar} style={{ flex:1, padding:"10px", borderRadius:8, border:`1.5px solid ${C.border}`, background:"transparent", color:C.textMid, fontWeight:700, cursor:"pointer", fontSize:13 }}>Revisar</button>
-          <button onClick={onConfirmar} disabled={salvando} style={{ flex:2, padding:"10px", borderRadius:8, border:"none", background:"#0d9e78", color:"#fff", fontWeight:800, cursor:"pointer", fontSize:13.5 }}>{salvando?"Salvando...":"✓ Confirmar "+blocos.length+" agendamento"+(blocos.length>1?"s":"")}</button>
+          <button onClick={onConfirmar} disabled={salvando} style={{ flex:2, padding:"10px", borderRadius:8, border:"none", background:"#40b07a", color:"#fff", fontWeight:800, cursor:"pointer", fontSize:13.5 }}>{salvando?"Salvando...":"✓ Confirmar "+blocos.length+" agendamento"+(blocos.length>1?"s":"")}</button>
         </div>
       </div>
     </div>
@@ -843,18 +843,18 @@ function ProfessorView({ usuario }) {
   const futuras=todasMinhas.filter(r=>r.data>=hoje);
   const passadas=todasMinhas.filter(r=>r.data<hoje).reverse();
   const porData={}; futuras.forEach(r=>{ if(!porData[r.data])porData[r.data]=[]; porData[r.data].push(r); });
-  const sc=(s)=>s==="confirmado"?"#16a34a":s==="pendente"?"#d97706":"#dc2626";
+  const sc=(s)=>s==="confirmado"?"#1a6b47":s==="pendente"?"#d97706":"#dc2626";
 
   const RRow=({r})=>(
-    <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:r.data===hoje?"rgba(13,158,120,.07)":C.surface, border:"1px solid "+(r.data===hoje?"#0d9e7844":C.border), marginBottom:4, borderLeft:"3px solid "+sc(r.status) }}>
-      <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#0d9e78", minWidth:42, flexShrink:0 }}>{r.horario}</span>
+    <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:r.data===hoje?"rgba(26,107,71,.07)":C.surface, border:"1px solid "+(r.data===hoje?"#40b07a44":C.border), marginBottom:4, borderLeft:"3px solid "+sc(r.status) }}>
+      <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#40b07a", minWidth:42, flexShrink:0 }}>{r.horario}</span>
       <div style={{ width:1, height:32, background:C.borderLight, flexShrink:0 }} />
       <div style={{ flex:1, minWidth:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom:2 }}>
           <span style={{ fontWeight:700, fontSize:13, color:C.navy }}>{r.espaco}</span>
           <span style={{ fontSize:11, color:C.textMuted }}>·</span>
           <span style={{ fontSize:12, color:C.textMid }}>{r.turma}</span>
-          {extraInfo(r)&&<span style={{ fontSize:11, background:"#f0fdf4", color:"#166534", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
+          {extraInfo(r)&&<span style={{ fontSize:11, background:"#e2f4ea", color:"#0f4c2b", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
           <Badge status={r.status} />
@@ -872,11 +872,11 @@ function ProfessorView({ usuario }) {
   if (sucesso) return (
     <div style={{ maxWidth:600, margin:"0 auto", padding:"24px 16px" }}>
       <div className="fade-in" style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:16, padding:"40px 28px", textAlign:"center" }}>
-        <div style={{ width:64,height:64,borderRadius:"50%",background:"#16a34a",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,margin:"0 auto 16px" }}>✓</div>
+        <div style={{ width:64,height:64,borderRadius:"50%",background:"#1a6b47",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,margin:"0 auto 16px" }}>✓</div>
         <h3 style={{ fontSize:20, fontWeight:800, color:C.green, marginBottom:6 }}>{blocos.length>1?`${blocos.length} agendamentos salvos!`:"Agendamento confirmado!"}</h3>
         <p style={{ fontSize:13.5, color:C.green, marginBottom:8 }}>📍 {espacoSel} · 📅 {dataSel.split("-").reverse().join("/")}</p>
         {blocos.map((b,i)=><p key={i} style={{ fontSize:13, color:C.green, opacity:.8 }}>🕐 {b.horario} · {b.turma}</p>)}
-        <button onClick={resetForm} style={{ marginTop:24, padding:"11px 24px", borderRadius:10, border:"none", background:"#16a34a", color:"#fff", fontWeight:800, cursor:"pointer", fontSize:14 }}>Voltar ao início</button>
+        <button onClick={resetForm} style={{ marginTop:24, padding:"11px 24px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, cursor:"pointer", fontSize:14 }}>Voltar ao início</button>
       </div>
     </div>
   );
@@ -886,276 +886,229 @@ function ProfessorView({ usuario }) {
       {editando&&<ModalEdicao reserva={editando} isAdmin={false} onClose={()=>setEditando(null)} onSave={()=>setEditando(null)} />}
       {mostrarResumo&&<ModalResumo espaco={espacoSel} data={dataSel} blocos={blocos} onConfirmar={handleSalvar} onCancelar={()=>setMostrarResumo(false)} salvando={salvando} C={C} />}
 
-      {/* ── Card verde principal: calendário semana/mês ── */}
-      <div style={{ background:`linear-gradient(135deg,#0d9e78,#0a7a5e)`, borderRadius:14, marginBottom:20, color:"#fff", overflow:"hidden" }}>
-
-        {/* Visão de DIA (substitui o calendário ao clicar) */}
-        {diaMesSel ? (
-          <div className="fade-in">
-            {/* Header do dia */}
-            <div style={{ padding:"14px 16px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, flexWrap:"wrap", borderBottom:"1px solid rgba(255,255,255,.15)" }}>
-              <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                <button onClick={()=>setDiaMesSel(null)} style={{ background:"rgba(255,255,255,.18)", border:"1px solid rgba(255,255,255,.3)", borderRadius:8, color:"#fff", fontSize:12, fontWeight:700, padding:"5px 11px", cursor:"pointer" }}>‹ Voltar</button>
-                <div>
-                  <p style={{ fontSize:10, fontWeight:700, opacity:.65, textTransform:"uppercase", letterSpacing:".5px" }}>Agendamentos do dia</p>
-                  <p style={{ fontSize:16, fontWeight:800 }}>{(()=>{ const [ano,m,dia]=diaMesSel.split("-"); const nd=["Dom.","Seg.","Ter.","Qua.","Qui.","Sex.","Sáb."][new Date(Date.UTC(+ano,+m-1,+dia)).getUTCDay()]; return `${nd} ${dia}/${m}/${ano}`; })()}</p>
-                </div>
-              </div>
-              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                {(()=>{ const fonte2=(filtroGrade==="meus"?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado"):todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade); const rs=fonte2.filter(r=>r.data===diaMesSel); const meus=rs.filter(r=>r.professorId===usuario.uid); return <span style={{ background:"rgba(255,255,255,.18)", border:"1px solid rgba(255,255,255,.25)", borderRadius:20, padding:"3px 10px", fontSize:11, fontWeight:700 }}>{meus.length} meu{meus.length!==1?"s":""} · {rs.length} total</span>; })()}
-                <button onClick={()=>setDiaMesSel(addDays(diaMesSel,-1))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
-                <button onClick={()=>setDiaMesSel(addDays(diaMesSel,1))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
-              </div>
+      {/* Card de agendamentos com calendário */}
+      <div style={{ background:`linear-gradient(135deg,#1a6b47,#0f4c2b)`, borderRadius:14, padding:"16px 18px", marginBottom:20, color:"#fff" }}>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10, flexWrap:"wrap", gap:6 }}>
+          <div>
+            <p style={{ fontSize:11, fontWeight:700, opacity:.75, textTransform:"uppercase", letterSpacing:".5px", marginBottom:2 }}>Agendamentos</p>
+            {pendentes.length>0&&<span style={{ fontSize:11, background:"rgba(255,255,255,.2)", borderRadius:20, padding:"2px 9px" }}>⚠️ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
+          </div>
+          <div style={{ display:"flex", gap:6, alignItems:"center", flexWrap:"wrap" }}>
+            <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2, alignItems:"center" }}>
+              <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"transparent", border:"none", color:"rgba(255,255,255,.85)", fontWeight:700, fontSize:11.5, cursor:"pointer", outline:"none", padding:"4px 6px", borderRadius:6, maxWidth:130 }}>
+                <option value="" style={{ background:"#40b07a" }}>Todos espaços</option>
+                {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}
+              </select>
             </div>
-            {/* Lista do dia */}
-            {(()=>{
-              const fonte2=(filtroGrade==="meus"?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado"):todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
-              const rsDia=fonte2.filter(r=>r.data===diaMesSel).sort((a,b)=>a.horario>b.horario?1:-1);
-              return (
-                <div style={{ padding:"10px 14px" }}>
-                  {rsDia.length===0 ? (
-                    <p style={{ fontSize:13, opacity:.7, textAlign:"center", padding:"20px 0" }}>🎉 Nenhum agendamento neste dia.</p>
-                  ) : (
+            <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2 }}>
+              {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
+                <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#40b07a":"rgba(255,255,255,.8)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+              ))}
+            </div>
+            <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2 }}>
+              {[{id:"meus",label:"Só meus"},{id:"todos",label:"Todos"}].map(op=>(
+                <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#40b07a":"rgba(255,255,255,.8)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Modo SEMANA */}
+        {modoVisu==="semana"&&(()=>{
+          const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sexta"];
+          // CORREÇÃO: guarda r?.professor
+          const fonte=(filtroGrade==="meus"
+            ?semanaReservas.filter(r=>r?.professor)
+            :todasSemana.filter(r=>r?.professor)
+          ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
+          const todasFonte=(filtroGrade==="meus"
+            ?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado")
+            :todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")
+          ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
+          const porDataSemana={};
+          todasFonte.forEach(r=>{ if(!porDataSemana[r.data])porDataSemana[r.data]=[]; porDataSemana[r.data].push(r); });
+          return (
+            <div>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:6 }}>
+                {diasSemana.map((d,i)=>{
+                  const [,,dia]=d.split("-"); const isHoje=d===hoje; const isSel=d===diaMesSel;
+                  const rsDodia=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1);
+                  return (
+                    <div key={d} onClick={()=>setDiaMesSel(isSel?null:d)} style={{ background:isSel?"rgba(255,255,255,.35)":isHoje?"rgba(255,255,255,.22)":"rgba(255,255,255,.1)", borderRadius:10, padding:"8px 6px", minHeight:80, cursor:"pointer", transition:"background .15s" }}>
+                      <div style={{ textAlign:"center", marginBottom:6 }}>
+                        <p style={{ fontSize:9.5, fontWeight:700, opacity:.75, textTransform:"uppercase" }}>{nomesDia[i]}</p>
+                        <p style={{ fontSize:16, fontWeight:900, lineHeight:1 }}>{dia}</p>
+                        {isHoje&&<div style={{ width:4, height:4, borderRadius:"50%", background:"#fff", margin:"3px auto 0" }} />}
+                      </div>
+                      {rsDodia.length===0 ? <p style={{ fontSize:9, opacity:.4, textAlign:"center", marginTop:4 }}>—</p> : (
+                        <div style={{ display:"grid", gap:3 }}>
+                          {rsDodia.map(r=>{ const isMeu=r.professorId===usuario.uid; const bg=isMeu?(r.status==="confirmado"?"rgba(74,222,128,.28)":"rgba(251,191,36,.28)"):"rgba(255,255,255,.13)"; return (
+                            <div key={r.id||r.horario} title={`${r.professor} · ${r.espaco} · ${r.turma}`} style={{ background:bg, borderRadius:5, padding:"3px 5px", borderLeft:isMeu?"2px solid rgba(255,255,255,.6)":"2px solid rgba(255,255,255,.2)" }}>
+                              <p style={{ fontSize:9.5, fontWeight:800, fontFamily:"'DM Mono',monospace", opacity:.95 }}>{r.horario}</p>
+                              <p style={{ fontSize:9, fontWeight:700, opacity:.9, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
+                              <p style={{ fontSize:8.5, opacity:.75, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{filtroGrade==="todos"&&!isMeu?r.professor.split(" ")[0]:r.turma}</p>
+                            </div>
+                          ); })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {diaMesSel&&diasSemana.includes(diaMesSel)&&(
+                <div className="fade-in" style={{ marginTop:10, background:"rgba(255,255,255,.12)", borderRadius:10, padding:"12px 14px" }}>
+                  <p style={{ fontSize:12, fontWeight:700, opacity:.8, marginBottom:8 }}>{diaMesSel.split("-").reverse().join("/")}</p>
+                  {(porDataSemana[diaMesSel]||[]).length===0 ? <p style={{ fontSize:12, opacity:.7, marginBottom:10 }}>🎉 Nenhum agendamento neste dia.</p> : (
                     <div style={{ display:"grid", gap:4, marginBottom:10 }}>
-                      {rsDia.map((r,ri)=>{ const isMeu=r.professorId===usuario.uid; const isPend=r.status==="pendente"; return (
-                        <div key={r.id||ri} style={{ display:"flex", gap:8, alignItems:"center", padding:"7px 10px", borderRadius:8, background:isMeu?(isPend?"rgba(251,191,36,.2)":"rgba(74,222,128,.18)"):"rgba(255,255,255,.08)", borderLeft:isMeu?(isPend?"2px solid rgba(251,191,36,.9)":"2px solid rgba(74,222,128,.8)"):"2px solid rgba(255,255,255,.25)" }}>
-                          <span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, fontSize:12, minWidth:38, opacity:.95 }}>{r.horario}</span>
-                          <span style={{ fontWeight:700, fontSize:12, flex:1, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco}</span>
-                          <span style={{ fontSize:11, opacity:.8 }}>{r.turma}</span>
-                          {isMeu&&isPend&&<span style={{ fontSize:9.5, fontWeight:700, background:"rgba(251,191,36,.35)", border:"1px solid rgba(251,191,36,.6)", borderRadius:8, padding:"1px 6px" }}>⏳</span>}
-                          {filtroGrade==="todos"&&!isMeu&&<span style={{ fontSize:10, opacity:.6 }}>{r.professor.split(" ")[0]}</span>}
+                      {(porDataSemana[diaMesSel]||[]).sort((a,b)=>a.horario>b.horario?1:-1).map((r,ri)=>{ const isMeu=r.professorId===usuario.uid; return (
+                        <div key={r.id||ri} style={{ display:"flex", gap:8, alignItems:"center", padding:"5px 8px", borderRadius:7, background:isMeu?"rgba(74,222,128,.2)":"rgba(255,255,255,.1)", borderLeft:isMeu?"2px solid rgba(74,222,128,.8)":"2px solid rgba(255,255,255,.3)" }}>
+                          <span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, fontSize:11, minWidth:38 }}>{r.horario}</span>
+                          <span style={{ fontWeight:700, fontSize:11, flex:1, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco}</span>
+                          <span style={{ fontSize:10, opacity:.8 }}>{r.turma}</span>
+                          {filtroGrade==="todos"&&<span style={{ fontSize:10, opacity:.7 }}>{r.professor.split(" ")[0]}</span>}
                         </div>
                       ); })}
                     </div>
                   )}
                   {diaMesSel>=hoje&&(
-                    <div style={{ borderTop:"1px solid rgba(255,255,255,.15)", paddingTop:10 }}>
+                    <div style={{ borderTop:"1px solid rgba(255,255,255,.15)", paddingTop:10, marginTop:4 }}>
                       {!espacoSel ? (
                         <div>
-                          <p style={{ fontSize:11.5, fontWeight:700, opacity:.85, marginBottom:8 }}>Agendar neste dia — selecione o espaço:</p>
+                          <p style={{ fontSize:12, fontWeight:700, opacity:.85, marginBottom:8 }}>Deseja agendar neste dia? Selecione o espaço:</p>
                           <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
                             <select defaultValue="" onChange={e=>{ if(!e.target.value) return; setDiaMesSel(null); setDataSel(diaMesSel); setEspacoSel(e.target.value); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ flex:1, padding:"8px 10px", borderRadius:8, border:"1px solid rgba(255,255,255,.3)", background:"rgba(255,255,255,.15)", color:"#fff", fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none", minWidth:180 }}>
-                              <option value="" style={{ background:"#0d9e78" }}>Selecione o espaço...</option>
-                              <optgroup label="🏛️ Espaços" style={{ background:"#0d9e78" }}>{ESPACOS.filter(e=>e.tipo==="espaco").map(e=><option key={e.id} value={e.nome} style={{ background:"#0d9e78" }}>{e.nome}</option>)}</optgroup>
-                              <optgroup label="🔬 Laboratórios" style={{ background:"#0d9e78" }}>{ESPACOS.filter(e=>e.tipo==="laboratorio").map(e=><option key={e.id} value={e.nome} style={{ background:"#0d9e78" }}>{e.nome}</option>)}</optgroup>
-                              <optgroup label="💻 Equipamentos" style={{ background:"#0d9e78" }}>{ESPACOS.filter(e=>e.tipo==="equipamento").map(e=><option key={e.id} value={e.nome} style={{ background:"#0d9e78" }}>{e.nome}</option>)}</optgroup>
+                              <option value="" style={{ background:"#40b07a" }}>Selecione o espaço...</option>
+                              <optgroup label="🏛️ Espaços" style={{ background:"#40b07a" }}>{ESPACOS.filter(e=>e.tipo==="espaco").map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}</optgroup>
+                              <optgroup label="🔬 Laboratórios" style={{ background:"#40b07a" }}>{ESPACOS.filter(e=>e.tipo==="laboratorio").map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}</optgroup>
+                              <optgroup label="💻 Equipamentos" style={{ background:"#40b07a" }}>{ESPACOS.filter(e=>e.tipo==="equipamento").map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}</optgroup>
                             </select>
+                            <button onClick={()=>setDiaMesSel(null)} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,.3)", background:"transparent", color:"#fff", fontWeight:700, fontSize:12, cursor:"pointer" }}>Fechar</button>
                           </div>
                         </div>
                       ) : (
                         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, flexWrap:"wrap" }}>
                           <p style={{ fontSize:12, fontWeight:700, opacity:.85 }}>Agendar em <strong>{espacoSel}</strong> neste dia?</p>
-                          <button onClick={()=>{ setDataSel(diaMesSel); setDiaMesSel(null); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:"#fff", color:"#0d9e78", fontWeight:800, fontSize:12, cursor:"pointer" }}>Sim ✓</button>
+                          <div style={{ display:"flex", gap:8 }}>
+                            <button onClick={()=>{ setDataSel(diaMesSel); setDiaMesSel(null); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:"#fff", color:"#40b07a", fontWeight:800, fontSize:12, cursor:"pointer" }}>Sim ✓</button>
+                            <button onClick={()=>setDiaMesSel(null)} style={{ padding:"7px 12px", borderRadius:8, border:"1px solid rgba(255,255,255,.3)", background:"transparent", color:"#fff", fontWeight:700, fontSize:12, cursor:"pointer" }}>Fechar</button>
+                          </div>
                         </div>
                       )}
                     </div>
                   )}
                 </div>
-              );
-            })()}
-          </div>
-        ) : (
-          /* ── Header + calendário semana/mês ── */
-          <div>
-            <div style={{ padding:"14px 16px 10px", display:"flex", alignItems:"flex-start", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
-              <div>
-                {modoVisu==="semana" ? (()=>{
-                  const seg=getSegunda(hoje); const fim=addDays(seg,4);
-                  const fmtCurto=(s)=>{ const [,m,d]=s.split("-"); return `${d}/${m}`; };
-                  const nMeus=(filtroGrade==="meus"?semanaReservas:todasSemana).filter(r=>r?.professor&&r.professorId===usuario.uid&&(!filtroEspacoGrade||r.espaco===filtroEspacoGrade)).length;
-                  const nTodos=(filtroGrade==="meus"?semanaReservas:todasSemana).filter(r=>r?.professor&&(!filtroEspacoGrade||r.espaco===filtroEspacoGrade)).length;
-                  return <>
-                    <p style={{ fontSize:15, fontWeight:800, marginBottom:1 }}>Semana {fmtCurto(seg)} – {fmtCurto(fim)}</p>
-                    <p style={{ fontSize:11, opacity:.65 }}>{nMeus} seu{nMeus!==1?"s":""} · {nTodos} no total</p>
-                    {pendentes.length>0&&<span style={{ display:"inline-block", marginTop:4, fontSize:11, background:"rgba(251,191,36,.3)", border:"1px solid rgba(251,191,36,.5)", borderRadius:20, padding:"2px 9px" }}>⏳ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
-                  </>;
-                })() : (()=>{
-                  const agora2=new Date(); const nomeMes=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][agora2.getMonth()];
-                  const fonte2=(filtroGrade==="meus"?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado"):todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
-                  const nMes=fonte2.filter(r=>r.data.startsWith(`${agora2.getFullYear()}-${String(agora2.getMonth()+1).padStart(2,"0")}`));
-                  const nMeus=nMes.filter(r=>r.professorId===usuario.uid).length;
-                  return <>
-                    <p style={{ fontSize:15, fontWeight:800, marginBottom:1 }}>{nomeMes} {agora2.getFullYear()}</p>
-                    <p style={{ fontSize:11, opacity:.65 }}>{nMeus} seu{nMeus!==1?"s":""} · {nMes.length} no total</p>
-                    {pendentes.length>0&&<span style={{ display:"inline-block", marginTop:4, fontSize:11, background:"rgba(251,191,36,.3)", border:"1px solid rgba(251,191,36,.5)", borderRadius:20, padding:"2px 9px" }}>⏳ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
-                  </>;
-                })()}
+              )}
+              {fonte.length===0&&<p style={{ fontSize:13, opacity:.7, textAlign:"center", marginTop:8 }}>Nenhum agendamento esta semana</p>}
+              <p style={{ fontSize:10, opacity:.6, textAlign:"right", marginTop:6 }}>Clique no dia para detalhes</p>
+            </div>
+          );
+        })()}
+
+        {/* Modo MÊS */}
+        {modoVisu==="mes"&&(()=>{
+          // CORREÇÃO: guarda r?.professor + NÃO desestrutura no .map() (era o bug principal)
+          const fonte=(filtroGrade==="meus"
+            ?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado")
+            :todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")
+          ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
+          const porDataMes={}; fonte.forEach(r=>{ if(!porDataMes[r.data])porDataMes[r.data]=[]; porDataMes[r.data].push(r); });
+          const agora2=new Date(); const ano=agora2.getFullYear(), mes=agora2.getMonth();
+          const nomeMes=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][mes];
+          const primeiroDia=new Date(Date.UTC(ano,mes,1)); const diasNoMes=new Date(Date.UTC(ano,mes+1,0)).getUTCDate(); const inicioGrid=primeiroDia.getUTCDay();
+          const cells=[]; for(let i=0;i<inicioGrid;i++)cells.push(null); for(let d=1;d<=diasNoMes;d++)cells.push(d);
+          return (
+            <div>
+              <p style={{ fontSize:13, fontWeight:800, textAlign:"center", marginBottom:8, opacity:.9 }}>{nomeMes} {ano}</p>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", marginBottom:4 }}>
+                {["D","S","T","Q","Q","S","S"].map((n,i)=><div key={i} style={{ textAlign:"center", fontSize:9.5, fontWeight:700, opacity:.6, padding:"2px 0" }}>{n}</div>)}
               </div>
-              <div style={{ display:"flex", gap:6, flexDirection:"column", alignItems:"flex-end" }}>
-                <div style={{ display:"flex", gap:6 }}>
-                  <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2 }}>
-                    {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
-                      <button key={op.id} onClick={()=>{ setModoVisu(op.id); }} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#0d9e78":"rgba(255,255,255,.8)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-                    ))}
-                  </div>
-                  <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2 }}>
-                    {[{id:"meus",label:"Só meus"},{id:"todos",label:"Todos"}].map(op=>(
-                      <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#0d9e78":"rgba(255,255,255,.8)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-                    ))}
-                  </div>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:2 }}>
+                {cells.map((d,i)=>{
+                  if (!d) return <div key={i} />;
+                  const dateStr=`${ano}-${String(mes+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+                  const isHoje=dateStr===hoje, isPast=dateStr<hoje;
+                  // CORREÇÃO: usa diaMesSel diretamente — sem desestruturação inválida
+                  const isSel=dateStr===diaMesSel;
+                  const rs=porDataMes[dateStr]||[];
+                  return (
+                    <button key={i} onClick={()=>setDiaMesSel(isSel?null:dateStr)} style={{ borderRadius:8, border:"none", cursor:"pointer", background:isSel?"rgba(255,255,255,.35)":isHoje?"rgba(255,255,255,.2)":"transparent", color:isPast?"rgba(255,255,255,.35)":"#fff", transition:"all .15s", display:"flex", flexDirection:"column", alignItems:"center", padding:"6px 3px", gap:2, minHeight:52 }}>
+                      <span style={{ fontWeight:isHoje||isSel?900:500, fontSize:13, lineHeight:1 }}>{d}</span>
+                      {rs.length>0&&(
+                        <div style={{ display:"grid", gap:1, width:"100%" }}>
+                          {[...new Map(rs.map(r=>[r.professorId,r])).values()].slice(0,2).map(r=>{
+                            const isMeu=r.professorId===usuario.uid;
+                            return <div key={r.professorId} style={{ background:isMeu?"rgba(74,222,128,.35)":"rgba(255,255,255,.18)", borderRadius:3, padding:"1px 3px", overflow:"hidden" }}><p style={{ fontSize:7.5, fontWeight:800, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", textAlign:"center", opacity:.95 }}>{r.professor.split(" ")[0]}</p></div>;
+                          })}
+                          {[...new Map(rs.map(r=>[r.professorId,r])).values()].length>2&&<p style={{ fontSize:7, opacity:.6, textAlign:"center" }}>+{[...new Map(rs.map(r=>[r.professorId,r])).values()].length-2}</p>}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+              {diaMesSel&&(
+                <div className="fade-in" style={{ marginTop:12, background:"rgba(255,255,255,.12)", borderRadius:10, padding:"12px 14px" }}>
+                  <p style={{ fontSize:12, fontWeight:700, opacity:.8, marginBottom:8 }}>{diaMesSel.split("-").reverse().join("/")}</p>
+                  {(porDataMes[diaMesSel]||[]).length===0 ? <p style={{ fontSize:12, opacity:.7, marginBottom:10 }}>🎉 Nenhum agendamento neste dia.</p> : (
+                    <div style={{ display:"grid", gap:4, marginBottom:10 }}>
+                      {(porDataMes[diaMesSel]||[]).sort((a,b)=>a.horario>b.horario?1:-1).map((r,ri)=>{ const isMeu=r.professorId===usuario.uid; return (
+                        <div key={r.id||ri} style={{ display:"flex", gap:8, alignItems:"center", padding:"5px 8px", borderRadius:7, background:isMeu?"rgba(74,222,128,.2)":"rgba(255,255,255,.1)", borderLeft:isMeu?"2px solid rgba(74,222,128,.8)":"2px solid rgba(255,255,255,.3)" }}>
+                          <span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, fontSize:11, minWidth:38 }}>{r.horario}</span>
+                          <span style={{ fontWeight:700, fontSize:11, flex:1, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco}</span>
+                          <span style={{ fontSize:10, opacity:.8 }}>{r.turma}</span>
+                          {filtroGrade==="todos"&&<span style={{ fontSize:10, opacity:.7 }}>{r.professor.split(" ")[0]}</span>}
+                        </div>
+                      ); })}
+                    </div>
+                  )}
+                  {diaMesSel>=hoje&&(
+                    <div style={{ borderTop:"1px solid rgba(255,255,255,.15)", paddingTop:10, marginTop:4 }}>
+                      <p style={{ fontSize:12, fontWeight:700, opacity:.85, marginBottom:8 }}>Deseja agendar neste dia? Selecione o espaço:</p>
+                      <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+                        <select defaultValue="" onChange={e=>{ if (!e.target.value) return; setDiaMesSel(null); setDataSel(diaMesSel); setEspacoSel(e.target.value); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ flex:1, padding:"8px 10px", borderRadius:8, border:"1px solid rgba(255,255,255,.3)", background:"rgba(255,255,255,.15)", color:"#fff", fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none", minWidth:180 }}>
+                          <option value="" style={{ background:"#40b07a" }}>Selecione o espaço...</option>
+                          <optgroup label="🏛️ Espaços" style={{ background:"#40b07a" }}>{ESPACOS.filter(e=>e.tipo==="espaco").map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}</optgroup>
+                          <optgroup label="🔬 Laboratórios" style={{ background:"#40b07a" }}>{ESPACOS.filter(e=>e.tipo==="laboratorio").map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}</optgroup>
+                          <optgroup label="💻 Equipamentos" style={{ background:"#40b07a" }}>{ESPACOS.filter(e=>e.tipo==="equipamento").map(e=><option key={e.id} value={e.nome} style={{ background:"#40b07a" }}>{e.nome}</option>)}</optgroup>
+                        </select>
+                        <button onClick={()=>setDiaMesSel(null)} style={{ padding:"8px 14px", borderRadius:8, border:"1px solid rgba(255,255,255,.3)", background:"transparent", color:"#fff", fontWeight:700, fontSize:12, cursor:"pointer" }}>Fechar</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2, alignItems:"center" }}>
-                  <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"transparent", border:"none", color:"rgba(255,255,255,.85)", fontWeight:700, fontSize:11.5, cursor:"pointer", outline:"none", padding:"4px 6px", borderRadius:6, maxWidth:150 }}>
-                    <option value="" style={{ background:"#0d9e78" }}>Todos os espaços</option>
-                    {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#0d9e78" }}>{e.nome}</option>)}
-                  </select>
-                </div>
+              )}
+              <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap", alignItems:"center" }}>
+                <div style={{ display:"flex", alignItems:"center", gap:5 }}><div style={{ width:14, height:10, borderRadius:3, background:"rgba(74,222,128,.35)" }} /><span style={{ fontSize:10, opacity:.8 }}>Meus</span></div>
+                <span style={{ fontSize:10, opacity:.6, marginLeft:"auto" }}>Clique no dia para detalhes</span>
               </div>
             </div>
-
-            {/* SEMANA */}
-            {modoVisu==="semana"&&(()=>{
-              const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sexta"];
-              const fonte=(filtroGrade==="meus"?semanaReservas.filter(r=>r?.professor):todasSemana.filter(r=>r?.professor)).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
-              return (
-                <div style={{ padding:"0 14px 10px" }}>
-                  <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:5 }}>
-                    {diasSemana.map((d,i)=>{
-                      const [,,dia]=d.split("-"); const isHoje=d===hoje;
-                      const rsDodia=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1);
-                      return (
-                        <div key={d} onClick={()=>setDiaMesSel(d)} style={{ background:isHoje?"rgba(255,255,255,.22)":"rgba(255,255,255,.1)", borderRadius:10, padding:"8px 5px", minHeight:80, cursor:"pointer", transition:"background .15s" }}
-                          onMouseEnter={e=>e.currentTarget.style.background=isHoje?"rgba(255,255,255,.28)":"rgba(255,255,255,.18)"}
-                          onMouseLeave={e=>e.currentTarget.style.background=isHoje?"rgba(255,255,255,.22)":"rgba(255,255,255,.1)"}
-                        >
-                          <div style={{ textAlign:"center", marginBottom:5 }}>
-                            <p style={{ fontSize:9.5, fontWeight:700, opacity:.7, textTransform:"uppercase" }}>{nomesDia[i]}</p>
-                            <p style={{ fontSize:16, fontWeight:900, lineHeight:1 }}>{dia}</p>
-                            {isHoje&&<div style={{ width:4, height:4, borderRadius:"50%", background:"#fff", margin:"3px auto 0" }} />}
-                          </div>
-                          {rsDodia.length===0 ? <p style={{ fontSize:9, opacity:.35, textAlign:"center", marginTop:4 }}>—</p> : (
-                            <div style={{ display:"grid", gap:3 }}>
-                              {rsDodia.map(r=>{ const isMeu=r.professorId===usuario.uid; const isPend=r.status==="pendente"; return (
-                                <div key={r.id||r.horario} style={{ background:isMeu?(isPend?"rgba(251,191,36,.3)":"rgba(74,222,128,.28)"):"rgba(255,255,255,.12)", borderRadius:5, padding:"3px 5px", borderLeft:isMeu?(isPend?"2px solid rgba(251,191,36,.9)":"2px solid rgba(74,222,128,.8)"):"2px solid rgba(255,255,255,.2)" }}>
-                                  <p style={{ fontSize:9.5, fontWeight:800, fontFamily:"'DM Mono',monospace", opacity:.95 }}>{r.horario}</p>
-                                  <p style={{ fontSize:9, fontWeight:700, opacity:.9, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
-                                  <p style={{ fontSize:8.5, opacity:.75, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{filtroGrade==="todos"&&!isMeu?r.professor.split(" ")[0]:r.turma}</p>
-                                </div>
-                              ); })}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {fonte.length===0&&<p style={{ fontSize:12, opacity:.6, textAlign:"center", marginTop:10 }}>Nenhum agendamento esta semana</p>}
-                  {/* Legenda */}
-                  <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap", alignItems:"center" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:12,height:8,borderRadius:2,background:"rgba(74,222,128,.35)",borderLeft:"2px solid rgba(74,222,128,.8)" }} /><span style={{ fontSize:9.5, opacity:.7 }}>Meus</span></div>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:12,height:8,borderRadius:2,background:"rgba(251,191,36,.35)",borderLeft:"2px solid rgba(251,191,36,.9)" }} /><span style={{ fontSize:9.5, opacity:.7 }}>Pendente</span></div>
-                    {filtroGrade==="todos"&&<div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:12,height:8,borderRadius:2,background:"rgba(255,255,255,.12)",borderLeft:"2px solid rgba(255,255,255,.2)" }} /><span style={{ fontSize:9.5, opacity:.7 }}>Outros</span></div>}
-                    <span style={{ fontSize:9, opacity:.5, marginLeft:"auto" }}>Clique no dia para detalhes</span>
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* MÊS */}
-            {modoVisu==="mes"&&(()=>{
-              const fonte=(filtroGrade==="meus"?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado"):todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
-              const porDataMes={}; fonte.forEach(r=>{ if(!porDataMes[r.data])porDataMes[r.data]=[]; porDataMes[r.data].push(r); });
-              const agora2=new Date(); const ano=agora2.getFullYear(), mes=agora2.getMonth();
-              const primeiroDia=new Date(Date.UTC(ano,mes,1)); const diasNoMes=new Date(Date.UTC(ano,mes+1,0)).getUTCDate(); const inicioGrid=primeiroDia.getUTCDay();
-              const cells=[]; for(let i=0;i<inicioGrid;i++)cells.push(null); for(let d=1;d<=diasNoMes;d++)cells.push(d);
-              return (
-                <div>
-                  {/* Cabeçalho dias */}
-                  <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", background:"rgba(0,0,0,.15)", borderTop:"1px solid rgba(255,255,255,.1)" }}>
-                    {["D","S","T","Q","Q","S","S"].map((n,i)=><div key={i} style={{ textAlign:"center", fontSize:9.5, fontWeight:700, opacity:.6, padding:"5px 0", color:i===0||i===6?"#f87171":"inherit" }}>{n}</div>)}
-                  </div>
-                  {/* Grid */}
-                  <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)" }}>
-                    {cells.map((d,i)=>{
-                      if (!d) return <div key={i} style={{ minHeight:58, borderRight:"1px solid rgba(255,255,255,.07)", borderBottom:"1px solid rgba(255,255,255,.07)" }} />;
-                      const dateStr=`${ano}-${String(mes+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-                      const isHoje=dateStr===hoje, isPast=dateStr<hoje;
-                      const dow=new Date(Date.UTC(ano,mes,d)).getUTCDay();
-                      const rs=porDataMes[dateStr]||[];
-                      const meus=rs.filter(r=>r.professorId===usuario.uid);
-                      const pend=meus.filter(r=>r.status==="pendente");
-                      return (
-                        <div key={i} onClick={()=>setDiaMesSel(dateStr)}
-                          style={{ minHeight:58, borderRight:"1px solid rgba(255,255,255,.07)", borderBottom:"1px solid rgba(255,255,255,.07)", padding:"4px 4px", cursor:"pointer", background:isHoje?"rgba(255,255,255,.14)":isPast?"rgba(0,0,0,.1)":"transparent", transition:"background .12s" }}
-                          onMouseEnter={e=>e.currentTarget.style.background=isHoje?"rgba(255,255,255,.2)":isPast?"rgba(0,0,0,.06)":"rgba(255,255,255,.07)"}
-                          onMouseLeave={e=>e.currentTarget.style.background=isHoje?"rgba(255,255,255,.14)":isPast?"rgba(0,0,0,.1)":"transparent"}
-                        >
-                          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:2 }}>
-                            <span style={{ fontSize:12, fontWeight:isHoje?900:500, color:isPast?"rgba(255,255,255,.3)":dow===0||dow===6?"#f87171":"#fff", width:20, height:20, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:isHoje?"rgba(255,255,255,.9)":undefined, ...(isHoje?{color:"#0d7a5f"}:{}) }}>{d}</span>
-                            {rs.length>0&&<span style={{ fontSize:8.5, fontWeight:700, color:pend.length>0?"rgba(251,191,36,.95)":meus.length>0?"rgba(74,222,128,.95)":"rgba(255,255,255,.5)", background:pend.length>0?"rgba(251,191,36,.2)":meus.length>0?"rgba(74,222,128,.15)":"rgba(255,255,255,.08)", borderRadius:6, padding:"0px 3px" }}>{rs.length}</span>}
-                          </div>
-                          <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
-                            {meus.slice(0,2).map((r,ri)=><div key={r.id||ri} style={{ borderRadius:3, padding:"1px 3px", fontSize:8.5, fontWeight:600, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", background:r.status==="pendente"?"rgba(251,191,36,.3)":"rgba(74,222,128,.28)", color:"rgba(255,255,255,.95)" }}>{r.horario} {r.espaco.split(" ")[0]}{r.status==="pendente"?" ⏳":""}</div>)}
-                            {rs.filter(r=>r.professorId!==usuario.uid).slice(0,meus.length>=2?0:2-meus.length).map((r,ri)=><div key={r.id||ri} style={{ borderRadius:3, padding:"1px 3px", fontSize:8.5, fontWeight:500, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", background:"rgba(255,255,255,.1)", color:"rgba(255,255,255,.65)" }}>{r.horario} {r.espaco.split(" ")[0]}</div>)}
-                            {rs.length>2&&<div style={{ fontSize:8, opacity:.5 }}>+{rs.length-2} mais</div>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {/* Legenda */}
-                  <div style={{ display:"flex", gap:12, padding:"8px 14px", flexWrap:"wrap", alignItems:"center", borderTop:"1px solid rgba(255,255,255,.1)" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:12,height:8,borderRadius:2,background:"rgba(74,222,128,.35)" }} /><span style={{ fontSize:9.5, opacity:.7 }}>Meus</span></div>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:12,height:8,borderRadius:2,background:"rgba(251,191,36,.35)" }} /><span style={{ fontSize:9.5, opacity:.7 }}>Pendente</span></div>
-                    {filtroGrade==="todos"&&<div style={{ display:"flex", alignItems:"center", gap:4 }}><div style={{ width:12,height:8,borderRadius:2,background:"rgba(255,255,255,.12)" }} /><span style={{ fontSize:9.5, opacity:.7 }}>Outros</span></div>}
-                    <span style={{ fontSize:9, opacity:.5, marginLeft:"auto" }}>Clique no dia para detalhes</span>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-        )}
+          );
+        })()}
       </div>
 
-      {/* ── KPIs + Agenda ── */}
-      {(futuras.length>0||passadas.length>0)&&(
-        <div style={{ marginBottom:20 }}>
-          {/* KPIs rápidos */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:8, marginBottom:14 }}>
-            {[
-              { label:"Próximos", val:futuras.length, bg:C.surface, c:C.navy, border:C.border },
-              { label:"Pendentes", val:pendentes.length, bg:pendentes.length>0?C.amberBg:C.surface, c:pendentes.length>0?C.amber:C.textMuted, border:pendentes.length>0?C.amberBorder:C.border },
-              { label:"Histórico", val:passadas.length, bg:C.surface, c:C.textMuted, border:C.border },
-            ].map(k=>(
-              <div key={k.label} style={{ background:k.bg, border:`1px solid ${k.border}`, borderRadius:10, padding:"10px 14px" }}>
-                <p style={{ fontSize:24, fontWeight:800, color:k.c, lineHeight:1 }}>{k.val}</p>
-                <p style={{ fontSize:11, color:k.c, opacity:.75, marginTop:2 }}>{k.label}</p>
-              </div>
-            ))}
+      {/* Meus próximos */}
+      {futuras.length>0&&(
+        <div style={{ marginBottom:20, background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
+          <div style={{ padding:"10px 16px", borderBottom:`1px solid ${C.border}` }}>
+            <p style={{ fontSize:13, fontWeight:800, color:C.navy }}>Meus próximos · {futuras.length}</p>
           </div>
-
-          {/* Lista agenda */}
-          {futuras.length>0&&(
-            <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
-              <div style={{ padding:"10px 16px", borderBottom:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                <p style={{ fontSize:13, fontWeight:800, color:C.navy }}>Meus próximos agendamentos</p>
-                {pendentes.length>0&&<span style={{ fontSize:11, background:C.amberBg, color:C.amber, border:`1px solid ${C.amberBorder}`, borderRadius:20, padding:"2px 9px", fontWeight:700 }}>⏳ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
+          <div style={{ padding:"12px 16px" }}>
+            {Object.entries(porData).map(([data,rs])=>{ const [ano,mes,dia]=data.split("-"); const isHoje=data===hoje; return (
+              <div key={data} style={{ marginBottom:12 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                  <span style={{ fontSize:11.5, fontWeight:700, color:isHoje?"#40b07a":C.textMid, fontFamily:"'DM Mono',monospace" }}>{isHoje?"📌 Hoje":`${dia}/${mes}/${ano}`}</span>
+                  <div style={{ flex:1, height:1, background:C.borderLight }} />
+                </div>
+                {rs.map(r=><RRow key={r.id} r={r} />)}
               </div>
-              <div style={{ padding:"10px 16px" }}>
-                {Object.entries(porData).map(([data,rs])=>{ const [ano,mes,dia]=data.split("-"); const isHoje=data===hoje; return (
-                  <div key={data} style={{ marginBottom:12 }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
-                      <span style={{ fontSize:11, fontWeight:700, color:isHoje?"#0d9e78":C.textMid, fontFamily:"'DM Mono',monospace", background:isHoje?"rgba(13,158,120,.1)":"transparent", padding:isHoje?"2px 8px":"0", borderRadius:isHoje?20:0 }}>{isHoje?"📌 Hoje":`${dia}/${mes}`}</span>
-                      <div style={{ flex:1, height:1, background:C.borderLight }} />
-                      <span style={{ fontSize:10, color:C.textMuted }}>{rs.length} reserva{rs.length!==1?"s":""}</span>
-                    </div>
-                    {rs.map(r=><RRow key={r.id} r={r} />)}
-                  </div>
-                ); })}
-              </div>
-            </div>
-          )}
-
-          {/* Histórico */}
-          {passadas.length>0&&(
-            <div style={{ marginTop:10, background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden", opacity:.6 }}>
-              <div style={{ padding:"8px 16px", borderBottom:`1px solid ${C.border}` }}>
-                <p style={{ fontSize:11, fontWeight:700, color:C.textMuted, textTransform:"uppercase", letterSpacing:".5px" }}>Histórico · {passadas.length}</p>
-              </div>
-              <div style={{ padding:"8px 16px" }}>
+            ); })}
+            {passadas.length>0&&(
+              <div style={{ opacity:.5, marginTop:12 }}>
+                <p style={{ fontSize:11, fontWeight:700, color:C.textMuted, textTransform:"uppercase", letterSpacing:".5px", marginBottom:8 }}>Histórico · {passadas.length}</p>
                 {passadas.slice(0,5).map(r=><RRow key={r.id} r={r} />)}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
@@ -1171,7 +1124,7 @@ function ProfessorView({ usuario }) {
             </select>
           </Field>
         ) : (
-          <div style={{ display:"flex", alignItems:"center", gap:10, background:C.surface, border:`2px solid #0d9e78`, borderRadius:10, padding:"10px 16px" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, background:C.surface, border:`2px solid #40b07a`, borderRadius:10, padding:"10px 16px" }}>
             <span style={{ fontSize:20 }}>{tipoIcon(ESPACOS.find(e=>e.nome===espacoSel)?.tipo)}</span>
             <span style={{ fontSize:14, fontWeight:700, color:C.navy, flex:1 }}>{espacoSel}</span>
             <button onClick={()=>{ setEspacoSel(""); setDataSel(""); setBlocos([blocoVazio()]); }} style={{ background:"none", border:"none", color:C.textMuted, cursor:"pointer", fontSize:12, fontWeight:600 }}>Trocar ✕</button>
@@ -1189,7 +1142,7 @@ function ProfessorView({ usuario }) {
       {/* Formulário multi-agendamento */}
       {espacoSel&&dataSel&&(
         <div className="fade-in" style={{ marginTop:14 }}>
-          <div style={{ background:`linear-gradient(135deg,#0d9e78,#0a7a5e)`, padding:"12px 16px", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
+          <div style={{ background:`linear-gradient(135deg,#1a6b47,#0f4c2b)`, padding:"12px 16px", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
             <div>
               <p style={{ fontSize:11, color:"rgba(255,255,255,.75)", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px", marginBottom:2 }}>Agendando em</p>
               <p style={{ fontSize:15, fontWeight:800, color:"#fff" }}>{tipoIcon(ESPACOS.find(e=>e.nome===espacoSel)?.tipo)} {espacoSel} · {dataSel.split("-").reverse().join("/")}</p>
@@ -1215,14 +1168,14 @@ function ProfessorView({ usuario }) {
           </div>
 
           {blocos.length<HORARIOS.length&&(
-            <button onClick={addBloco} disabled={!blocoValido(blocos[blocos.length-1])} style={{ width:"100%", marginTop:10, padding:"11px", borderRadius:10, border:`2px dashed ${!blocoValido(blocos[blocos.length-1])?"#cbd5e1":"#0d9e78"}`, background:"transparent", color:!blocoValido(blocos[blocos.length-1])?C.textMuted:"#0d9e78", fontWeight:700, fontSize:13.5, cursor:!blocoValido(blocos[blocos.length-1])?"not-allowed":"pointer" }}>
+            <button onClick={addBloco} disabled={!blocoValido(blocos[blocos.length-1])} style={{ width:"100%", marginTop:10, padding:"11px", borderRadius:10, border:`2px dashed ${!blocoValido(blocos[blocos.length-1])?"#cbd5e1":"#40b07a"}`, background:"transparent", color:!blocoValido(blocos[blocos.length-1])?C.textMuted:"#40b07a", fontWeight:700, fontSize:13.5, cursor:!blocoValido(blocos[blocos.length-1])?"not-allowed":"pointer" }}>
               + Agendar outra turma neste dia
             </button>
           )}
 
           <div style={{ display:"flex", gap:10, marginTop:14 }}>
             <button onClick={()=>{ setDataSel(""); setBlocos([blocoVazio()]); }} style={{ padding:"12px 18px", borderRadius:10, border:`1.5px solid ${C.border}`, background:"transparent", color:C.textMid, fontWeight:700, fontSize:13, cursor:"pointer" }}>← Alterar dia/espaço</button>
-            <button onClick={()=>setMostrarResumo(true)} disabled={!todosValidos} style={{ flex:1, padding:"13px", borderRadius:12, border:"none", background:todosValidos?"#0d9e78":"#cbd5e1", color:todosValidos?"#fff":"#94a3b8", fontWeight:800, fontSize:15, cursor:todosValidos?"pointer":"not-allowed", boxShadow:todosValidos?"0 4px 14px rgba(13,158,120,.35)":"none" }}>
+            <button onClick={()=>setMostrarResumo(true)} disabled={!todosValidos} style={{ flex:1, padding:"13px", borderRadius:12, border:"none", background:todosValidos?"#40b07a":"#cbd5e1", color:todosValidos?"#fff":"#94a3b8", fontWeight:800, fontSize:15, cursor:todosValidos?"pointer":"not-allowed", boxShadow:todosValidos?"0 4px 14px rgba(26,107,71,.35)":"none" }}>
               {todosValidos?`Confirmar e salvar ${blocos.length} agendamento${blocos.length>1?"s":""}`:"Preencha todos os campos"}
             </button>
           </div>
@@ -1382,7 +1335,7 @@ function AdminView() {
   filtradas.forEach(r=>{ if(!turmasMap[r.turma])turmasMap[r.turma]=[]; turmasMap[r.turma].push(r); });
 
   const kpis=[
-    {label:"Total",       val:reservas.length,                                    bg:"#dbeafe", c:C.blueMid},
+    {label:"Total",       val:reservas.length,                                    bg:"#e2f0eb", c:C.blueMid},
     {label:"Confirmados", val:reservas.filter(r=>r.status==="confirmado").length, bg:C.greenBg, c:C.green},
     {label:"Pendentes",   val:pendentes.length,                                   bg:C.amberBg, c:C.amber},
     {label:"Urgentes",    val:urgentes.length,                                    bg:"#fff7ed",  c:"#c2410c"},
@@ -1406,10 +1359,10 @@ function AdminView() {
   // Linha de reserva
   const ReservaRow=({r,showDate=false})=>{
     const urg=isUrgente(r);
-    const borderColor=r.status==="confirmado"?"#16a34a":r.status==="pendente"?"#d97706":"#dc2626";
+    const borderColor=r.status==="confirmado"?"#1a6b47":r.status==="pendente"?"#d97706":"#dc2626";
     const [ano,mes,dia]=r.data.split("-");
     return (
-      <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 14px", borderRadius:10, marginBottom:6, background:urg?"#fff7ed":r.data===hoje?"rgba(13,158,120,.05)":C.surface, border:`1px solid ${urg?"#f97316":r.data===hoje?"#0d9e7844":C.border}`, borderLeft:`4px solid ${urg?"#f97316":borderColor}` }}>
+      <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 14px", borderRadius:10, marginBottom:6, background:urg?"#fff7ed":r.data===hoje?"rgba(26,107,71,.05)":C.surface, border:`1px solid ${urg?"#f97316":r.data===hoje?"#40b07a44":C.border}`, borderLeft:`4px solid ${urg?"#f97316":borderColor}` }}>
         <div style={{ minWidth:52, flexShrink:0, textAlign:"center" }}>
           <p style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:urg?"#c2410c":C.blueMid }}>{r.horario}</p>
           {showDate&&<p style={{ fontSize:10, color:C.textMuted, marginTop:1 }}>{dia}/{mes}</p>}
@@ -1529,100 +1482,99 @@ function AdminView() {
       ══════════════════════════════════════════════ */}
       {modoVisu==="calendario"&&(
         <div className="fade-in">
-          {diaSel ? (
-            /* ── Visão de dia — substitui o calendário ── */
-            <div className="fade-in">
-              <div style={{ background:`linear-gradient(135deg,#0d9e78,#0a7a5e)`, borderRadius:14, padding:"16px 20px", marginBottom:16, display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap", boxShadow:"0 4px 16px rgba(13,158,120,.25)" }}>
-                <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-                  <button onClick={()=>setDiaSel(null)} style={{ background:"rgba(255,255,255,.2)", border:"1px solid rgba(255,255,255,.35)", borderRadius:9, color:"#fff", fontSize:13, fontWeight:800, padding:"7px 14px", cursor:"pointer", display:"flex", alignItems:"center", gap:6, whiteSpace:"nowrap" }}>‹ Voltar ao mês</button>
-                  <div>
-                    <p style={{ fontSize:11, color:"rgba(255,255,255,.75)", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px", marginBottom:2 }}>Agendamentos do dia</p>
-                    <p style={{ fontSize:18, fontWeight:800, color:"#fff" }}>📅 {(()=>{ const [ano,m,dia]=diaSel.split("-"); const nd=["Dom.","Seg.","Ter.","Qua.","Qui.","Sex.","Sáb."][new Date(Date.UTC(+ano,+m-1,+dia)).getUTCDay()]; return `${nd} ${dia}/${m}/${ano}`; })()}</p>
-                  </div>
-                </div>
-                <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                  {(porDataCal[diaSel]||[]).length>0&&<span style={{ background:"rgba(255,255,255,.2)", border:"1px solid rgba(255,255,255,.3)", borderRadius:20, padding:"4px 12px", fontSize:13, fontWeight:800, color:"#fff" }}>{(porDataCal[diaSel]||[]).length} agendamento{(porDataCal[diaSel]||[]).length!==1?"s":""}</span>}
-                  <div style={{ display:"flex", gap:4 }}>
-                    <button onClick={()=>setDiaSel(addDays(diaSel,-1))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.3)", borderRadius:8, color:"#fff", fontSize:15, fontWeight:800, width:34, height:34, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
-                    <button onClick={()=>setDiaSel(addDays(diaSel,1))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.3)", borderRadius:8, color:"#fff", fontSize:15, fontWeight:800, width:34, height:34, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
-                  </div>
-                </div>
+          {/* Cabeçalho do mês */}
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14, flexWrap:"wrap", gap:10 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+              <button onClick={()=>navMes(-1)} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, width:34, height:34, cursor:"pointer", color:C.textMid, fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
+              <div style={{ textAlign:"center", minWidth:130 }}>
+                <p style={{ fontSize:18, fontWeight:800, color:C.navy }}>{nomeMes} {mesCal.a}</p>
+                <p style={{ fontSize:11, color:C.textMuted }}>{filtradas.filter(r=>r.status!=="recusado"&&r.data.startsWith(`${mesCal.a}-${String(mesCal.m+1).padStart(2,"0")}`)).length} agendamentos neste mês</p>
               </div>
-              <div style={{ background:C.surface, borderRadius:14, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
+              <button onClick={()=>navMes(1)} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, width:34, height:34, cursor:"pointer", color:C.textMid, fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
+            </div>
+            <button onClick={()=>{ const d=new Date(); setMesCal({a:d.getFullYear(),m:d.getMonth()}); setDiaSel(null); }} style={{ background:C.surface, border:`1.5px solid ${C.border}`, borderRadius:8, color:C.blueMid, fontSize:12, fontWeight:700, padding:"6px 14px", cursor:"pointer" }}>Hoje</button>
+          </div>
+
+          <div style={{ background:C.surface, borderRadius:16, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
+            {/* Dias da semana */}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", borderBottom:`2px solid ${C.border}` }}>
+              {["Dom.","Seg.","Ter.","Qua.","Qui.","Sexta","Sáb."].map((d,i)=>(
+                <div key={d} style={{ padding:"10px 0", textAlign:"center", fontSize:11, fontWeight:700, color:i===0||i===6?"#ef4444":C.textMuted, letterSpacing:".3px", textTransform:"uppercase" }}>{d}</div>
+              ))}
+            </div>
+            {/* Células */}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)" }}>
+              {cells.map((d,i)=>{
+                if (!d) return <div key={i} style={{ minHeight:90, borderRight:`1px solid ${C.borderLight}`, borderBottom:`1px solid ${C.borderLight}` }} />;
+                const dateStr=`${mesCal.a}-${String(mesCal.m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+                const isPast=dateStr<hoje, isHoje=dateStr===hoje, isSel=dateStr===diaSel;
+                const rsdia=porDataCal[dateStr]||[];
+                const urgDia=rsdia.filter(isUrgente);
+                const pendDia=rsdia.filter(r=>r.status==="pendente"&&!isUrgente(r));
+                const confDia=rsdia.filter(r=>r.status==="confirmado");
+                const dow=new Date(Date.UTC(mesCal.a,mesCal.m,d)).getUTCDay();
+                const isFimSemana=dow===0||dow===6;
+                return (
+                  <div key={i} onClick={()=>setDiaSel(isSel?null:dateStr)} style={{ minHeight:90, borderRight:`1px solid ${C.borderLight}`, borderBottom:`1px solid ${C.borderLight}`, padding:"6px 8px", cursor:"pointer", background:isSel?"rgba(26,107,71,.08)":isHoje?"rgba(26,107,71,.04)":isPast?"rgba(0,0,0,.015)":"transparent", transition:"background .15s", position:"relative" }}>
+                    {/* Número do dia */}
+                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:4 }}>
+                      <span style={{ fontSize:13.5, fontWeight:isHoje?900:500, color:isSel?"#40b07a":isHoje?"#40b07a":isPast?C.textMuted:isFimSemana?"#ef4444":C.navy, width:26, height:26, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:isHoje?"rgba(26,107,71,.15)":"transparent" }}>{d}</span>
+                      {rsdia.length>0&&<span style={{ fontSize:10, fontWeight:700, color:urgDia.length>0?"#c2410c":pendDia.length>0?C.amber:C.green, background:urgDia.length>0?"#fff7ed":pendDia.length>0?C.amberBg:C.greenBg, borderRadius:8, padding:"1px 5px" }}>{rsdia.length}</span>}
+                    </div>
+                    {/* Chips de reservas */}
+                    <div style={{ display:"flex", flexDirection:"column", gap:2 }}>
+                      {urgDia.slice(0,2).map(r=>(
+                        <div key={r.id} style={{ background:"#fff7ed", border:"1px solid #f97316", borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:700, color:"#c2410c", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                          ⚡ {r.horario} {r.professor.split(" ")[0]}
+                        </div>
+                      ))}
+                      {pendDia.slice(0,1).map(r=>(
+                        <div key={r.id} title={`⏳ ${r.horario} | ${r.espaco} | ${r.professor}`} style={{ background:C.amberBg, border:`1px solid ${C.amberBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:700, color:C.amber, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setDiaSel(dateStr);}}>
+                          ⏳ {r.horario} {r.espaco.split(" ")[0]}
+                        </div>
+                      ))}
+                      {confDia.slice(0,2).map(r=>(
+                        <div key={r.id} title={`✅ ${r.horario} | ${r.espaco} | ${r.professor} | ${r.turma}`} style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:600, color:C.green, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setDiaSel(dateStr);}}>
+                          {r.horario} {r.espaco.split(" ")[0]}
+                        </div>
+                      ))}
+                      {rsdia.length>3&&<div title={rsdia.slice(3).map(r=>`${r.horario} | ${r.espaco} | ${r.professor.split(" ")[0]}`).join("\n")} style={{ fontSize:9, color:C.blueMid, fontWeight:700, paddingLeft:2, cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setDiaSel(dateStr);}}>+{rsdia.length-3} mais ↓</div>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Legenda */}
+          <div style={{ display:"flex", gap:16, marginTop:10, flexWrap:"wrap", alignItems:"center" }}>
+            {[{label:"Urgente",bg:"#fff7ed",border:"#f97316",c:"#c2410c"},{label:"Pendente",bg:C.amberBg,border:C.amberBorder,c:C.amber},{label:"Confirmado",bg:C.greenBg,border:C.greenBorder,c:C.green}].map(l=>(
+              <div key={l.label} style={{ display:"flex", alignItems:"center", gap:5 }}>
+                <div style={{ width:14, height:14, borderRadius:3, background:l.bg, border:`1.5px solid ${l.border}` }} />
+                <span style={{ fontSize:11.5, color:C.textMuted, fontWeight:600 }}>{l.label}</span>
+              </div>
+            ))}
+            <span style={{ marginLeft:"auto", fontSize:11, color:C.textMuted }}>Clique no dia para ver detalhes</span>
+          </div>
+
+          {/* Painel lateral do dia selecionado */}
+          {diaSel&&(
+            <div className="fade-in" style={{ marginTop:16, background:C.surface, borderRadius:14, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
+              <div style={{ background:`linear-gradient(135deg,#1a6b47,#0f4c2b)`, padding:"12px 18px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                <div>
+                  <p style={{ fontSize:11, color:"rgba(255,255,255,.75)", fontWeight:700, textTransform:"uppercase", letterSpacing:".5px" }}>Agendamentos do dia</p>
+                  <p style={{ fontSize:16, fontWeight:800, color:"#fff", marginTop:2 }}>📅 {diaSel.split("-").reverse().join("/")}</p>
+                </div>
+                <button onClick={()=>setDiaSel(null)} style={{ background:"rgba(255,255,255,.2)", border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:700, padding:"5px 12px", cursor:"pointer" }}>✕ Fechar</button>
+              </div>
+              <div style={{ padding:"14px 18px" }}>
                 {(porDataCal[diaSel]||[]).length===0 ? (
-                  <div style={{ padding:"48px 24px", textAlign:"center" }}>
-                    <div style={{ fontSize:40, marginBottom:12 }}>🎉</div>
-                    <p style={{ fontSize:16, fontWeight:700, color:C.navy, marginBottom:6 }}>Dia livre!</p>
-                    <p style={{ fontSize:13, color:C.textMuted }}>Nenhum agendamento neste dia.</p>
-                  </div>
+                  <p style={{ fontSize:13, color:C.textMuted, textAlign:"center", padding:"16px 0" }}>🎉 Nenhum agendamento neste dia.</p>
                 ) : (
-                  <div style={{ padding:"16px 18px", display:"grid", gap:6 }}>
-                    {[...(porDataCal[diaSel]||[])].sort((a,b)=>a.horario>b.horario?1:-1).map(r=><ReservaRow key={r.id} r={r} />)}
-                  </div>
+                  [...(porDataCal[diaSel]||[])].sort((a,b)=>a.horario>b.horario?1:-1).map(r=><ReservaRow key={r.id} r={r} />)
                 )}
               </div>
             </div>
-          ) : (
-            <>
-              {/* Cabeçalho do mês */}
-              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14, flexWrap:"wrap", gap:10 }}>
-                <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                  <button onClick={()=>navMes(-1)} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, width:34, height:34, cursor:"pointer", color:C.textMid, fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
-                  <div style={{ textAlign:"center", minWidth:130 }}>
-                    <p style={{ fontSize:18, fontWeight:800, color:C.navy }}>{nomeMes} {mesCal.a}</p>
-                    <p style={{ fontSize:11, color:C.textMuted }}>{filtradas.filter(r=>r.status!=="recusado"&&r.data.startsWith(`${mesCal.a}-${String(mesCal.m+1).padStart(2,"0")}`)).length} agendamentos neste mês</p>
-                  </div>
-                  <button onClick={()=>navMes(1)} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, width:34, height:34, cursor:"pointer", color:C.textMid, fontSize:16, display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
-                </div>
-                <button onClick={()=>{ const d=new Date(); setMesCal({a:d.getFullYear(),m:d.getMonth()}); setDiaSel(null); }} style={{ background:C.surface, border:`1.5px solid ${C.border}`, borderRadius:8, color:C.blueMid, fontSize:12, fontWeight:700, padding:"6px 14px", cursor:"pointer" }}>Hoje</button>
-              </div>
-              <div style={{ background:C.surface, borderRadius:16, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", borderBottom:`2px solid ${C.border}` }}>
-                  {["Dom.","Seg.","Ter.","Qua.","Qui.","Sexta","Sáb."].map((d,i)=>(
-                    <div key={d} style={{ padding:"10px 0", textAlign:"center", fontSize:11, fontWeight:700, color:i===0||i===6?"#ef4444":C.textMuted, letterSpacing:".3px", textTransform:"uppercase" }}>{d}</div>
-                  ))}
-                </div>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)" }}>
-                  {cells.map((d,i)=>{
-                    if (!d) return <div key={i} style={{ minHeight:90, borderRight:`1px solid ${C.borderLight}`, borderBottom:`1px solid ${C.borderLight}` }} />;
-                    const dateStr=`${mesCal.a}-${String(mesCal.m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-                    const isPast=dateStr<hoje, isHoje=dateStr===hoje;
-                    const rsdia=porDataCal[dateStr]||[];
-                    const urgDia=rsdia.filter(isUrgente);
-                    const pendDia=rsdia.filter(r=>r.status==="pendente"&&!isUrgente(r));
-                    const confDia=rsdia.filter(r=>r.status==="confirmado");
-                    const dow=new Date(Date.UTC(mesCal.a,mesCal.m,d)).getUTCDay();
-                    const isFimSemana=dow===0||dow===6;
-                    return (
-                      <div key={i} onClick={()=>setDiaSel(dateStr)} style={{ minHeight:90, borderRight:`1px solid ${C.borderLight}`, borderBottom:`1px solid ${C.borderLight}`, padding:"6px 8px", cursor:"pointer", background:isHoje?"rgba(13,158,120,.04)":isPast?"rgba(0,0,0,.015)":"transparent", transition:"background .15s", position:"relative" }}
-                        onMouseEnter={e=>e.currentTarget.style.background=isHoje?"rgba(13,158,120,.1)":isPast?"rgba(0,0,0,.03)":"rgba(13,158,120,.05)"}
-                        onMouseLeave={e=>e.currentTarget.style.background=isHoje?"rgba(13,158,120,.04)":isPast?"rgba(0,0,0,.015)":"transparent"}
-                      >
-                        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:4 }}>
-                          <span style={{ fontSize:13.5, fontWeight:isHoje?900:500, color:isHoje?"#0d9e78":isPast?C.textMuted:isFimSemana?"#ef4444":C.navy, width:26, height:26, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", background:isHoje?"rgba(13,158,120,.15)":"transparent" }}>{d}</span>
-                          {rsdia.length>0&&<span style={{ fontSize:10, fontWeight:700, color:urgDia.length>0?"#c2410c":pendDia.length>0?C.amber:C.green, background:urgDia.length>0?"#fff7ed":pendDia.length>0?C.amberBg:C.greenBg, borderRadius:8, padding:"1px 5px" }}>{rsdia.length}</span>}
-                        </div>
-                        <div style={{ display:"flex", flexDirection:"column", gap:2 }}>
-                          {urgDia.slice(0,2).map(r=><div key={r.id} style={{ background:"#fff7ed", border:"1px solid #f97316", borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:700, color:"#c2410c", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>⚡ {r.horario} {r.professor.split(" ")[0]}</div>)}
-                          {pendDia.slice(0,1).map(r=><div key={r.id} style={{ background:C.amberBg, border:`1px solid ${C.amberBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:700, color:C.amber, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>⏳ {r.horario} {r.espaco.split(" ")[0]}</div>)}
-                          {confDia.slice(0,2).map(r=><div key={r.id} style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:600, color:C.green, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.horario} {r.espaco.split(" ")[0]}</div>)}
-                          {rsdia.length>3&&<div style={{ fontSize:9, color:C.blueMid, fontWeight:700, paddingLeft:2 }}>+{rsdia.length-3} mais ↓</div>}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div style={{ display:"flex", gap:16, marginTop:10, flexWrap:"wrap", alignItems:"center" }}>
-                {[{label:"Urgente",bg:"#fff7ed",border:"#f97316"},{label:"Pendente",bg:C.amberBg,border:C.amberBorder},{label:"Confirmado",bg:C.greenBg,border:C.greenBorder}].map(l=>(
-                  <div key={l.label} style={{ display:"flex", alignItems:"center", gap:5 }}>
-                    <div style={{ width:14, height:14, borderRadius:3, background:l.bg, border:`1.5px solid ${l.border}` }} />
-                    <span style={{ fontSize:11.5, color:C.textMuted, fontWeight:600 }}>{l.label}</span>
-                  </div>
-                ))}
-                <span style={{ marginLeft:"auto", fontSize:11, color:C.textMuted }}>Clique no dia para ver detalhes</span>
-              </div>
-            </>
           )}
         </div>
       )}
@@ -1683,7 +1635,7 @@ function AdminView() {
                       return (
                         <div key={data} style={{ marginBottom:14 }}>
                           <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
-                            <div style={{ background:isH?"#0d9e78":isFut?C.navy:C.textMuted, color:"#fff", borderRadius:7, padding:"3px 12px", fontSize:11.5, fontWeight:700, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{isH?"📌 Hoje":`${dia}/${mes}/${ano}`}</div>
+                            <div style={{ background:isH?"#40b07a":isFut?C.navy:C.textMuted, color:"#fff", borderRadius:7, padding:"3px 12px", fontSize:11.5, fontWeight:700, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{isH?"📌 Hoje":`${dia}/${mes}/${ano}`}</div>
                             <div style={{ flex:1, height:1, background:C.borderLight }} />
                             <span style={{ fontSize:11, color:C.textMuted }}>{rs.length} reserva{rs.length!==1?"s":""}</span>
                           </div>
@@ -1719,7 +1671,7 @@ function AdminView() {
                         const [ano,mes,dia]=data.split("-"); const isH=data===hoje;
                         return (
                           <div key={data} style={{ marginBottom:10 }}>
-                            <p style={{ fontSize:11, fontWeight:700, color:isH?"#0d9e78":C.textMuted, fontFamily:"'DM Mono',monospace", marginBottom:6 }}>{isH?"📌 Hoje":`${dia}/${mes}/${ano}`}</p>
+                            <p style={{ fontSize:11, fontWeight:700, color:isH?"#40b07a":C.textMuted, fontFamily:"'DM Mono',monospace", marginBottom:6 }}>{isH?"📌 Hoje":`${dia}/${mes}/${ano}`}</p>
                             <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
                               {drs.map(r=>(
                                 <div key={r.id} style={{ background:C.bg, border:`1px solid ${C.border}`, borderRadius:8, padding:"6px 12px", fontSize:12, display:"flex", alignItems:"center", gap:8 }}>
@@ -1791,7 +1743,7 @@ function ModalLogin({ onSuccess, onClose }) {
         <div style={{ display:"grid", gap:13 }}>
           <Field label="E-mail"><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="seu@escola.edu.br" style={inp} onKeyDown={e=>e.key==="Enter"&&handleLogin()} /></Field>
           <Field label="Senha"><input type="password" value={senha} onChange={e=>setSenha(e.target.value)} placeholder="••••••••" style={inp} onKeyDown={e=>e.key==="Enter"&&handleLogin()} /></Field>
-          <button onClick={handleLogin} disabled={loading} style={{ padding:"11px", borderRadius:10, border:"none", background:"#0d9e78", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer" }}>{loading?"Aguarde...":"Entrar →"}</button>
+          <button onClick={handleLogin} disabled={loading} style={{ padding:"11px", borderRadius:10, border:"none", background:"#40b07a", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer" }}>{loading?"Aguarde...":"Entrar →"}</button>
         </div>
         <p style={{ fontSize:11, color:C.textMuted, textAlign:"center", marginTop:16 }}>Sem acesso? Contate o administrador.</p>
       </div>
@@ -1821,11 +1773,11 @@ function TelaPublica() {
         <div style={{ display:"flex", alignItems:"center", gap:10 }}><Logo size={34} /><div><p style={{ fontSize:13, fontWeight:800, color:C.navy }}>Reserva de Salas</p><p style={{ fontSize:10, color:C.textMuted }}>Colégio Arena</p></div></div>
         <div style={{ display:"flex", gap:8, alignItems:"center" }}>
           <button onClick={toggle} style={{ background:dark?"#f1f5f9":"#0f172a", color:dark?"#0f172a":"#f1f5f9", border:"none", borderRadius:20, padding:"5px 12px", cursor:"pointer", fontSize:12, fontWeight:700 }}>{dark?"☀️ Claro":"🌙 Escuro"}</button>
-          <button onClick={()=>setMostrarLogin(true)} style={{ padding:"7px 18px", borderRadius:8, border:"none", background:"#0d9e78", color:"#fff", fontWeight:700, fontSize:13, cursor:"pointer" }}>Entrar</button>
+          <button onClick={()=>setMostrarLogin(true)} style={{ padding:"7px 18px", borderRadius:8, border:"none", background:"#40b07a", color:"#fff", fontWeight:700, fontSize:13, cursor:"pointer" }}>Entrar</button>
         </div>
       </header>
       <div style={{ maxWidth:700, margin:"0 auto", padding:"20px 16px 60px" }}>
-        <div style={{ background:`linear-gradient(135deg,#0d9e78,#0a7a5e)`, borderRadius:14, padding:"18px 20px", marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap" }}>
+        <div style={{ background:`linear-gradient(135deg,#1a6b47,#0f4c2b)`, borderRadius:14, padding:"18px 20px", marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap" }}>
           <div><p style={{ fontSize:15, fontWeight:800, color:"#fff", marginBottom:4 }}>Bem-vindo ao sistema de reservas</p><p style={{ fontSize:12.5, color:"rgba(255,255,255,.8)" }}>Para agendar, entre com seu login de professor.</p></div>
           <button onClick={()=>setMostrarLogin(true)} style={{ padding:"10px 22px", borderRadius:10, border:"2px solid #fff", background:"transparent", color:"#fff", fontWeight:800, fontSize:13.5, cursor:"pointer", whiteSpace:"nowrap", flexShrink:0 }}>Entrar para agendar →</button>
         </div>
@@ -1841,7 +1793,7 @@ function TelaPublica() {
           </div>
         </div>
         {modoVisu==="semana"&&(
-          <div style={{ background:`linear-gradient(135deg,#0d9e78,#0a7a5e)`, borderRadius:14, padding:"16px 18px", color:"#fff" }}>
+          <div style={{ background:`linear-gradient(135deg,#1a6b47,#0f4c2b)`, borderRadius:14, padding:"16px 18px", color:"#fff" }}>
             <p style={{ fontSize:11, fontWeight:700, opacity:.75, textTransform:"uppercase", letterSpacing:".5px", marginBottom:12 }}>Semana atual</p>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:6 }}>
               {diasSemana.map((d,i)=>{ const [,,dia]=d.split("-"); const isHoje=d===hoje; const rsDodia=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1); return (
@@ -1864,9 +1816,9 @@ function TelaPublica() {
               <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", marginBottom:6 }}>{["D","S","T","Q","Q","S","S"].map((n,i)=><div key={i} style={{ textAlign:"center", fontSize:10, fontWeight:700, color:i===0||i===6?"#ef4444":C.textMuted, padding:"3px 0" }}>{n}</div>)}</div>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:2 }}>
                 {cells.map((d,i)=>{ if (!d) return <div key={i} />; const dateStr=`${mesCal.a}-${String(mesCal.m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`; const isHoje=dateStr===hoje; const isPast=dateStr<hoje; const isSel=dateStr===diaMesSel; const rs=reservasPorData[dateStr]||[]; const profs=[...new Map(rs.map(r=>[r.professorId,r])).values()]; return (
-                  <button key={i} onClick={()=>setDiaMesSel(isSel?null:dateStr)} style={{ borderRadius:8, border:"none", cursor:"pointer", background:isSel?"#0d9e78":isHoje?"rgba(13,158,120,.12)":"transparent", transition:"all .15s", display:"flex", flexDirection:"column", alignItems:"center", padding:"5px 2px", gap:2, minHeight:52 }}>
+                  <button key={i} onClick={()=>setDiaMesSel(isSel?null:dateStr)} style={{ borderRadius:8, border:"none", cursor:"pointer", background:isSel?"#40b07a":isHoje?"rgba(26,107,71,.12)":"transparent", transition:"all .15s", display:"flex", flexDirection:"column", alignItems:"center", padding:"5px 2px", gap:2, minHeight:52 }}>
                     <span style={{ fontWeight:isHoje||isSel?900:500, fontSize:13, color:isSel?"#fff":isPast?C.textMuted:C.navy }}>{d}</span>
-                    {profs.slice(0,2).map(r=><div key={r.professorId} style={{ background:isSel?"rgba(255,255,255,.25)":"rgba(13,158,120,.12)", borderRadius:3, padding:"1px 3px", width:"100%" }}><p style={{ fontSize:7.5, fontWeight:800, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", textAlign:"center", color:isSel?"#fff":"#0d9e78" }}>{r.professor.split(" ")[0]}</p></div>)}
+                    {profs.slice(0,2).map(r=><div key={r.professorId} style={{ background:isSel?"rgba(255,255,255,.25)":"rgba(26,107,71,.12)", borderRadius:3, padding:"1px 3px", width:"100%" }}><p style={{ fontSize:7.5, fontWeight:800, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", textAlign:"center", color:isSel?"#fff":"#40b07a" }}>{r.professor.split(" ")[0]}</p></div>)}
                     {profs.length>2&&<p style={{ fontSize:7, color:isSel?"rgba(255,255,255,.7)":C.textMuted }}>+{profs.length-2}</p>}
                   </button>
                 ); })}
@@ -1876,10 +1828,10 @@ function TelaPublica() {
                   <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>{diaMesSel.split("-").reverse().join("/")}</p>
                   {(reservasPorData[diaMesSel]||[]).length===0 ? <p style={{ fontSize:13, color:C.textMuted }}>🎉 Dia livre.</p> : (
                     <div style={{ display:"grid", gap:5, marginBottom:10 }}>
-                      {(reservasPorData[diaMesSel]||[]).sort((a,b)=>a.horario>b.horario?1:-1).map((r,i)=><div key={r.id||i} style={{ display:"flex", gap:8, alignItems:"center", padding:"6px 10px", borderRadius:8, background:C.surface, border:`1px solid ${C.border}`, borderLeft:`3px solid #0d9e78` }}><span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#0d9e78", fontSize:12, minWidth:38 }}>{r.horario}</span><span style={{ fontWeight:700, fontSize:12, flex:1, color:C.navy }}>{r.espaco}</span><span style={{ fontSize:11, color:C.textMid }}>{r.turma}</span><span style={{ fontSize:11, color:C.textMuted }}>{r.professor.split(" ")[0]}</span></div>)}
+                      {(reservasPorData[diaMesSel]||[]).sort((a,b)=>a.horario>b.horario?1:-1).map((r,i)=><div key={r.id||i} style={{ display:"flex", gap:8, alignItems:"center", padding:"6px 10px", borderRadius:8, background:C.surface, border:`1px solid ${C.border}`, borderLeft:`3px solid #40b07a` }}><span style={{ fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#40b07a", fontSize:12, minWidth:38 }}>{r.horario}</span><span style={{ fontWeight:700, fontSize:12, flex:1, color:C.navy }}>{r.espaco}</span><span style={{ fontSize:11, color:C.textMid }}>{r.turma}</span><span style={{ fontSize:11, color:C.textMuted }}>{r.professor.split(" ")[0]}</span></div>)}
                     </div>
                   )}
-                  {diaMesSel>=hoje&&<div style={{ borderTop:`1px solid ${C.border}`, paddingTop:10, display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}><p style={{ fontSize:12.5, fontWeight:700, color:C.navy }}>Deseja agendar?</p><button onClick={()=>setMostrarLogin(true)} style={{ padding:"7px 16px", borderRadius:8, border:"none", background:"#0d9e78", color:"#fff", fontWeight:800, fontSize:13, cursor:"pointer" }}>Entrar para agendar →</button></div>}
+                  {diaMesSel>=hoje&&<div style={{ borderTop:`1px solid ${C.border}`, paddingTop:10, display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}><p style={{ fontSize:12.5, fontWeight:700, color:C.navy }}>Deseja agendar?</p><button onClick={()=>setMostrarLogin(true)} style={{ padding:"7px 16px", borderRadius:8, border:"none", background:"#40b07a", color:"#fff", fontWeight:800, fontSize:13, cursor:"pointer" }}>Entrar para agendar →</button></div>}
                 </div>
               )}
             </div>
@@ -1906,7 +1858,7 @@ export default function App() {
     <ThemeCtx.Provider value={{dark,toggle}}>
       <GlobalStyle dark={dark} />
       <div style={{ minHeight:"100vh", background:C.bg }} translate="no" lang="pt-BR">
-        <header style={{ background:C.headerBg, borderBottom:C.headerBorder, padding:"0 24px", display:"flex", alignItems:"center", justifyContent:"space-between", height:58, position:"sticky", top:0, zIndex:100, boxShadow:"0 1px 6px rgba(15,32,68,.07)" }}>
+        <header style={{ background:C.headerBg, borderBottom:C.headerBorder, padding:"0 24px", display:"flex", alignItems:"center", justifyContent:"space-between", height:58, position:"sticky", top:0, zIndex:100, boxShadow:"0 1px 6px rgba(19,35,24,.07)" }}>
           <div style={{ display:"flex", alignItems:"center", gap:16 }}>
             <div style={{ display:"flex", alignItems:"center", gap:10 }}><Logo size={36} /><div><p style={{ fontSize:13, fontWeight:800, color:C.navy }}>Reserva de Salas e Equipamentos</p><p style={{ fontSize:10, color:C.textMuted }}>Colégio Arena</p></div></div>
             {usuario?.perfil==="admin"&&<AdminUsuariosBtn />}
