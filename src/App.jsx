@@ -1529,16 +1529,16 @@ function AdminView() {
                         </div>
                       ))}
                       {pendDia.slice(0,1).map(r=>(
-                        <div key={r.id} style={{ background:C.amberBg, border:`1px solid ${C.amberBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:700, color:C.amber, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                        <div key={r.id} title={`⏳ ${r.horario} | ${r.espaco} | ${r.professor}`} style={{ background:C.amberBg, border:`1px solid ${C.amberBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:700, color:C.amber, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setDiaSel(dateStr);}}>
                           ⏳ {r.horario} {r.espaco.split(" ")[0]}
                         </div>
                       ))}
                       {confDia.slice(0,2).map(r=>(
-                        <div key={r.id} style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:600, color:C.green, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                        <div key={r.id} title={`✅ ${r.horario} | ${r.espaco} | ${r.professor} | ${r.turma}`} style={{ background:C.greenBg, border:`1px solid ${C.greenBorder}`, borderRadius:4, padding:"2px 5px", fontSize:9.5, fontWeight:600, color:C.green, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setDiaSel(dateStr);}}>
                           {r.horario} {r.espaco.split(" ")[0]}
                         </div>
                       ))}
-                      {rsdia.length>3&&<div title={rsdia.slice(3).map(r=>`${r.horario} ${r.espaco.split(" ")[0]} · ${r.professor.split(" ")[0]}`).join("\n")} style={{ fontSize:9, color:C.blueMid, fontWeight:700, paddingLeft:2, cursor:"help" }}>+{rsdia.length-3} mais</div>}
+                      {rsdia.length>3&&<div title={rsdia.slice(3).map(r=>`${r.horario} | ${r.espaco} | ${r.professor.split(" ")[0]}`).join("\n")} style={{ fontSize:9, color:C.blueMid, fontWeight:700, paddingLeft:2, cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setDiaSel(dateStr);}}>+{rsdia.length-3} mais ↓</div>}
                     </div>
                   </div>
                 );
