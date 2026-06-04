@@ -21,21 +21,21 @@ const useTheme = () => useContext(ThemeCtx);
 const HORARIOS = ["07:10","08:00","09:10","10:00","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00"];
 const ESPACOS = [
   { id:1,  nome:"Biblioteca",                      tipo:"espaco"      },
-  { id:2,  nome:"Maker Anos Iniciais",              tipo:"espaco"      },
-  { id:3,  nome:"Maker Anos Finais",                tipo:"espaco"      },
+  { id:2,  nome:"Maker A. Iniciais",              tipo:"espaco"      },
+  { id:3,  nome:"Maker A. Finais",                tipo:"espaco"      },
   { id:4,  nome:"Ateliê de Artes",                  tipo:"espaco"      },
   { id:5,  nome:"Sala de Dança",                    tipo:"espaco"      },
   { id:6,  nome:"Sala Multifuncional",              tipo:"espaco"      },
   { id:7,  nome:"Cozinha Experimental",             tipo:"espaco"      },
   { id:8,  nome:"Lab. de Ciências Anos Iniciais",   tipo:"laboratorio" },
   { id:9,  nome:"Lab. de Ciências Anos Finais",     tipo:"laboratorio" },
-  { id:10, nome:"Tablets (18 disponíveis)",         tipo:"equipamento", estoque:18 },
-  { id:11, nome:"Computadores (16 disponíveis)",    tipo:"equipamento", estoque:16 },
+  { id:10, nome:"Tablets (18 disp.)",         tipo:"equipamento", estoque:18 },
+  { id:11, nome:"Computadores (16 disp.)",    tipo:"equipamento", estoque:16 },
 ];
 const TURMAS = (() => {
   const t = [];
-  for (let ano=1;ano<=5;ano++) ["A","B","C","D","E"].forEach((l)=>t.push(`${ano}º Ano ${l}`));
-  for (let ano=6;ano<=9;ano++) ["A","B","C","D","E","F","G","H"].forEach((l)=>t.push(`${ano}º Ano ${l}`));
+  for (let ano=1;ano<=5;ano++) ["A","B","C","D","E"].forEach((l)=>t.push(`${ano}º${l}`));
+  for (let ano=6;ano<=9;ano++) ["A","B","C","D","E","F","G","H"].forEach((l)=>t.push(`${ano}º${l}`));
   return t;
 })();
 const today = new Date();
