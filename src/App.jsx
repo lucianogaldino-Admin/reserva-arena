@@ -214,7 +214,7 @@ function HorariosOcupados({ espaco, data, horarioSelecionado, onSelect, excluirI
 const fmtDia = (str) => {
   const [a,m,d] = str.split("-").map(Number);
   const dt = new Date(Date.UTC(a, m-1, d));
-  const dias  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+  const dias  = ["Dom.","Seg.","Ter.","Qua.","Qui.","Sex.","Sáb."];
   const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
   const dow = dt.getUTCDay();
   return { diaSemana:dias[dow], dia:String(d).padStart(2,"0"), mes:meses[m-1], isWeekend:dow===0||dow===6 };
@@ -394,7 +394,7 @@ function CalMensalAdmin({ reservas, filtroEspaco, hoje, C, onNovaReserva }) {
       </div>
       {/* Cabeçalho dias */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", background:C.bg, borderBottom:`1px solid ${C.border}` }}>
-        {["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"].map((d,i)=>(
+        {["Dom.","Seg.","Ter.","Qua.","Qui.","Sex.","Sáb."].map((d,i)=>(
           <div key={d} style={{ padding:"8px 0", textAlign:"center", fontSize:10.5, fontWeight:700, color:i===0||i===6?"#ef4444":C.textMuted, textTransform:"uppercase", letterSpacing:".3px" }}>{d}</div>
         ))}
       </div>
@@ -649,7 +649,7 @@ function CalendarioMensal({ reservasPorData, onSelectDia, dataSelecionada }) {
       </div>
       <div style={{ padding:"12px 16px 16px" }}>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", marginBottom:6 }}>
-          {["DOM","SEG","TER","QUA","QUI","SEX","SÁB"].map(d=><div key={d} style={{ textAlign:"center", fontSize:10, fontWeight:700, color:d==="DOM"||d==="SÁB"?"#ef4444":C.textMuted, padding:"4px 0" }}>{d}</div>)}
+          {["Dom.","Seg.","Ter.","Qua.","Qui.","Sex.","Sáb."].map(d=><div key={d} style={{ textAlign:"center", fontSize:10, fontWeight:700, color:d==="DOM"||d==="SÁB"?"#ef4444":C.textMuted, padding:"4px 0" }}>{d}</div>)}
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:3 }}>
           {cells.map((d,i)=>{
@@ -915,7 +915,7 @@ function ProfessorView({ usuario }) {
 
         {/* Modo SEMANA */}
         {modoVisu==="semana"&&(()=>{
-          const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg","Ter","Qua","Qui","Sex"];
+          const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sex."];
           // CORREÇÃO: guarda r?.professor
           const fonte=(filtroGrade==="meus"
             ?semanaReservas.filter(r=>r?.professor)
@@ -1498,7 +1498,7 @@ function AdminView() {
           <div style={{ background:C.surface, borderRadius:16, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
             {/* Dias da semana */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", borderBottom:`2px solid ${C.border}` }}>
-              {["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"].map((d,i)=>(
+              {["Dom.","Seg.","Ter.","Qua.","Qui.","Sex.","Sáb."].map((d,i)=>(
                 <div key={d} style={{ padding:"10px 0", textAlign:"center", fontSize:11, fontWeight:700, color:i===0||i===6?"#ef4444":C.textMuted, letterSpacing:".3px", textTransform:"uppercase" }}>{d}</div>
               ))}
             </div>
@@ -1760,7 +1760,7 @@ function TelaPublica() {
   useEffect(()=>onSnapshot(collection(db,"reservas"),snap=>setTodasReservas(snap.docs.map(d=>d.data()).filter(r=>r&&r.professor&&r.data&&r.horario))),[]);
   const fonte=useMemo(()=>todasReservas.filter(r=>r?.status!=="recusado"&&(!espacoSel||r.espaco===espacoSel)),[todasReservas,espacoSel]);
   const reservasPorData=useMemo(()=>{ const m={}; fonte.forEach(r=>{ if(!m[r.data])m[r.data]=[]; m[r.data].push(r); }); return m; },[fonte]);
-  const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg","Ter","Qua","Qui","Sex"];
+  const seg=getSegunda(hoje); const diasSemana=Array.from({length:5},(_,i)=>addDays(seg,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sex."];
   const agora2=new Date(); const [mesCal,setMesCal]=useState({a:agora2.getFullYear(),m:agora2.getMonth()});
   const nomeMes=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][mesCal.m];
   const primeiroDia=new Date(Date.UTC(mesCal.a,mesCal.m,1)); const diasNoMes=new Date(Date.UTC(mesCal.a,mesCal.m+1,0)).getUTCDate(); const inicioGrid=primeiroDia.getUTCDay();
