@@ -863,8 +863,20 @@ function ProfessorView({ usuario }) {
         </div>
       </div>
       <div style={{ display:"flex", gap:4, flexShrink:0 }}>
-        {r.data>=hoje&&r.status!=="recusado"&&<button onClick={()=>setEditando(r)} style={{ background:"none", border:"none", color:C.textMuted, cursor:"pointer", fontSize:15, padding:"4px" }}>✏️</button>}
-        {r.data>=hoje&&r.status!=="recusado"&&<button onClick={()=>cancelar(r.id)} style={{ background:"none", border:"none", color:C.textMuted, cursor:"pointer", fontSize:15, padding:"4px" }}>✕</button>}
+        {r.data>=hoje&&r.status!=="recusado"&&(
+          <button onClick={()=>setEditando(r)} title="Editar agendamento" style={{ background:"none", border:"1px solid transparent", borderRadius:7, color:C.textMuted, cursor:"pointer", fontSize:14, padding:"5px 8px", display:"flex", alignItems:"center", gap:4, transition:"all .15s" }}
+            onMouseEnter={e=>{e.currentTarget.style.background=C.greenBg;e.currentTarget.style.borderColor=C.greenBorder;e.currentTarget.style.color=C.green;}}
+            onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="transparent";e.currentTarget.style.color=C.textMuted;}}>
+            ✏️ <span style={{ fontSize:11, fontWeight:600 }}>Editar</span>
+          </button>
+        )}
+        {r.data>=hoje&&r.status!=="recusado"&&(
+          <button onClick={()=>cancelar(r.id)} title="Cancelar reserva" style={{ background:"none", border:"1px solid transparent", borderRadius:7, color:C.textMuted, cursor:"pointer", fontSize:14, padding:"5px 8px", display:"flex", alignItems:"center", gap:4, transition:"all .15s" }}
+            onMouseEnter={e=>{e.currentTarget.style.background=C.redBg;e.currentTarget.style.borderColor=C.redBorder;e.currentTarget.style.color=C.red;}}
+            onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="transparent";e.currentTarget.style.color=C.textMuted;}}>
+            ✕ <span style={{ fontSize:11, fontWeight:600 }}>Cancelar</span>
+          </button>
+        )}
       </div>
     </div>
   );
@@ -1380,9 +1392,19 @@ function AdminView() {
           </div>
         </div>
         <div style={{ display:"flex", gap:5, flexShrink:0, alignItems:"center" }}>
-          <button onClick={()=>setEditandoReserva(r)} style={{ background:"none", border:"none", color:C.textMuted, cursor:"pointer", fontSize:15, padding:"4px" }}>✏️</button>
+          <button onClick={()=>setEditandoReserva(r)} title="Editar agendamento" style={{ background:"none", border:"1px solid transparent", borderRadius:7, color:C.textMuted, cursor:"pointer", fontSize:14, padding:"5px 8px", display:"flex", alignItems:"center", gap:4, transition:"all .15s" }}
+            onMouseEnter={e=>{e.currentTarget.style.background=C.greenBg;e.currentTarget.style.borderColor=C.greenBorder;e.currentTarget.style.color=C.green;}}
+            onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="transparent";e.currentTarget.style.color=C.textMuted;}}>
+            ✏️ <span style={{ fontSize:11, fontWeight:600 }}>Editar</span>
+          </button>
           {r.status==="pendente"&&<><Btn onClick={()=>moderar(r.id,"confirmado")} variant="success" size="sm">✓ Aprovar</Btn><Btn onClick={()=>moderar(r.id,"recusado")} variant="danger" size="sm">✗</Btn></>}
-          {r.status==="confirmado"&&<Btn onClick={()=>moderar(r.id,"recusado")} variant="ghost" size="sm" style={{ color:C.amber,borderColor:C.amberBorder,background:C.amberBg,fontSize:11 }}>Cancelar</Btn>}
+          {r.status==="confirmado"&&(
+            <button onClick={()=>moderar(r.id,"recusado")} title="Cancelar reserva" style={{ background:C.redBg, border:`1px solid ${C.redBorder}`, borderRadius:7, color:C.red, cursor:"pointer", fontSize:11, fontWeight:600, padding:"5px 10px", display:"flex", alignItems:"center", gap:4, transition:"all .15s" }}
+              onMouseEnter={e=>{e.currentTarget.style.opacity=".8";}}
+              onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}>
+              ✕ Cancelar
+            </button>
+          )}
           <button onClick={()=>excluir(r.id)} style={{ background:"none", border:"none", color:C.textMuted, cursor:"pointer", fontSize:14, padding:"4px" }}>🗑</button>
         </div>
       </div>
