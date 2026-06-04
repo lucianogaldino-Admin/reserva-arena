@@ -1007,49 +1007,30 @@ function ProfessorView({ usuario }) {
           </div>
         ) : (
         <>
-        {/* Header verde — faixa do topo */}
-        <div style={{ background:"#1a6b47", padding:"10px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
-          {/* Linha 1: label + pendentes + modo calendário/agenda */}
-          <div style={{ display:"flex", alignItems:"center", gap:10, width:"100%", flexWrap:"wrap" }}>
-
-            {pendentes.length>0&&<span style={{ fontSize:11, background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:20, padding:"2px 9px", color:"#fff" }}>⚠️ {pendentes.length} pendente{pendentes.length!==1?"s":""}</span>}
-            <div style={{ marginLeft:"auto", display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-              {[{id:"calendario",label:"📅 Calendário"},{id:"agenda",label:"☰ Agenda"}].map(op=>(
-                <button key={op.id} onClick={()=>setModoCard(op.id)} style={{ padding:"5px 12px", borderRadius:6, border:"none", background:modoCard===op.id?"#fff":"transparent", color:modoCard===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:11.5, cursor:"pointer" }}>{op.label}</button>
+        {/* Banner verde — navegação e filtros, só aparece no modo calendário */}
+        {modoCard==="calendario"&&(
+          <div style={{ background:"#1a6b47", padding:"10px 14px", display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
+            {/* Navegação semana */}
+            {modoVisu==="semana"&&(<>
+              <button onClick={()=>setSemanaInicio(s=>addDays(s,-7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>‹</button>
+              <p style={{ fontSize:12, fontWeight:700, color:"#fff", minWidth:72, textAlign:"center" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}–${db}/${mb}`:`${da}/${ma}–${db}/${mb}`; })()}</p>
+              <button onClick={()=>setSemanaInicio(s=>addDays(s,7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>›</button>
+              <div style={{ width:1, height:20, background:"rgba(255,255,255,.2)", margin:"0 2px", flexShrink:0 }} />
+            </>)}
+            {/* Semana / Mês */}
+            <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
+              {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
+                <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
               ))}
             </div>
-          </div>
-          {/* Linha 2: navegação semana/mês + filtros (só no modo calendário) */}
-          {modoCard==="calendario"&&(
-            <div style={{ display:"flex", alignItems:"center", gap:6, width:"100%", flexWrap:"wrap" }}>
-              {/* Navegação semana */}
-              {modoVisu==="semana"&&(
-                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                  <button onClick={()=>setSemanaInicio(s=>addDays(s,-7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
-                  <div style={{ textAlign:"center" }}>
-                    <p style={{ fontSize:12, fontWeight:700, color:"#fff" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}–${db}/${mb}`:`${da}/${ma} – ${db}/${mb}`; })()}</p>
-                  </div>
-                  <button onClick={()=>setSemanaInicio(s=>addDays(s,7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
 
-                </div>
-              )}
-              <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-                {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
-                  <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-                ))}
-              </div>
-              <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-                {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
-                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-                ))}
-              </div>
-              <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"#fff", fontWeight:600, fontSize:11.5, cursor:"pointer", outline:"none", padding:"5px 8px", maxWidth:140 }}>
-                <option value="" style={{ background:"#1a6b47" }}>Todos espaços</option>
-                {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
-              </select>
-            </div>
-          )}
-        </div>
+            {/* Espaço */}
+            <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"#fff", fontWeight:600, fontSize:11.5, cursor:"pointer", outline:"none", padding:"5px 8px", maxWidth:150 }}>
+              <option value="" style={{ background:"#1a6b47" }}>Espaços</option>
+              {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
+            </select>
+          </div>
+        )}
         {/* Corpo branco */}
         <div style={{ padding:"14px 16px" }}>
 
