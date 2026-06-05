@@ -820,10 +820,10 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
             <input type="checkbox" checked={ciente} onChange={e=>setCiente(e.target.checked)} style={{ width:18, height:18, marginTop:1, accentColor:"#1a6b47", flexShrink:0, cursor:"pointer" }} />
             <span style={{ fontSize:12, color:C.navy, lineHeight:1.5, fontWeight:ciente?700:400 }}>
               {blocosUrgentes.length>0&&isFimSemana
-                ? "Estou ciente de que este agendamento ficará pendente por ser em fim de semana e ter menos de 24 horas de antecedência. Entrarei em contato com a administração para confirmar o uso do espaço."
+                ? "Estou ciente: agendamento pendente (fim de semana + menos de 24h). Entrarei em contato com a administração para confirmar."
                 : isFimSemana
-                  ? "Estou ciente de que agendamentos em fim de semana ficam pendentes até aprovação do administrador, e que o espaço só estará garantido após a confirmação."
-                  : "Estou ciente de que este agendamento tem menos de 24 horas de antecedência, ficará como pendente e precisarei contatar a administração para confirmar o uso do espaço."
+                  ? "Estou ciente: agendamento em fim de semana fica pendente até aprovação do administrador."
+                  : "Estou ciente: agendamento com menos de 24h ficará pendente. Entrarei em contato com a administração para confirmar."
               }
             </span>
           </label>
@@ -1034,12 +1034,12 @@ function ProfessorView({ usuario }) {
               <div style={{ fontSize:36, marginBottom:10 }}>⚠️</div>
               <h3 style={{ fontSize:16, fontWeight:800, color:"#92400e", marginBottom:8 }}>Agendamento de curto prazo</h3>
               <p style={{ fontSize:13, color:"#78350f", lineHeight:1.6 }}>
-                Este dia tem menos de <strong>24 horas</strong> de antecedência. O agendamento será salvo como <strong>pendente</strong> e <strong>não estará confirmado</strong> até a aprovação do administrador.
+                Este agendamento ficará <strong>pendente</strong> até o administrador aprovar. O espaço <strong>não estará garantido</strong> sem a aprovação.
               </p>
-              <p style={{ fontSize:12.5, color:"#92400e", marginTop:10, lineHeight:1.55 }}>
-                Após agendar, entre em contato com a administração do colégio para garantir o uso do espaço.
+              <p style={{ fontSize:12.5, color:"#92400e", marginTop:8, lineHeight:1.5 }}>
+                Contate a administração do colégio para confirmar o uso.
               </p>
-              <p style={{ fontSize:12, color:"#b45309", fontStyle:"italic", marginTop:8 }}>Deseja continuar mesmo assim?</p>
+              <p style={{ fontSize:12, color:"#b45309", fontStyle:"italic", marginTop:6 }}>Deseja continuar mesmo assim?</p>
             </div>
             <div style={{ display:"flex", gap:10 }}>
               <button onClick={()=>setAlertaUrgente(null)} style={{ flex:1, padding:"11px", borderRadius:8, border:"1.5px solid #c7dfd4", background:"transparent", color:"#132318", fontWeight:700, fontSize:13, cursor:"pointer" }}>← Cancelar</button>
@@ -1446,8 +1446,8 @@ function ProfessorView({ usuario }) {
             <div style={{ background:"#fff7ed", border:"1.5px solid #f97316", borderRadius:10, padding:"10px 14px", marginBottom:12, display:"flex", gap:10, alignItems:"flex-start" }}>
               <span style={{ fontSize:18, flexShrink:0 }}>⚠️</span>
               <div>
-                <p style={{ fontSize:12.5, fontWeight:800, color:"#92400e", marginBottom:3 }}>Agendamento de curto prazo — menos de 24h</p>
-                <p style={{ fontSize:12, color:"#78350f", lineHeight:1.5 }}>Este agendamento ficará <strong>pendente</strong> até aprovação do administrador. Contate a administração do colégio para garantir o uso do espaço.</p>
+                <p style={{ fontSize:12.5, fontWeight:800, color:"#92400e", marginBottom:3 }}>⚠️ Menos de 24h — ficará pendente</p>
+                <p style={{ fontSize:12, color:"#78350f", lineHeight:1.5 }}>Aguarda aprovação do administrador. Contate a administração para garantir o espaço.</p>
               </div>
             </div>
           )}
