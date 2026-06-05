@@ -926,6 +926,7 @@ function ProfessorView({ usuario }) {
 
   const resetForm=()=>{ setEspacoSel(""); setDataSel(""); setBlocos([blocoVazio()]); setSucesso(null); setErro(""); };
   const hoje = fmt(new Date());
+  const nomeProf=(nome)=>{ if(!nome) return ""; const p=nome.trim().split(" "); return p.length===1?p[0]:p[0]+" "+p[p.length-1][0]+"."; };
   const eDiaUrgente=(data)=>{ try { const [a,m,d]=data.split("-").map(Number); const primeirHorario=new Date(a,m-1,d,7,10,0); const diff=(primeirHorario-new Date())/3600000; return diff>0&&diff<24; } catch { return false; } };
 
   const semanaReservas = useMemo(()=>{
@@ -956,11 +957,11 @@ function ProfessorView({ usuario }) {
           <span style={{ fontWeight:700, fontSize:13, color:C.navy }}>{r.espaco}</span>
           <span style={{ fontSize:11, color:C.textMuted }}>·</span>
           <span style={{ fontSize:12, color:C.textMid }}>{r.turma}</span>
-          {filtroGrade==="todos"&&r.professorId!==usuario.uid&&<span style={{ fontSize:11, color:C.textMuted, fontStyle:"italic" }}>· {r.professor?.split(" ")[0]}</span>}
           {extraInfo(r)&&<span style={{ fontSize:11, background:"#e2f4ea", color:"#0f4c2b", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
           <Badge status={r.status} />
+          <span style={{ fontSize:12, color:C.textMuted, fontStyle:"italic" }}>{nomeProf(r.professor)}</span>
           {r.laboratorista==="Sim"&&<span style={{ fontSize:10.5, color:C.textMuted }}>🔬 Lab</span>}
           {r.quantidade&&<span style={{ fontSize:10.5, color:C.textMuted }}>🖥️ {r.quantidade}</span>}
         </div>
@@ -1234,9 +1235,11 @@ function ProfessorView({ usuario }) {
                         <div style={{ display:"grid", gap:3 }}>
                           {rsDodia.map(r=>{ const isMeu=r.professorId===usuario.uid; const isPend=r.status==="pendente"; return (
                             <div key={r.id||r.horario} style={{ background:isMeu?(isPend?C.amberBg:C.greenBg):"rgba(26,107,71,.06)", borderRadius:5, padding:"3px 5px", borderLeft:`2px solid ${isMeu?(isPend?C.amberBorder:C.greenBorder):C.borderLight}` }}>
-                              <p style={{ fontSize:11, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?(isPend?C.amber:C.green):C.textMid }}>{r.horario}</p>
-                              <p style={{ fontSize:11, fontWeight:700, color:C.navy, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
-                              <p style={{ fontSize:10, color:C.textMuted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{filtroGrade==="todos"&&!isMeu?r.professor.split(" ")[0]:r.turma}</p>
+                              <div style={{ display:"flex", alignItems:"baseline", gap:3 }}>
+                                <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?(isPend?C.amber:C.green):C.textMid, flexShrink:0 }}>{r.horario}</p>
+                                <p style={{ fontSize:10, fontWeight:700, color:C.navy, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
+                              </div>
+                              <p style={{ fontSize:9, color:C.textMuted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.turma} · {filtroGrade==="todos"?nomeProf(r.professor):nomeProf(r.professor)}</p>
                             </div>
                           ); })}
                         </div>
