@@ -766,7 +766,7 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
 
         {/* Alerta de urgência / fim de semana */}
         {precisaCiencia&&(
-          <div style={{ background:"#fff7ed", border:"1.5px solid #fed7aa", borderRadius:12, padding:"14px 16px", marginBottom:16 }}>
+          <div style={{ background:"#fff7ed", border:"1.5px solid #fed7aa", borderRadius:10, padding:"10px 14px", marginBottom:12 }}>
             <p style={{ fontSize:12.5, fontWeight:800, color:"#7c2d12", marginBottom:5 }}>
               {isFimSemana ? "⚠️ Agendamento em fim de semana" : "⚠️ Menos de 24h de antecedência"}
             </p>
@@ -777,7 +777,7 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
             )}
             {blocosUrgentes.length>0&&(
               <p style={{ fontSize:12, color:"#92400e", lineHeight:1.5, marginBottom:6 }}>
-                {isFimSemana?"Além disso, c":"C"}ontate a administração para confirmar o uso do espaço.
+                {isFimSemana?"Além disso, c":"C"}ontate a administração do colégio para confirmar.
               </p>
             )}
             <p style={{ fontSize:11.5, color:"#92400e", fontStyle:"italic" }}>
@@ -899,6 +899,8 @@ function ProfessorView({ usuario }) {
   const todosValidos = blocos.every(blocoValido);
 
   const isUrgente=(data,horario)=>{ try { const [ano2,mes2,dia2]=data.split("-").map(Number); const [h,m]=horario.split(":").map(Number); const ev=new Date(ano2,mes2-1,dia2,h,m,0,0); const diff=(ev-new Date())/3600000; return diff<24; } catch { return false; } };
+  const isDiaUrgente=(data)=>{ try { const [a2,m2,d2]=data.split("-").map(Number); const ev=new Date(a2,m2-1,d2,23,59,59); return (ev-new Date())/3600000<24; } catch { return false; } };
+  const agendarDia=(data)=>{ if(isDiaUrgente(data)){ setAlertaUrgente(data); } else { setDataSel(data); setBlocos([blocoVazio()]); } };
 
   const handleSalvar=async()=>{
     setSalvando(true); setErro("");
@@ -1141,7 +1143,7 @@ function ProfessorView({ usuario }) {
                   {diaMesSel>=hoje&&(
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:14, marginTop:4 }}>
                       <p style={{ fontSize:12, color:C.textMuted, marginBottom:10 }}>Quer agendar um espaço neste dia?</p>
-                      <button onClick={()=>{ setDataSel(diaMesSel); setDiaMesSel(null); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:"0 4px 12px rgba(26,107,71,.3)", transition:"opacity .15s" }}
+                      <button onClick={()=>{ setDiaMesSel(null); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:"0 4px 12px rgba(26,107,71,.3)", transition:"opacity .15s" }}
                         onMouseEnter={e=>e.currentTarget.style.opacity=".9"}
                         onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
                         + Agendar neste dia
@@ -1248,7 +1250,7 @@ function ProfessorView({ usuario }) {
                         <div>
                           <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>Agendar neste dia — selecione o espaço:</p>
                           <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-                            <select defaultValue="" onChange={e=>{ if(!e.target.value) return; setDiaMesSel(null); setDataSel(diaMesSel); setEspacoSel(e.target.value); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ flex:1, padding:"8px 10px", borderRadius:8, border:`1px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none", minWidth:180 }}>
+                            <select defaultValue="" onChange={e=>{ if(!e.target.value) return; setDiaMesSel(null); setEspacoSel(e.target.value); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ flex:1, padding:"8px 10px", borderRadius:8, border:`1px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none", minWidth:180 }}>
                               <option value="">Selecione o espaço...</option>
                               <optgroup label="🏛️ Espaços">{ESPACOS.filter(e=>e.tipo==="espaco").map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}</optgroup>
                               <optgroup label="🔬 Laboratórios">{ESPACOS.filter(e=>e.tipo==="laboratorio").map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}</optgroup>
@@ -1259,7 +1261,7 @@ function ProfessorView({ usuario }) {
                       ) : (
                         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, flexWrap:"wrap" }}>
                           <p style={{ fontSize:12, fontWeight:700, color:C.navy }}>Agendar em <strong>{espacoSel}</strong> neste dia?</p>
-                          <button onClick={()=>{ setDataSel(diaMesSel); setDiaMesSel(null); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, fontSize:12, cursor:"pointer" }}>Sim ✓</button>
+                          <button onClick={()=>{ setDiaMesSel(null); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, fontSize:12, cursor:"pointer" }}>Sim ✓</button>
                         </div>
                       )}
                     </div>
@@ -1332,7 +1334,7 @@ function ProfessorView({ usuario }) {
                   {diaMesSel>=hoje&&(
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:10, marginTop:4 }}>
                       <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>Agendar neste dia — selecione o espaço:</p>
-                      <select defaultValue="" onChange={e=>{ if (!e.target.value) return; setDiaMesSel(null); setDataSel(diaMesSel); setEspacoSel(e.target.value); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ width:"100%", padding:"8px 10px", borderRadius:8, border:`1px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none" }}>
+                      <select defaultValue="" onChange={e=>{ if (!e.target.value) return; setDiaMesSel(null); setEspacoSel(e.target.value); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ width:"100%", padding:"8px 10px", borderRadius:8, border:`1px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none" }}>
                         <option value="">Selecione o espaço...</option>
                         <optgroup label="🏛️ Espaços">{ESPACOS.filter(e=>e.tipo==="espaco").map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}</optgroup>
                         <optgroup label="🔬 Laboratórios">{ESPACOS.filter(e=>e.tipo==="laboratorio").map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}</optgroup>
