@@ -1187,23 +1187,6 @@ function ProfessorView({ usuario }) {
         {/* Banner verde — navegação e filtros, só aparece no modo calendário */}
         {modoCard==="calendario"&&(
           <div className="banner-prof">
-            {/* Legenda de cores quando Todos */}
-            {filtroGrade==="todos"&&(
-              <div style={{ display:"flex", gap:8, alignItems:"center", background:"rgba(0,0,0,.2)", borderRadius:8, padding:"4px 10px", flexShrink:0 }}>
-                <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                  <div style={{ width:10, height:10, borderRadius:2, background:C.greenBg, border:`1.5px solid ${C.greenBorder}` }} />
-                  <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Meus</span>
-                </div>
-                <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                  <div style={{ width:10, height:10, borderRadius:2, background:"rgba(255,255,255,.15)", border:"1.5px solid rgba(255,255,255,.3)" }} />
-                  <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Outros</span>
-                </div>
-                <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                  <span style={{ fontSize:10 }}>⏳</span>
-                  <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Pendente</span>
-                </div>
-              </div>
-            )}
             {/* Navegação semana */}
             {modoVisu==="semana"&&(<>
               <div className="banner-prof-nav">
@@ -1219,12 +1202,29 @@ function ProfessorView({ usuario }) {
                 <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
               ))}
             </div>
-
-            {/* Meus / Todos */}
-            <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-              {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
-                <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-              ))}
+            {/* Meus / Todos + legenda inline */}
+            <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+              <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
+                {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
+                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+                ))}
+              </div>
+              {filtroGrade==="todos"&&(
+                <div style={{ display:"flex", gap:6, alignItems:"center" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:3 }}>
+                    <div style={{ width:9, height:9, borderRadius:2, background:"#e2f4ea", border:"1.5px solid #6ee7a0", flexShrink:0 }} />
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>Meus</span>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:3 }}>
+                    <div style={{ width:9, height:9, borderRadius:2, background:"rgba(255,255,255,.85)", border:"1.5px solid rgba(200,220,210,.6)", flexShrink:0 }} />
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>Outros</span>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:3 }}>
+                    <div style={{ width:9, height:9, borderRadius:2, background:"#fff7ed", border:"1.5px solid #fed7aa", flexShrink:0 }} />
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>⏳</span>
+                  </div>
+                </div>
+              )}
             </div>
             {/* Espaço */}
             <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"#fff", fontWeight:600, fontSize:11.5, cursor:"pointer", outline:"none", padding:"5px 8px", maxWidth:150 }}>
