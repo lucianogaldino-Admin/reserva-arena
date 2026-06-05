@@ -926,7 +926,7 @@ function ProfessorView({ usuario }) {
 
   const resetForm=()=>{ setEspacoSel(""); setDataSel(""); setBlocos([blocoVazio()]); setSucesso(null); setErro(""); };
   const hoje = fmt(new Date());
-  const eDiaUrgente=(data)=>{ try { const [a,m,d]=data.split("-").map(Number); const fimDia=new Date(a,m-1,d,23,59,59); const diff=(fimDia-new Date())/3600000; return diff>=0&&diff<24; } catch { return false; } };
+  const eDiaUrgente=(data)=>{ try { const [a,m,d]=data.split("-").map(Number); const primeirHorario=new Date(a,m-1,d,7,10,0); const diff=(primeirHorario-new Date())/3600000; return diff>0&&diff<24; } catch { return false; } };
 
   const semanaReservas = useMemo(()=>{
     const seg=getSegunda(hoje); const dias=Array.from({length:5},(_,i)=>addDays(seg,i));
