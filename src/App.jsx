@@ -1235,10 +1235,11 @@ function ProfessorView({ usuario }) {
                       {rsDodia.length===0 ? <p style={{ fontSize:9, color:C.textMuted, opacity:.5, textAlign:"center", marginTop:4 }}>—</p> : (
                         <div style={{ display:"grid", gap:3 }}>
                           {rsDodia.map(r=>{ const isMeu=r.professorId===usuario.uid; const isPend=r.status==="pendente"; return (
-                            <div key={r.id||r.horario} style={{ background:isMeu?(isPend?C.amberBg:C.greenBg):"rgba(26,107,71,.06)", borderRadius:5, padding:"3px 5px", borderLeft:`2px solid ${isMeu?(isPend?C.amberBorder:C.greenBorder):C.borderLight}` }}>
+                            <div key={r.id||r.horario} style={{ background:isMeu?C.greenBg:"rgba(26,107,71,.06)", borderRadius:5, padding:"3px 5px", borderLeft:`2px solid ${isMeu?C.greenBorder:C.borderLight}` }}>
                               <div style={{ display:"flex", alignItems:"baseline", gap:3 }}>
-                                <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?(isPend?C.amber:C.green):C.textMid, flexShrink:0 }}>{r.horario}</p>
+                                <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?C.green:C.textMid, flexShrink:0 }}>{r.horario}</p>
                                 <p style={{ fontSize:10, fontWeight:700, color:C.navy, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
+                                {isMeu&&isPend&&<span style={{ fontSize:9, flexShrink:0 }}>⏳</span>}
                               </div>
                               <p style={{ fontSize:9, color:C.textMuted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{fmtTurma(r.turma)} · {nomeProf(r.professor)}</p>
                             </div>
@@ -1289,7 +1290,25 @@ function ProfessorView({ usuario }) {
                 </div>
               )}
               {fonte.length===0&&<p style={{ fontSize:13, color:C.textMuted, textAlign:"center", marginTop:8 }}>Nenhum agendamento esta semana</p>}
-              <p style={{ fontSize:10, color:C.textMuted, opacity:.7, textAlign:"right", marginTop:6 }}>Clique no dia para detalhes</p>
+              <div style={{ display:"flex", alignItems:"center", gap:12, marginTop:8, flexWrap:"wrap" }}>
+                {filtroGrade==="todos"&&(
+                  <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                      <div style={{ width:10, height:10, borderRadius:2, background:C.greenBg, border:`1.5px solid ${C.greenBorder}` }} />
+                      <span style={{ fontSize:10, color:C.textMuted }}>Meus</span>
+                    </div>
+                    <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                      <div style={{ width:10, height:10, borderRadius:2, background:"rgba(26,107,71,.06)", border:`1.5px solid ${C.borderLight}` }} />
+                      <span style={{ fontSize:10, color:C.textMuted }}>Outros</span>
+                    </div>
+                    <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                      <span style={{ fontSize:10 }}>⏳</span>
+                      <span style={{ fontSize:10, color:C.textMuted }}>Pendente</span>
+                    </div>
+                  </div>
+                )}
+                <p style={{ fontSize:10, color:C.textMuted, opacity:.7, marginLeft:"auto" }}>Clique no dia para detalhes</p>
+              </div>
             </div>
           );
         })()}
