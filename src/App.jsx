@@ -900,7 +900,7 @@ function ProfessorView({ usuario }) {
 
   const isUrgente=(data,horario)=>{ try { const [ano2,mes2,dia2]=data.split("-").map(Number); const [h,m]=horario.split(":").map(Number); const ev=new Date(ano2,mes2-1,dia2,h,m,0,0); const diff=(ev-new Date())/3600000; return diff<24; } catch { return false; } };
   const isDiaUrgente=(data)=>{ try { const [a2,m2,d2]=data.split("-").map(Number); const ev=new Date(a2,m2-1,d2,23,59,59); const diff=(ev-new Date())/3600000; return diff>=0&&diff<24; } catch { return false; } };
-  const agendarDia=(data)=>{ if(isDiaUrgente(data)){ setAlertaUrgente(data); } else { setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); } };
+  const agendarDia=(data)=>{ setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); };
 
   const handleSalvar=async()=>{
     setSalvando(true); setErro("");
@@ -1449,13 +1449,12 @@ function ProfessorView({ usuario }) {
       {/* Formulário multi-agendamento */}
       {espacoSel&&dataSel&&(
         <div className="fade-in" style={{ marginTop:14 }}>
-          {isDiaUrgente(dataSel)&&(
-            <div style={{ background:"#fff7ed", border:"1.5px solid #f97316", borderRadius:10, padding:"10px 14px", marginBottom:12, display:"flex", gap:10, alignItems:"flex-start" }}>
-              <span style={{ fontSize:18, flexShrink:0 }}>⚠️</span>
-              <div>
-                <p style={{ fontSize:12.5, fontWeight:800, color:"#92400e", marginBottom:3 }}>⚠️ Menos de 24h — ficará pendente</p>
-                <p style={{ fontSize:12, color:"#78350f", lineHeight:1.5 }}>Aguarda aprovação do administrador. Contate a administração para garantir o espaço.</p>
-              </div>
+          {dataSel===hoje&&(
+            <div style={{ background:"#fff7ed", border:"2px solid #f97316", borderRadius:10, padding:"14px 16px", marginBottom:14 }}>
+              <p style={{ fontSize:14, fontWeight:800, color:"#92400e", marginBottom:6 }}>⚠️ Agendamento no mesmo dia</p>
+              <p style={{ fontSize:13, color:"#78350f", lineHeight:1.6 }}>
+                Este agendamento ficará <strong>pendente</strong> até o administrador aprovar. O espaço <strong>não estará garantido</strong> sem confirmação. Contate a administração do colégio para confirmar o uso.
+              </p>
             </div>
           )}
           <div style={{ background:`linear-gradient(135deg,#1a6b47,#0f4c2b)`, padding:"12px 16px", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
