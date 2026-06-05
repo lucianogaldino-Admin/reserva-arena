@@ -956,6 +956,7 @@ function ProfessorView({ usuario }) {
           <span style={{ fontWeight:700, fontSize:13, color:C.navy }}>{r.espaco}</span>
           <span style={{ fontSize:11, color:C.textMuted }}>·</span>
           <span style={{ fontSize:12, color:C.textMid }}>{r.turma}</span>
+          {filtroGrade==="todos"&&r.professorId!==usuario.uid&&<span style={{ fontSize:11, color:C.textMuted, fontStyle:"italic" }}>· {r.professor?.split(" ")[0]}</span>}
           {extraInfo(r)&&<span style={{ fontSize:11, background:"#e2f4ea", color:"#0f4c2b", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
@@ -1064,11 +1065,13 @@ function ProfessorView({ usuario }) {
               <p style={{ fontSize:13, color:C.textMuted, marginTop:2 }}>Veja seus agendamentos ou reserve um espaço abaixo.</p>
             </div>
             {pendentes.length>0&&(
-              <div style={{ background:C.amberBg, border:`1px solid ${C.amberBorder}`, borderRadius:10, padding:"8px 14px", display:"flex", alignItems:"center", gap:8 }}>
+              <div onClick={()=>setModoCard("agenda")} style={{ background:C.amberBg, border:`1px solid ${C.amberBorder}`, borderRadius:10, padding:"8px 14px", display:"flex", alignItems:"center", gap:8, cursor:"pointer", transition:"opacity .15s" }}
+                onMouseEnter={e=>e.currentTarget.style.opacity=".8"}
+                onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
                 <span style={{ fontSize:18 }}>⏳</span>
                 <div>
                   <p style={{ fontSize:12, fontWeight:800, color:C.amber }}>{pendentes.length} agendamento{pendentes.length!==1?"s":""} pendente{pendentes.length!==1?"s":""}</p>
-                  <p style={{ fontSize:11, color:C.amber, opacity:.8 }}>Aguardando aprovação</p>
+                  <p style={{ fontSize:11, color:C.amber, opacity:.8 }}>Toque para ver →</p>
                 </div>
               </div>
             )}
@@ -1159,7 +1162,7 @@ function ProfessorView({ usuario }) {
                       <button onClick={()=>{ setDiaMesSel(null); setDataSel(diaMesSel); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:eDiaUrgente(diaMesSel)?"#d97706":"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:`0 4px 12px rgba(${diaMesSel===hoje?"217,119,6":"26,107,71"},.35)`, transition:"opacity .15s" }}
                         onMouseEnter={e=>e.currentTarget.style.opacity=".9"}
                         onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
-                        {diaMesSel===hoje?"⚠️ Agendar mesmo assim":"+ Agendar neste dia"}
+                        {eDiaUrgente(diaMesSel)?"⚠️ Agendar mesmo assim":"+ Agendar neste dia"}
                       </button>
                     </div>
                   )}
