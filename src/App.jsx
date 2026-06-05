@@ -940,8 +940,10 @@ function ProfessorView({ usuario }) {
   },[todasReservas,hoje]);
 
   const todasMinhas=[...minhas].sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1);
-  const futuras=todasMinhas.filter(r=>r.data>=hoje);
-  const passadas=todasMinhas.filter(r=>r.data<hoje).reverse();
+  const todasAgenda=filtroGrade==="todos"?[...todasReservas].filter(r=>r?.professor&&r?.status!=="recusado").sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1):todasMinhas;
+  const agendaFiltrada=todasAgenda.filter(r=>(!filtroEspacoGrade||r.espaco===filtroEspacoGrade));
+  const futuras=agendaFiltrada.filter(r=>r.data>=hoje);
+  const passadas=(filtroGrade==="meus"?todasMinhas:[]).filter(r=>r.data<hoje).reverse();
   const porData={}; futuras.forEach(r=>{ if(!porData[r.data])porData[r.data]=[]; porData[r.data].push(r); });
   const sc=(s)=>s==="confirmado"?"#1a6b47":s==="pendente"?"#d97706":"#dc2626";
 
@@ -1366,6 +1368,19 @@ function ProfessorView({ usuario }) {
         {/* Modo AGENDA */}
         {modoCard==="agenda"&&(
           <div className="fade-in">
+            {/* Filtros da agenda */}
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center", padding:"10px 14px", background:C.bg, borderBottom:`1px solid ${C.border}`, marginBottom:14 }}>
+              <div style={{ display:"flex", background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:2 }}>
+                {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
+                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 12px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#1a6b47":"transparent", color:filtroGrade===op.id?"#fff":C.textMid, fontWeight:700, fontSize:12, cursor:"pointer", transition:"all .15s" }}>{op.label}</button>
+                ))}
+              </div>
+              <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ padding:"5px 10px", borderRadius:7, border:`1px solid ${C.border}`, background:C.surface, color:C.text, fontWeight:600, fontSize:12, cursor:"pointer", outline:"none", flex:1, minWidth:140 }}>
+                <option value="">Todos os espaços</option>
+                {ESPACOS.map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}
+              </select>
+              {filtroEspacoGrade&&<button onClick={()=>setFiltroEspacoGrade("")} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:7, color:C.textMuted, fontSize:12, padding:"5px 10px", cursor:"pointer" }}>✕ Limpar</button>}
+            </div>
             {futuras.length===0&&passadas.length===0?(
               <p style={{ fontSize:13, color:C.textMuted, textAlign:"center", padding:"24px 0" }}>Nenhum agendamento encontrado.</p>
             ):(
