@@ -942,16 +942,23 @@ function ProfessorView({ usuario }) {
   },[todasReservas,hoje]);
 
   const todasMinhas=[...minhas].sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1);
-  const todasAgenda=filtroGrade==="todos"?[...todasReservas].filter(r=>r?.professor&&r?.status!=="recusado").sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1):todasMinhas;
+  const ehMeuAgenda=(r)=>r.professorId===usuario.uid||r.professor===usuario.nome;
+  const todasAgenda=filtroGrade==="todos"?[...todasReservas].filter(r=>r?.professor&&r?.status!=="recusado").sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1):[...todasReservas].filter(r=>r?.professor&&ehMeuAgenda(r)&&r?.status!=="recusado").sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1);
   const agendaFiltrada=todasAgenda.filter(r=>(!filtroEspacoGrade||r.espaco===filtroEspacoGrade));
   const futuras=agendaFiltrada.filter(r=>r.data>=hoje);
   const passadas=(filtroGrade==="meus"?todasMinhas:[]).filter(r=>r.data<hoje).reverse();
   const porData={}; futuras.forEach(r=>{ if(!porData[r.data])porData[r.data]=[]; porData[r.data].push(r); });
   const sc=(s)=>s==="confirmado"?"#1a6b47":s==="pendente"?"#d97706":"#dc2626";
 
-  const RRow=({r})=>(
-    <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:r.data===hoje?"rgba(26,107,71,.07)":C.surface, border:"1px solid "+(r.data===hoje?"#40b07a44":C.border), marginBottom:4, borderLeft:"3px solid "+sc(r.status) }}>
-      <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:"#40b07a", minWidth:42, flexShrink:0 }}>{r.horario}</span>
+  const RRow=({r})=>{
+    const isMeuR=r.professorId===usuario.uid;
+    const isPendR=r.status==="pendente";
+    const bgR=isMeuR?(isPendR?"rgba(255,247,237,.8)":C.greenBg):"rgba(26,107,71,.04)";
+    const borderR=isMeuR?(isPendR?C.amberBorder:C.greenBorder):C.borderLight;
+    const borderLeft=isMeuR?(isPendR?C.amber:C.green):C.borderLight;
+    return (
+    <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:bgR, border:`1px solid ${borderR}`, marginBottom:4, borderLeft:`3px solid ${borderLeft}` }}>
+      <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:isMeuR?(isPendR?C.amber:C.green):C.textMid, minWidth:42, flexShrink:0 }}>{r.horario}</span>
       <div style={{ width:1, height:32, background:C.borderLight, flexShrink:0 }} />
       <div style={{ flex:1, minWidth:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom:2 }}>
@@ -961,7 +968,10 @@ function ProfessorView({ usuario }) {
           {extraInfo(r)&&<span style={{ fontSize:11, background:"#e2f4ea", color:"#0f4c2b", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
-          <Badge status={r.status} />
+          {isPendR
+            ? <span style={{ fontSize:11.5, fontWeight:800, background:C.amberBg, color:C.amber, border:`1.5px solid ${C.amberBorder}`, borderRadius:20, padding:"2px 10px" }}>⏳ Pendente</span>
+            : <Badge status={r.status} />
+          }
           <span style={{ fontSize:12, color:C.textMuted }}>{r.professor}</span>
           {r.laboratorista==="Sim"&&<span style={{ fontSize:10.5, color:C.textMuted }}>🔬 Lab</span>}
           {r.quantidade&&<span style={{ fontSize:10.5, color:C.textMuted }}>🖥️ {r.quantidade}</span>}
@@ -984,7 +994,7 @@ function ProfessorView({ usuario }) {
         )}
       </div>
     </div>
-  );
+  );};
 
   if (sucesso!==null) return (
     <div style={{ maxWidth:600, margin:"0 auto", padding:"24px 16px" }}>
@@ -1177,6 +1187,23 @@ function ProfessorView({ usuario }) {
         {/* Banner verde — navegação e filtros, só aparece no modo calendário */}
         {modoCard==="calendario"&&(
           <div className="banner-prof">
+            {/* Legenda de cores quando Todos */}
+            {filtroGrade==="todos"&&(
+              <div style={{ display:"flex", gap:8, alignItems:"center", background:"rgba(0,0,0,.2)", borderRadius:8, padding:"4px 10px", flexShrink:0 }}>
+                <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                  <div style={{ width:10, height:10, borderRadius:2, background:C.greenBg, border:`1.5px solid ${C.greenBorder}` }} />
+                  <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Meus</span>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                  <div style={{ width:10, height:10, borderRadius:2, background:"rgba(255,255,255,.15)", border:"1.5px solid rgba(255,255,255,.3)" }} />
+                  <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Outros</span>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                  <span style={{ fontSize:10 }}>⏳</span>
+                  <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Pendente</span>
+                </div>
+              </div>
+            )}
             {/* Navegação semana */}
             {modoVisu==="semana"&&(<>
               <div className="banner-prof-nav">
@@ -1212,8 +1239,9 @@ function ProfessorView({ usuario }) {
         {/* Modo CALENDÁRIO */}
         {modoCard==="calendario"&&modoVisu==="semana"&&(()=>{
           const diasSemana=Array.from({length:5},(_,i)=>addDays(semanaInicio,i)); const nomesDia=["Seg.","Ter.","Qua.","Qui.","Sex."];
+          const ehMeu=(r)=>r.professorId===usuario.uid||r.professor===usuario.nome;
           const todasFonte=(filtroGrade==="meus"
-            ?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado")
+            ?todasReservas.filter(r=>r?.professor&&ehMeu(r)&&r?.status!=="recusado")
             :todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")
           ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
           const fonte=todasFonte.filter(r=>diasSemana.includes(r.data));
@@ -1225,6 +1253,7 @@ function ProfessorView({ usuario }) {
                 {diasSemana.map((d,i)=>{
                   const [,,dia]=d.split("-"); const isHoje=d===hoje; const isSel=d===diaMesSel;
                   const rsDodia=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1);
+                  const ehMeuLocal=(r)=>r.professorId===usuario.uid||r.professor===usuario.nome;
                   return (
                     <div key={d} className="semana-dia" onClick={()=>setDiaMesSel(isSel?null:d)} style={{ background:isSel?C.greenBg:isHoje?"rgba(26,107,71,.06)":C.bg, border:`1px solid ${isSel?C.greenBorder:isHoje?C.blueMid:C.borderLight}`, borderRadius:10, padding:"10px 8px", minHeight:80, cursor:"pointer", transition:"all .15s", flex:"1 1 0" }}>
                       <div style={{ textAlign:"center", marginBottom:6 }}>
@@ -1234,12 +1263,12 @@ function ProfessorView({ usuario }) {
                       </div>
                       {rsDodia.length===0 ? <p style={{ fontSize:9, color:C.textMuted, opacity:.5, textAlign:"center", marginTop:4 }}>—</p> : (
                         <div style={{ display:"grid", gap:3 }}>
-                          {rsDodia.map(r=>{ const isMeu=r.professorId===usuario.uid; const isPend=r.status==="pendente"; return (
+                          {rsDodia.map(r=>{ const isMeu=ehMeuLocal(r); const isPend=r.status==="pendente"; return (
                             <div key={r.id||r.horario} style={{ background:isMeu?C.greenBg:"rgba(26,107,71,.06)", borderRadius:5, padding:"3px 5px", borderLeft:`2px solid ${isMeu?C.greenBorder:C.borderLight}` }}>
                               <div style={{ display:"flex", alignItems:"baseline", gap:3 }}>
                                 <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?C.green:C.textMid, flexShrink:0 }}>{r.horario}</p>
                                 <p style={{ fontSize:10, fontWeight:700, color:C.navy, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
-                                {isMeu&&isPend&&<span style={{ fontSize:9, flexShrink:0 }}>⏳</span>}
+                                {isMeu&&isPend&&<span style={{ fontSize:9, fontWeight:700, color:C.amber, flexShrink:0 }}>⏳ pend.</span>}
                               </div>
                               <p style={{ fontSize:9, color:C.textMuted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{fmtTurma(r.turma)} · {nomeProf(r.professor)}</p>
                             </div>
@@ -1290,25 +1319,7 @@ function ProfessorView({ usuario }) {
                 </div>
               )}
               {fonte.length===0&&<p style={{ fontSize:13, color:C.textMuted, textAlign:"center", marginTop:8 }}>Nenhum agendamento esta semana</p>}
-              <div style={{ display:"flex", alignItems:"center", gap:12, marginTop:8, flexWrap:"wrap" }}>
-                {filtroGrade==="todos"&&(
-                  <div style={{ display:"flex", gap:10, alignItems:"center" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                      <div style={{ width:10, height:10, borderRadius:2, background:C.greenBg, border:`1.5px solid ${C.greenBorder}` }} />
-                      <span style={{ fontSize:10, color:C.textMuted }}>Meus</span>
-                    </div>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                      <div style={{ width:10, height:10, borderRadius:2, background:"rgba(26,107,71,.06)", border:`1.5px solid ${C.borderLight}` }} />
-                      <span style={{ fontSize:10, color:C.textMuted }}>Outros</span>
-                    </div>
-                    <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                      <span style={{ fontSize:10 }}>⏳</span>
-                      <span style={{ fontSize:10, color:C.textMuted }}>Pendente</span>
-                    </div>
-                  </div>
-                )}
-                <p style={{ fontSize:10, color:C.textMuted, opacity:.7, marginLeft:"auto" }}>Clique no dia para detalhes</p>
-              </div>
+              <p style={{ fontSize:10, color:C.textMuted, opacity:.7, textAlign:"right", marginTop:6 }}>Clique no dia para detalhes</p>
             </div>
           );
         })()}
@@ -1316,8 +1327,9 @@ function ProfessorView({ usuario }) {
         {/* Modo MÊS */}
         {modoCard==="calendario"&&modoVisu==="mes"&&(()=>{
           // CORREÇÃO: guarda r?.professor + NÃO desestrutura no .map() (era o bug principal)
+          const ehMeuMes=(r)=>r.professorId===usuario.uid||r.professor===usuario.nome;
           const fonte=(filtroGrade==="meus"
-            ?todasReservas.filter(r=>r?.professor&&r.professorId===usuario.uid&&r?.status!=="recusado")
+            ?todasReservas.filter(r=>r?.professor&&ehMeuMes(r)&&r?.status!=="recusado")
             :todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")
           ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
           const porDataMes={}; fonte.forEach(r=>{ if(!porDataMes[r.data])porDataMes[r.data]=[]; porDataMes[r.data].push(r); });
@@ -1395,17 +1407,33 @@ function ProfessorView({ usuario }) {
         {modoCard==="agenda"&&(
           <div className="fade-in">
             {/* Filtros da agenda */}
-            <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center", padding:"10px 14px", background:C.bg, borderBottom:`1px solid ${C.border}`, marginBottom:14 }}>
-              <div style={{ display:"flex", background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:2 }}>
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center", padding:"10px 14px", background:"#1a6b47", borderBottom:`1px solid ${C.border}`, marginBottom:14, borderRadius:"10px 10px 0 0" }}>
+              <div style={{ display:"flex", background:"rgba(0,0,0,.2)", borderRadius:8, padding:2 }}>
                 {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
-                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 12px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#1a6b47":"transparent", color:filtroGrade===op.id?"#fff":C.textMid, fontWeight:700, fontSize:12, cursor:"pointer", transition:"all .15s" }}>{op.label}</button>
+                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 12px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer", transition:"all .15s" }}>{op.label}</button>
                 ))}
               </div>
-              <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ padding:"5px 10px", borderRadius:7, border:`1px solid ${C.border}`, background:C.surface, color:C.text, fontWeight:600, fontSize:12, cursor:"pointer", outline:"none", flex:1, minWidth:140 }}>
-                <option value="">Todos os espaços</option>
-                {ESPACOS.map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}
+              <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ padding:"5px 10px", borderRadius:7, border:"1px solid rgba(255,255,255,.25)", background:"rgba(255,255,255,.12)", color:"#fff", fontWeight:600, fontSize:12, cursor:"pointer", outline:"none", flex:1, minWidth:140 }}>
+                <option value="" style={{ background:"#1a6b47" }}>Todos os espaços</option>
+                {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
               </select>
-              {filtroEspacoGrade&&<button onClick={()=>setFiltroEspacoGrade("")} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:7, color:C.textMuted, fontSize:12, padding:"5px 10px", cursor:"pointer" }}>✕ Limpar</button>}
+              {filtroEspacoGrade&&<button onClick={()=>setFiltroEspacoGrade("")} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.3)", borderRadius:7, color:"#fff", fontSize:12, padding:"5px 10px", cursor:"pointer" }}>✕</button>}
+              {filtroGrade==="todos"&&(
+                <div style={{ display:"flex", gap:8, alignItems:"center", marginLeft:"auto" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                    <div style={{ width:10, height:10, borderRadius:2, background:C.greenBg, border:`1.5px solid ${C.greenBorder}` }} />
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Meus</span>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                    <div style={{ width:10, height:10, borderRadius:2, background:"rgba(255,255,255,.15)", border:"1.5px solid rgba(255,255,255,.3)" }} />
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Outros</span>
+                  </div>
+                  <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+                    <span style={{ fontSize:10 }}>⏳</span>
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Pendente</span>
+                  </div>
+                </div>
+              )}
             </div>
             {futuras.length===0&&passadas.length===0?(
               <p style={{ fontSize:13, color:C.textMuted, textAlign:"center", padding:"24px 0" }}>Nenhum agendamento encontrado.</p>
