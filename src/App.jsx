@@ -953,12 +953,12 @@ function ProfessorView({ usuario }) {
   const RRow=({r})=>{
     const isMeuR=r.professorId===usuario.uid;
     const isPendR=r.status==="pendente";
-    const bgR=isMeuR?(isPendR?"rgba(255,247,237,.8)":C.greenBg):"rgba(26,107,71,.04)";
-    const borderR=isMeuR?(isPendR?C.amberBorder:C.greenBorder):C.borderLight;
-    const borderLeft=isMeuR?(isPendR?C.amber:C.green):C.borderLight;
+    const bgR=isMeuR?(isPendR?"rgba(255,247,237,.8)":C.greenBg):C.surface;
+    const borderR=isMeuR?(isPendR?C.amberBorder:C.greenBorder):"#cbd5e1";
+    const borderLeft=isMeuR?(isPendR?C.amber:C.green):"#94a3b8";
     return (
     <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:bgR, border:`1px solid ${borderR}`, marginBottom:4, borderLeft:`3px solid ${borderLeft}` }}>
-      <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:isMeuR?(isPendR?C.amber:C.green):C.textMid, minWidth:42, flexShrink:0 }}>{r.horario}</span>
+      <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:isMeuR?(isPendR?C.amber:C.green):"#64748b", minWidth:42, flexShrink:0 }}>{r.horario}</span>
       <div style={{ width:1, height:32, background:C.borderLight, flexShrink:0 }} />
       <div style={{ flex:1, minWidth:0 }}>
         <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom:2 }}>
@@ -1216,7 +1216,7 @@ function ProfessorView({ usuario }) {
                     <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>Meus</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:3 }}>
-                    <div style={{ width:9, height:9, borderRadius:2, background:"rgba(255,255,255,.85)", border:"1.5px solid rgba(200,220,210,.6)", flexShrink:0 }} />
+                    <div style={{ width:9, height:9, borderRadius:2, background:"#fff", border:"1.5px solid #94a3b8", flexShrink:0 }} />
                     <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>Outros</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:3 }}>
@@ -1264,9 +1264,9 @@ function ProfessorView({ usuario }) {
                       {rsDodia.length===0 ? <p style={{ fontSize:9, color:C.textMuted, opacity:.5, textAlign:"center", marginTop:4 }}>—</p> : (
                         <div style={{ display:"grid", gap:3 }}>
                           {rsDodia.map(r=>{ const isMeu=ehMeuLocal(r); const isPend=r.status==="pendente"; return (
-                            <div key={r.id||r.horario} style={{ background:isMeu?C.greenBg:"rgba(26,107,71,.06)", borderRadius:5, padding:"3px 5px", borderLeft:`2px solid ${isMeu?C.greenBorder:C.borderLight}` }}>
+                            <div key={r.id||r.horario} style={{ background:isMeu?C.greenBg:C.surface, borderRadius:5, padding:"3px 5px", border:`1px solid ${isMeu?C.greenBorder:C.border}`, borderLeft:`3px solid ${isMeu?C.green:"#94a3b8"}` }}>
                               <div style={{ display:"flex", alignItems:"baseline", gap:3 }}>
-                                <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?C.green:C.textMid, flexShrink:0 }}>{r.horario}</p>
+                                <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?C.green:"#64748b", flexShrink:0 }}>{r.horario}</p>
                                 <p style={{ fontSize:10, fontWeight:700, color:C.navy, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
                                 {isMeu&&isPend&&<span style={{ fontSize:9, fontWeight:700, color:C.amber, flexShrink:0 }}>⏳ pend.</span>}
                               </div>
@@ -1424,7 +1424,7 @@ function ProfessorView({ usuario }) {
                     <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Meus</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:4 }}>
-                    <div style={{ width:10, height:10, borderRadius:2, background:"rgba(255,255,255,.85)", border:"1.5px solid #c7dfd4" }} />
+                    <div style={{ width:10, height:10, borderRadius:2, background:"#fff", border:"1.5px solid #94a3b8" }} />
                     <span style={{ fontSize:10, color:"rgba(255,255,255,.9)", fontWeight:700 }}>Outros</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:4 }}>
