@@ -900,7 +900,7 @@ function ProfessorView({ usuario }) {
 
   const isUrgente=(data,horario)=>{ try { const [ano2,mes2,dia2]=data.split("-").map(Number); const [h,m]=horario.split(":").map(Number); const ev=new Date(ano2,mes2-1,dia2,h,m,0,0); const diff=(ev-new Date())/3600000; return diff<24; } catch { return false; } };
   const isDiaUrgente=(data)=>{ try { const [a2,m2,d2]=data.split("-").map(Number); const ev=new Date(a2,m2-1,d2,23,59,59); return (ev-new Date())/3600000<24; } catch { return false; } };
-  const agendarDia=(data)=>{ if(isDiaUrgente(data)){ setAlertaUrgente(data); } else { setDataSel(data); setBlocos([blocoVazio()]); } };
+  const agendarDia=(data)=>{ if(isDiaUrgente(data)){ setAlertaUrgente(data); } else { setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); } };
 
   const handleSalvar=async()=>{
     setSalvando(true); setErro("");
@@ -1143,7 +1143,7 @@ function ProfessorView({ usuario }) {
                   {diaMesSel>=hoje&&(
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:14, marginTop:4 }}>
                       <p style={{ fontSize:12, color:C.textMuted, marginBottom:10 }}>Quer agendar um espaço neste dia?</p>
-                      <button onClick={()=>{ setDiaMesSel(null); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:"0 4px 12px rgba(26,107,71,.3)", transition:"opacity .15s" }}
+                      <button onClick={()=>{ setDiaMesSel(null); agendarDia(diaMesSel); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:"0 4px 12px rgba(26,107,71,.3)", transition:"opacity .15s" }}
                         onMouseEnter={e=>e.currentTarget.style.opacity=".9"}
                         onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
                         + Agendar neste dia
