@@ -926,7 +926,8 @@ function ProfessorView({ usuario }) {
 
   const resetForm=()=>{ setEspacoSel(""); setDataSel(""); setBlocos([blocoVazio()]); setSucesso(null); setErro(""); };
   const hoje = fmt(new Date());
-  const nomeProf=(nome)=>{ if(!nome) return ""; const p=nome.trim().split(" "); return p.length===1?p[0]:p[0]+" "+p[p.length-1][0]+"."; };
+  const nomeProf=(nome)=>{ if(!nome) return ""; const p=nome.trim().split(" ").filter(Boolean); if(p.length===1) return p[0]; const ult=p[p.length-1]; return p[0]+" "+ult[0].toUpperCase()+"."; };
+  const fmtTurma=(t)=>{ if(!t) return ""; return t.replace(/º Ano /g,"º").replace(/ª Ano /g,"ª"); };
   const eDiaUrgente=(data)=>{ try { const [a,m,d]=data.split("-").map(Number); const primeirHorario=new Date(a,m-1,d,7,10,0); const diff=(primeirHorario-new Date())/3600000; return diff>0&&diff<24; } catch { return false; } };
 
   const semanaReservas = useMemo(()=>{
@@ -956,12 +957,12 @@ function ProfessorView({ usuario }) {
         <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom:2 }}>
           <span style={{ fontWeight:700, fontSize:13, color:C.navy }}>{r.espaco}</span>
           <span style={{ fontSize:11, color:C.textMuted }}>·</span>
-          <span style={{ fontSize:12, color:C.textMid }}>{r.turma}</span>
+          <span style={{ fontSize:12, color:C.textMid }}>{fmtTurma(r.turma)}</span>
           {extraInfo(r)&&<span style={{ fontSize:11, background:"#e2f4ea", color:"#0f4c2b", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
           <Badge status={r.status} />
-          <span style={{ fontSize:12, color:C.textMuted, fontStyle:"italic" }}>{nomeProf(r.professor)}</span>
+          <span style={{ fontSize:12, color:C.textMuted }}>{r.professor}</span>
           {r.laboratorista==="Sim"&&<span style={{ fontSize:10.5, color:C.textMuted }}>🔬 Lab</span>}
           {r.quantidade&&<span style={{ fontSize:10.5, color:C.textMuted }}>🖥️ {r.quantidade}</span>}
         </div>
@@ -1239,7 +1240,7 @@ function ProfessorView({ usuario }) {
                                 <p style={{ fontSize:10, fontWeight:800, fontFamily:"'DM Mono',monospace", color:isMeu?(isPend?C.amber:C.green):C.textMid, flexShrink:0 }}>{r.horario}</p>
                                 <p style={{ fontSize:10, fontWeight:700, color:C.navy, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.espaco.split(" ")[0]}</p>
                               </div>
-                              <p style={{ fontSize:9, color:C.textMuted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.turma} · {filtroGrade==="todos"?nomeProf(r.professor):nomeProf(r.professor)}</p>
+                              <p style={{ fontSize:9, color:C.textMuted, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{fmtTurma(r.turma)} · {nomeProf(r.professor)}</p>
                             </div>
                           ); })}
                         </div>
@@ -1391,6 +1392,34 @@ function ProfessorView({ usuario }) {
               <p style={{ fontSize:13, color:C.textMuted, textAlign:"center", padding:"24px 0" }}>Nenhum agendamento encontrado.</p>
             ):(
               <>
+                {/* Seção de pendentes no topo */}
+                {pendentes.length>0&&(
+                  <div style={{ background:C.amberBg, border:`1.5px solid ${C.amberBorder}`, borderRadius:12, padding:"14px 16px", marginBottom:16 }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10 }}>
+                      <span style={{ fontSize:16 }}>⏳</span>
+                      <p style={{ fontSize:13, fontWeight:800, color:C.amber }}>
+                        {pendentes.length} agendamento{pendentes.length!==1?"s":""} pendente{pendentes.length!==1?"s":""} — aguardando aprovação
+                      </p>
+                    </div>
+                    <div style={{ background:"rgba(255,255,255,.5)", borderRadius:8, padding:"10px 12px", marginBottom:10 }}>
+                      <p style={{ fontSize:12, color:"#92400e", lineHeight:1.6 }}>
+                        ⚠️ Estes agendamentos ainda <strong>não estão confirmados</strong>. Entre em contato com a administração do colégio para garantir o uso do espaço ou solicitar a aprovação.
+                      </p>
+                    </div>
+                    <div style={{ display:"grid", gap:5 }}>
+                      {pendentes.sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1).map(r=>(
+                        <div key={r.id} style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:C.surface, border:`1px solid ${C.amberBorder}`, borderLeft:`3px solid ${C.amber}` }}>
+                          <span style={{ fontSize:12, fontFamily:"'DM Mono',monospace", fontWeight:800, color:C.amber, minWidth:38, flexShrink:0 }}>{r.horario}</span>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <p style={{ fontSize:13, fontWeight:700, color:C.navy, margin:0 }}>{r.espaco} · {fmtTurma(r.turma)}</p>
+                            <p style={{ fontSize:11, color:C.textMuted, margin:0 }}>{r.data.split("-").reverse().join("/")} · {nomeProf(r.professor)}</p>
+                          </div>
+                          <button onClick={()=>cancelar(r.id)} style={{ background:"none", border:`1px solid ${C.redBorder}`, borderRadius:7, color:C.red, cursor:"pointer", fontSize:11, fontWeight:600, padding:"4px 8px", flexShrink:0 }}>Cancelar</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {futuras.length>0&&Object.entries(porData).map(([data,rs])=>{ const [ano,mes,dia]=data.split("-"); const isHoje=data===hoje; return (
                   <div key={data} style={{ marginBottom:14 }}>
                     <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
