@@ -733,7 +733,7 @@ function BlocoAgendamento({ idx, espaco, data, bloco, onChange, onRemove, ocupad
 
 function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, C }) {
   const [ano,mes,dia]=data.split("-"); const dataFmt=`${dia}/${mes}/${ano}`;
-  const [ciente, setCiente] = React.useState(false);
+  const [ciente, setCiente] = useState(false);
 
   // Detecta urgência (< 24h) por bloco
   const agora = new Date();
