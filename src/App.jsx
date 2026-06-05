@@ -1202,35 +1202,35 @@ function ProfessorView({ usuario }) {
                 <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:modoVisu===op.id?"#fff":"transparent", color:modoVisu===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
               ))}
             </div>
-            {/* Meus / Todos + legenda inline */}
-            <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-              <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
-                {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
-                  <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
-                ))}
-              </div>
-              {filtroGrade==="todos"&&(
-                <div style={{ display:"flex", gap:6, alignItems:"center" }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:3 }}>
-                    <div style={{ width:9, height:9, borderRadius:2, background:"#e2f4ea", border:"1.5px solid #6ee7a0", flexShrink:0 }} />
-                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>Meus</span>
-                  </div>
-                  <div style={{ display:"flex", alignItems:"center", gap:3 }}>
-                    <div style={{ width:9, height:9, borderRadius:2, background:"#fff", border:"1.5px solid #94a3b8", flexShrink:0 }} />
-                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>Outros</span>
-                  </div>
-                  <div style={{ display:"flex", alignItems:"center", gap:3 }}>
-                    <div style={{ width:9, height:9, borderRadius:2, background:"#fff7ed", border:"1.5px solid #fed7aa", flexShrink:0 }} />
-                    <span style={{ fontSize:10, color:"rgba(255,255,255,.9)" }}>⏳</span>
-                  </div>
-                </div>
-              )}
+            {/* Meus / Todos */}
+            <div style={{ display:"flex", background:"rgba(0,0,0,.18)", borderRadius:8, padding:2 }}>
+              {[{id:"meus",label:"Meus"},{id:"todos",label:"Todos"}].map(op=>(
+                <button key={op.id} onClick={()=>setFiltroGrade(op.id)} style={{ padding:"5px 11px", borderRadius:6, border:"none", background:filtroGrade===op.id?"#fff":"transparent", color:filtroGrade===op.id?"#1a6b47":"rgba(255,255,255,.85)", fontWeight:700, fontSize:12, cursor:"pointer" }}>{op.label}</button>
+              ))}
             </div>
             {/* Espaço */}
             <select value={filtroEspacoGrade} onChange={e=>setFiltroEspacoGrade(e.target.value)} style={{ background:"rgba(255,255,255,.12)", border:"1px solid rgba(255,255,255,.2)", borderRadius:7, color:"#fff", fontWeight:600, fontSize:11.5, cursor:"pointer", outline:"none", padding:"5px 8px", maxWidth:150 }}>
               <option value="" style={{ background:"#1a6b47" }}>Espaços</option>
               {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
             </select>
+            {/* Legenda — linha separada quando Todos */}
+            {filtroGrade==="todos"&&(
+              <div style={{ width:"100%", display:"flex", gap:14, alignItems:"center" }}>
+                <span style={{ fontSize:11, color:"rgba(255,255,255,.65)" }}>Legenda:</span>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <div style={{ width:16, height:16, borderRadius:3, background:"#e2f4ea", border:"2px solid #6ee7a0", flexShrink:0 }} />
+                  <span style={{ fontSize:11, color:"rgba(255,255,255,.9)", fontWeight:600 }}>Meus</span>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <div style={{ width:16, height:16, borderRadius:3, background:"#ffffff", border:"2px solid #94a3b8", flexShrink:0 }} />
+                  <span style={{ fontSize:11, color:"rgba(255,255,255,.9)", fontWeight:600 }}>Outros</span>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <div style={{ width:16, height:16, borderRadius:3, background:"#fff7ed", border:"2px solid #fed7aa", flexShrink:0 }} />
+                  <span style={{ fontSize:11, color:"rgba(255,255,255,.9)", fontWeight:600 }}>⏳ Pendente</span>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {/* Corpo branco */}
