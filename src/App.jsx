@@ -820,10 +820,10 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
             <input type="checkbox" checked={ciente} onChange={e=>setCiente(e.target.checked)} style={{ width:18, height:18, marginTop:1, accentColor:"#1a6b47", flexShrink:0, cursor:"pointer" }} />
             <span style={{ fontSize:12, color:C.navy, lineHeight:1.5, fontWeight:ciente?700:400 }}>
               {blocosUrgentes.length>0&&isFimSemana
-                ? "Estou ciente: agendamento pendente (fim de semana + menos de 24h). Entrarei em contato com a administração para confirmar."
+                ? "Estou ciente de que este agendamento é em fim de semana e com menos de 24h de antecedência, ficando pendente até aprovação. Entrarei em contato com o T.E. para garantir a disponibilidade do espaço ou equipamento."
                 : isFimSemana
                   ? "Estou ciente: agendamento em fim de semana fica pendente até aprovação do administrador."
-                  : "Estou ciente: agendamento com menos de 24h ficará pendente. Entrarei em contato com a administração para confirmar."
+                  : "Estou ciente de que este agendamento tem menos de 24h de antecedência. Entrarei em contato com o T.E. (Tecnologia Educacional) para garantir que o espaço ou equipamento estará organizado e disponível."
               }
             </span>
           </label>
@@ -1020,7 +1020,7 @@ function ProfessorView({ usuario }) {
               <p style={{ fontSize:13, color:"#92400e", lineHeight:1.65 }}>
                 {sucesso.motivo==="fimSemana"
                   ? "Este agendamento está pendente pois ocorre em um fim de semana. Ele só será confirmado após aprovação do administrador — aguarde o retorno antes de usar o espaço."
-                  : "Como o agendamento tem menos de 24 horas de antecedência, ele ficou como pendente. Você deve entrar em contato imediatamente com a administração do colégio (pessoalmente, por WhatsApp ou e-mail) para confirmar a disponibilidade e garantir o uso do espaço."
+                  : "Este agendamento tem menos de 24h de antecedência. O espaço ou equipamento precisa ser preparado com antecedência pelo T.E. (Tecnologia Educacional). Entre em contato imediatamente com o T.E. para avisar sobre o uso — sem esse aviso, o espaço pode não estar pronto no horário."
                 }
               </p>
             </div>
@@ -1449,7 +1449,7 @@ function ProfessorView({ usuario }) {
                     </div>
                     <div style={{ background:"rgba(255,255,255,.5)", borderRadius:8, padding:"10px 12px", marginBottom:10 }}>
                       <p style={{ fontSize:12, color:"#92400e", lineHeight:1.6 }}>
-                        ⚠️ Estes agendamentos ainda <strong>não estão confirmados</strong>. Entre em contato com a administração do colégio para garantir o uso do espaço ou solicitar a aprovação.
+                        ⚠️ Estes agendamentos foram feitos com <strong>menos de 24h de antecedência</strong> ou em <strong>fim de semana</strong>. Para que o espaço ou equipamento esteja pronto, <strong>entre em contato com o T.E. (Tecnologia Educacional)</strong> o quanto antes e aguarde a confirmação antes de usar o espaço.
                       </p>
                     </div>
                     <div style={{ display:"grid", gap:5 }}>
@@ -1553,7 +1553,7 @@ function ProfessorView({ usuario }) {
             <div style={{ background:"#fff7ed", border:"2px solid #f97316", borderRadius:10, padding:"14px 16px", marginBottom:14 }}>
               <p style={{ fontSize:14, fontWeight:800, color:"#92400e", marginBottom:6 }}>⚠️ Menos de 24h de antecedência</p>
               <p style={{ fontSize:13, color:"#78350f", lineHeight:1.6 }}>
-                Este agendamento ficará <strong>pendente</strong> até o administrador aprovar. O espaço <strong>não estará garantido</strong> sem confirmação. Contate a administração do colégio para confirmar o uso.
+                Este agendamento tem menos de 24h de antecedência. <strong>Contate o T.E. (Tecnologia Educacional)</strong> para garantir que o espaço ou equipamento estará organizado e disponível no horário.
               </p>
             </div>
           )}
