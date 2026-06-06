@@ -1106,7 +1106,7 @@ function ProfessorView({ usuario }) {
           {extraInfo(r)&&<span style={{ fontSize:11, background:"#e2f4ea", color:"#0f4c2b", border:"1px solid #86efac", borderRadius:6, padding:"1px 6px", fontWeight:700 }}>{extraInfo(r)}</span>}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
-          {isPendR
+          {isPend
             ? <span style={{ fontSize:11.5, fontWeight:800, background:C.amberBg, color:C.amber, border:`1.5px solid ${C.amberBorder}`, borderRadius:20, padding:"2px 10px" }}>⏳ Pendente</span>
             : <Badge status={r.status} />
           }
