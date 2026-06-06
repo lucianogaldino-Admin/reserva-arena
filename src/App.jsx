@@ -2032,6 +2032,9 @@ function AdminView() {
           {(filtroEspaco||filtroProf||filtroStatus||filtroTurma)&&(
             <span style={{ fontSize:11.5, color:C.textMuted, whiteSpace:"nowrap" }}>{filtradas.length} resultado{filtradas.length!==1?"s":""}</span>
           )}
+          <button onClick={()=>setMostrarHistorico(h=>!h)} style={{ background:mostrarHistorico?C.navy:"transparent", border:`1.5px solid ${mostrarHistorico?C.navy:C.border}`, borderRadius:8, color:mostrarHistorico?"#fff":C.textMuted, fontSize:12, padding:"6px 12px", cursor:"pointer", fontWeight:600, whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:5, marginLeft:"auto" }}>
+            🕐 {mostrarHistorico?"Ocultar histórico":"Ver histórico"}
+          </button>
         </div>
       </div>
 
@@ -2181,8 +2184,10 @@ function AdminView() {
                 );
               })()}
               {(()=>{
-                const conf=filtradas.filter(r=>r.status!=="pendente");
-                if(!conf.length) { if(!filtradas.filter(r=>r.status==="pendente").length) return <p style={{ textAlign:"center",padding:"32px",color:C.textMuted,fontSize:13 }}>Nenhuma reserva encontrada.</p>; return null; }
+                const confTodas=filtradas.filter(r=>r.status!=="pendente");
+                const conf=mostrarHistorico?confTodas:confTodas.filter(r=>r.data>=hoje);
+                const confPassadas=confTodas.filter(r=>r.data<hoje);
+                if(!conf.length&&!confPassadas.length) { if(!filtradas.filter(r=>r.status==="pendente").length) return <p style={{ textAlign:"center",padding:"32px",color:C.textMuted,fontSize:13 }}>Nenhuma reserva encontrada.</p>; return null; }
                 const ord=[...conf].sort((a,b)=>a.data>b.data?1:a.data<b.data?-1:a.horario>b.horario?1:-1);
                 const pd={}; ord.forEach(r=>{ if(!pd[r.data])pd[r.data]=[]; pd[r.data].push(r); });
                 return (
@@ -2191,6 +2196,7 @@ function AdminView() {
                       <div style={{ width:8,height:8,borderRadius:"50%",background:C.green }} />
                       <p style={{ fontSize:12, fontWeight:800, color:C.green, textTransform:"uppercase", letterSpacing:".5px" }}>Confirmados · {conf.length}</p>
                       <div style={{ flex:1, height:1, background:C.greenBorder }} />
+                      {!mostrarHistorico&&confPassadas.length>0&&<span style={{ fontSize:11, color:C.textMuted, whiteSpace:"nowrap" }}>+{confPassadas.length} no histórico</span>}
                     </div>
                     {Object.entries(pd).map(([data,rs])=>{
                       const [ano,mes,dia]=data.split("-"); const isH=data===hoje; const isFut=data>=hoje;
