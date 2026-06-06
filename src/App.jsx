@@ -929,6 +929,7 @@ function ProfessorView({ usuario }) {
   const [modoCard, setModoCard]   = useState("calendario");
   const [semanaInicio, setSemanaInicio] = useState(()=>getSegunda(fmt(today)));
   const [diaMesSel, setDiaMesSel] = useState(null);
+  const [mesProfCal, setMesProfCal] = useState(()=>{ const d=new Date(); return {a:d.getFullYear(),m:d.getMonth()}; });
   const [alertaUrgente, setAlertaUrgente] = useState(null); // data string | null
   const [salvando, setSalvando]   = useState(false);
   const [sucesso, setSucesso]     = useState(null); // null | {status:"confirmado"|"pendente", motivo:"urgente"|"fimSemana"|null}
@@ -1457,13 +1458,18 @@ function ProfessorView({ usuario }) {
             :todasReservas.filter(r=>r?.professor&&r?.status!=="recusado")
           ).filter(r=>!filtroEspacoGrade||r.espaco===filtroEspacoGrade);
           const porDataMes={}; fonte.forEach(r=>{ if(!porDataMes[r.data])porDataMes[r.data]=[]; porDataMes[r.data].push(r); });
-          const agora2=new Date(); const ano=agora2.getFullYear(), mes=agora2.getMonth();
+          const ano=mesProfCal.a, mes=mesProfCal.m;
           const nomeMes=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][mes];
+          const navMesPRof=(dir)=>{ setMesProfCal(({a,m})=>{ let nm=m+dir,na=a; if(nm>11){nm=0;na++;} if(nm<0){nm=11;na--;} return {a:na,m:nm}; }); setDiaMesSel(null); };
           const primeiroDia=new Date(Date.UTC(ano,mes,1)); const diasNoMes=new Date(Date.UTC(ano,mes+1,0)).getUTCDate(); const inicioGrid=primeiroDia.getUTCDay();
           const cells=[]; for(let i=0;i<inicioGrid;i++)cells.push(null); for(let d=1;d<=diasNoMes;d++)cells.push(d);
           return (
             <div>
-              <p style={{ fontSize:13, fontWeight:800, textAlign:"center", marginBottom:8, color:C.navy }}>{nomeMes} {ano}</p>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+                <button onClick={()=>navMesPRof(-1)} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:8, width:30, height:30, cursor:"pointer", color:C.textMid, fontSize:15, display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
+                <p style={{ fontSize:13, fontWeight:800, color:C.navy }}>{nomeMes} {ano}</p>
+                <button onClick={()=>navMesPRof(1)} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:8, width:30, height:30, cursor:"pointer", color:C.textMid, fontSize:15, display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
+              </div>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", marginBottom:4 }}>
                 {["D","S","T","Q","Q","S","S"].map((n,i)=><div key={i} style={{ textAlign:"center", fontSize:9.5, fontWeight:700, color:C.textMuted, padding:"2px 0" }}>{n}</div>)}
               </div>
