@@ -137,9 +137,9 @@ const LIGHT = {
   cardShadow:"0 1px 6px rgba(26,107,71,.09)", inputBg:"#ffffff", inputBorder:"#c7dfd4",
 };
 const DARK = {
-  navy:"#d1fae5", navyMid:"#a7f3d0", blue:"#34d399", blueMid:"#10b981",
-  bg:"#0a1a12", surface:"#0f2318", border:"#1a3d27", borderLight:"#142d1e",
-  text:"#ecfdf5", textMid:"#a7f3d0", textMuted:"#6b9e80",
+  navy:"#e8fdf2", navyMid:"#b8f0d4", blue:"#4ade80", blueMid:"#34d399",
+  bg:"#0a1a12", surface:"#0f2318", border:"#1a3d27", borderLight:"#1a3d27",
+  text:"#f0fdf4", textMid:"#d1fae5", textMuted:"#86efac",
   green:"#6ee7b7", greenBg:"#052e16", greenBorder:"#065f46",
   amber:"#fbbf24", amberBg:"#1c1408", amberBorder:"#7c2d12",
   red:"#f87171", redBg:"#1a0505", redBorder:"#7f1d1d",
@@ -948,6 +948,7 @@ function ProfessorView({ usuario }) {
   const [filtroEspacoGrade, setFiltroEspacoGrade] = useState("");
   const [modoVisu, setModoVisu]   = useState("semana");
   const [modoCard, setModoCard]   = useState("calendario");
+  const [abaProf, setAbaProf]     = useState("agendar"); // "agendar" | "agendamentos"
   const [semanaInicio, setSemanaInicio] = useState(()=>getSegunda(fmt(today)));
   const [diaMesSel, setDiaMesSel] = useState(null);
   const [mesProfCal, setMesProfCal] = useState(()=>{ const d=new Date(); return {a:d.getFullYear(),m:d.getMonth()}; });
@@ -1116,14 +1117,14 @@ function ProfessorView({ usuario }) {
         </div>
       </div>
       <div style={{ display:"flex", gap:4, flexShrink:0 }}>
-        {r.data>=hoje&&r.status!=="recusado"&&(
+        {isMeuR&&r.data>=hoje&&r.status!=="recusado"&&(
           <button onClick={()=>setEditando(r)} title="Editar agendamento" style={{ background:"none", border:"1px solid transparent", borderRadius:7, color:C.textMuted, cursor:"pointer", fontSize:14, padding:"5px 8px", display:"flex", alignItems:"center", gap:4, transition:"all .15s" }}
             onMouseEnter={e=>{e.currentTarget.style.background=C.greenBg;e.currentTarget.style.borderColor=C.greenBorder;e.currentTarget.style.color=C.green;}}
             onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="transparent";e.currentTarget.style.color=C.textMuted;}}>
             ✏️ <span style={{ fontSize:11, fontWeight:600 }}>Editar</span>
           </button>
         )}
-        {r.data>=hoje&&r.status!=="recusado"&&(
+        {isMeuR&&r.data>=hoje&&r.status!=="recusado"&&(
           <button onClick={()=>cancelar(r.id)} title="Cancelar reserva" style={{ background:"none", border:"1px solid transparent", borderRadius:7, color:C.textMuted, cursor:"pointer", fontSize:14, padding:"5px 8px", display:"flex", alignItems:"center", gap:4, transition:"all .15s" }}
             onMouseEnter={e=>{e.currentTarget.style.background=C.redBg;e.currentTarget.style.borderColor=C.redBorder;e.currentTarget.style.color=C.red;}}
             onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="transparent";e.currentTarget.style.color=C.textMuted;}}>
@@ -1229,18 +1230,29 @@ function ProfessorView({ usuario }) {
         );
       })()}
 
-      {/* Toggle Calendário/Agenda + label acima do card */}
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
-        <p style={{ fontSize:13, fontWeight:700, color:C.textMid }}>Agendamentos</p>
+      {/* ══ TABS PRINCIPAIS: Agendar | Meus Agendamentos ══ */}
+      <div style={{ display:"flex", background:C.surface, border:`1px solid ${C.border}`, borderRadius:12, padding:4, gap:3, marginBottom:16, boxShadow:C.cardShadow }}>
+        <button onClick={()=>setAbaProf("agendar")} style={{ flex:1, padding:"10px 16px", borderRadius:9, border:"none", background:abaProf==="agendar"?"#1a6b47":"transparent", color:abaProf==="agendar"?"#fff":C.textMid, fontWeight:700, fontSize:13.5, cursor:"pointer", transition:"all .2s", display:"flex", alignItems:"center", justifyContent:"center", gap:7 }}>
+          <span style={{ fontSize:16 }}>✚</span> Agendar
+        </button>
+        <button onClick={()=>setAbaProf("agendamentos")} style={{ flex:1, padding:"10px 16px", borderRadius:9, border:"none", background:abaProf==="agendamentos"?"#1a6b47":"transparent", color:abaProf==="agendamentos"?"#fff":C.textMid, fontWeight:700, fontSize:13.5, cursor:"pointer", transition:"all .2s", display:"flex", alignItems:"center", justifyContent:"center", gap:7 }}>
+          <span style={{ fontSize:16 }}>📅</span> Meus Agendamentos
+        </button>
+      </div>
+
+      {/* ══ TAB AGENDAMENTOS: toggle Calendário/Agenda ══ */}
+      {abaProf==="agendamentos"&&(
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", marginBottom:8 }}>
         <div style={{ display:"flex", background:C.surface, border:`1px solid ${C.border}`, borderRadius:9, padding:2, gap:1 }}>
           {[{id:"calendario",label:"📅 Calendário"},{id:"agenda",label:"☰ Agenda"}].map(op=>(
             <button key={op.id} onClick={()=>setModoCard(op.id)} style={{ padding:"5px 13px", borderRadius:7, border:"none", background:modoCard===op.id?"#1a6b47":"transparent", color:modoCard===op.id?"#fff":C.textMid, fontWeight:700, fontSize:12, cursor:"pointer", transition:"all .15s" }}>{op.label}</button>
           ))}
         </div>
       </div>
+      )}
 
-      {/* Card de agendamentos com calendário */}
-      <div style={{ background:C.surface, borderRadius:14, marginBottom:20, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
+      {/* Card de agendamentos com calendário — só na tab Meus Agendamentos */}
+      {abaProf==="agendamentos"&&<div style={{ background:C.surface, borderRadius:14, marginBottom:20, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
         {diaMesSel ? (
           /* ══ VISÃO DE DIA — substitui o calendário ao clicar ══ */
           <div className="fade-in">
@@ -1326,7 +1338,7 @@ function ProfessorView({ usuario }) {
 
                       {!isDiaLetivo(diaMesSel)
                         ? <div style={{ width:"100%", padding:"13px", borderRadius:10, background:"#fef2f2", border:"1.5px solid #fca5a5", color:"#b91c1c", fontWeight:700, fontSize:13, textAlign:"center" }}>🚫 Agendamento não permitido neste dia</div>
-                        : <button onClick={()=>{ setDiaMesSel(null); agendarDia(diaMesSel); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:eDiaUrgente(diaMesSel)?"#d97706":"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:`0 4px 12px rgba(${eDiaUrgente(diaMesSel)?"217,119,6":"26,107,71"},.35)`, transition:"opacity .15s" }}
+                        : <button onClick={()=>{ agendarDia(diaMesSel); setDiaMesSel(null); setAbaProf("agendar"); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:eDiaUrgente(diaMesSel)?"#d97706":"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:`0 4px 12px rgba(${eDiaUrgente(diaMesSel)?"217,119,6":"26,107,71"},.35)`, transition:"opacity .15s" }}
                             onMouseEnter={e=>e.currentTarget.style.opacity=".9"}
                             onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
                             {eDiaUrgente(diaMesSel)?"⚠️ Agendar mesmo assim":"+ Agendar neste dia"}
@@ -1663,8 +1675,10 @@ function ProfessorView({ usuario }) {
         )}{/* fim diaMesSel ternário */}
       </div>
 
-      {/* Meus próximos — só aparece no modo calendário */}
-      {modoCard==="calendario"&&futuras.length>0&&(
+      }}{/* fim card agendamentos */}
+
+      {/* Meus próximos — só aparece na tab agendamentos + modo calendário */}
+      {abaProf==="agendamentos"&&modoCard==="calendario"&&futuras.length>0&&(
         <div style={{ marginBottom:20, background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
           <div style={{ padding:"10px 16px", borderBottom:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
             <p style={{ fontSize:13, fontWeight:800, color:C.navy }}>Meus próximos · {futuras.length}</p>
@@ -1691,8 +1705,8 @@ function ProfessorView({ usuario }) {
         </div>
       )}
 
-      {/* Seletor de espaço */}
-      <div id="seletor-espaco" style={{ marginBottom:espacoSel?14:0 }}>
+      {/* ══ TAB AGENDAR: seletor de espaço + formulário ══ */}
+      {abaProf==="agendar"&&<div id="seletor-espaco" style={{ marginBottom:espacoSel?14:0 }}>
         {!espacoSel ? (
           <Field label="Selecione o espaço / equipamento" required>
             <select defaultValue="" onChange={e=>e.target.value&&setEspacoSel(e.target.value)} style={{...inp,cursor:"pointer",fontSize:14}}>
@@ -1768,6 +1782,7 @@ function ProfessorView({ usuario }) {
           </div>
         </div>
       )}
+    }{/* fim abaProf agendar */}
     </div>
   );
 }
