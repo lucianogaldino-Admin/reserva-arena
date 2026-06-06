@@ -835,8 +835,9 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
       // Condição 2: agendado durante período sem T.E.
       const dowAgora=agora.getDay(); const horaAgora=agora.getHours()+agora.getMinutes()/60;
       const semTE=(dowAgora===5&&horaAgora>=17)||(dowAgora===6)||(dowAgora===0&&horaAgora<7);
-      const dowAlvo=new Date(+ano,+mes-1,+dia).getDay();
       if(semTE&&diff>0&&diasLetivosAte(`${ano}-${String(mes).padStart(2,"0")}-${String(dia).padStart(2,"0")}`)<1) return true;
+      // Condição 3: menos de 1 dia letivo até o agendamento
+      if(diff>0&&diasLetivosAte(`${ano}-${String(mes).padStart(2,"0")}-${String(dia).padStart(2,"0")}`)<1) return true;
       return false;
     } catch { return false; }
   });
@@ -1252,15 +1253,30 @@ function ProfessorView({ usuario }) {
               </div>
             </div>
             {/* Banner urgente — logo abaixo do header verde */}
-            {(!isDiaLetivo(diaMesSel)||eDiaUrgente(diaMesSel))&&(
-              <div style={{ background:!isDiaLetivo(diaMesSel)?"#fef2f2":"#fff7ed", borderBottom:`2px solid ${!isDiaLetivo(diaMesSel)?"#fca5a5":"#f97316"}`, padding:"10px 16px", display:"flex", alignItems:"center", gap:10 }}>
-                <span style={{ fontSize:20, flexShrink:0 }}>{!isDiaLetivo(diaMesSel)?"🚫":"⚠️"}</span>
-                <div>
-                  <p style={{ fontSize:12.5, fontWeight:800, color:"#92400e" }}>Menos de 24h de antecedência</p>
-                  <p style={{ fontSize:12, color:"#78350f", lineHeight:1.4 }}>Agendamentos neste dia ficam <strong>pendentes</strong> até aprovação. Contate a administração para garantir o espaço.</p>
+{(()=>{
+              const [_a,_m,_d]=diaMesSel.split("-").map(Number);
+              const dowSel=new Date(_a,_m-1,_d).getDay();
+              const isFimSemSel=dowSel===0||dowSel===6;
+              // Feriado em dia útil (não letivo mas não fim de semana)
+              const isFeriadoDiaUtil=!isDiaLetivo(diaMesSel)&&!isFimSemSel;
+              const isUrg=eDiaUrgente(diaMesSel);
+              if(!isFeriadoDiaUtil&&!isUrg) return null;
+              return (
+                <div style={{ background:isFeriadoDiaUtil?"#fef2f2":"#fff7ed", borderBottom:`2px solid ${isFeriadoDiaUtil?"#fca5a5":"#f97316"}`, padding:"10px 16px", display:"flex", alignItems:"center", gap:10 }}>
+                  <span style={{ fontSize:20, flexShrink:0 }}>{isFeriadoDiaUtil?"🚫":"⚠️"}</span>
+                  <div>
+                    <p style={{ fontSize:12.5, fontWeight:800, color:isFeriadoDiaUtil?"#991b1b":"#92400e" }}>
+                      {isFeriadoDiaUtil?"Dia não letivo":"Menos de 24h de antecedência"}
+                    </p>
+                    <p style={{ fontSize:12, color:isFeriadoDiaUtil?"#7f1d1d":"#78350f", lineHeight:1.4 }}>
+                      {isFeriadoDiaUtil
+                        ?"Este dia é feriado ou recesso e não permite agendamentos."
+                        :"Agendamentos neste dia ficam pendentes até aprovação. Contate a administração para garantir o espaço."}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
             {/* Corpo */}
             <div style={{ padding:"14px 16px" }}>
               {(()=>{
