@@ -219,7 +219,7 @@ function Avatar({ nome, size=36, variant="blue" }) {
 function Badge({ status }) {
   const cfg = {
     confirmado:{bg:"#1a6b47",c:"#fff",label:"Confirmado"},
-    pendente:  {bg:"#d97706",c:"#fff",label:"Pendente"},
+    pendente:  {bg:"#ea580c",c:"#fff",label:"Pendente"},
     recusado:  {bg:"#dc2626",c:"#fff",label:"Recusado"},
   };
   const s = cfg[status]||cfg.pendente;
