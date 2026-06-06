@@ -1015,7 +1015,8 @@ function ProfessorView({ usuario }) {
   };
   const isDiaUrgente=(data)=>{ try { const [a2,m2,d2]=data.split("-").map(Number); const ev=new Date(a2,m2-1,d2,23,59,59); const diff=(ev-new Date())/3600000; return diff>=0&&diff<24; } catch { return false; } };
   const agendarDia=(data)=>{ 
-    const turmaSel=blocos[0]?.turma||""; if(!isDiaLetivoParaTurma(data,turmaSel)){ alert("⚠️ Este dia é não letivo para a turma selecionada (feriado, recesso ou férias) e não pode ser agendado."); return; }
+    // Valida apenas se é dia letivo geral — validação por turma acontece no handleSalvar
+    if(!isDiaLetivo(data)){ alert("⚠️ Este dia é não letivo (feriado, recesso ou férias) e não pode ser agendado."); return; }
     setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); 
   };
 
@@ -1061,7 +1062,7 @@ function ProfessorView({ usuario }) {
       const semTE=(dowAgora===5&&horaAgora>=17)||(dowAgora===6)||(dowAgora===0&&horaAgora<7);
       if(semTE&&diasLetivosAte(data)<1) return true;
       // Condição 3: menos de 1 dia letivo entre agora e o agendamento
-      if(isDiaLetivoParaTurma(data,blocos.map(b=>b.turma).find(t=>t)||"")&&diasLetivosAte(data)<1) return true;
+      if(isDiaLetivo(data)&&diasLetivosAte(data)<1) return true;
       return false;
     } catch { return false; } 
   };
@@ -2456,7 +2457,7 @@ export default function App() {
   const [usuario,setUsuario] = useState(null); const [carregando,setCarregando] = useState(true);
   const [dark,setDark] = useState(()=>{ try { return localStorage.getItem("theme")==="dark"; } catch { return false; } });
   const toggle=()=>setDark(d=>{ const n=!d; try { localStorage.setItem("theme",n?"dark":"light"); } catch {} return n; });
-  useEffect(()=>onAuthStateChanged(auth,async user=>{ if (user) { const snap=await getDoc(doc(db,"usuarios",user.uid)); setUsuario(snap.exists()?{uid:user.uid,...snap.data()}:{uid:user.uid,email:user.email,perfil:"sem_acesso",ativo:false}); } else setUsuario(null); setCarregando(false); }),[]);
+  useEffect(()=>onAuthStateChanged(auth,async user=>{ if (user) { try { const snap=await getDoc(doc(db,"usuarios",user.uid)); setUsuario(snap.exists()?{uid:user.uid,...snap.data()}:{uid:user.uid,email:user.email,perfil:"sem_acesso",ativo:false}); } catch { setUsuario({uid:user.uid,email:user.email,perfil:"sem_acesso",ativo:false}); } } else setUsuario(null); setCarregando(false); }),[]);
   const C=dark?DARK:LIGHT;
   if (carregando) return <ThemeCtx.Provider value={{dark,toggle}}><GlobalStyle dark={dark} /><DarkToggle /><div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:C.bg }}><div style={{ textAlign:"center" }}><div style={{ width:60,height:60,borderRadius:15,background:C.logoBg,border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",margin:"0 auto 14px" }}>{ARENA_LOGO?<img src={ARENA_LOGO} alt="Arena" style={{ width:48,height:48,objectFit:"contain" }} />:<span style={{fontSize:26}}>🏫</span>}</div><p style={{ color:C.textMuted,fontSize:14,fontWeight:600 }}>Carregando...</p></div></div></ThemeCtx.Provider>;
   if (!usuario) return <ThemeCtx.Provider value={{dark,toggle}}><GlobalStyle dark={dark} /><TelaPublica /></ThemeCtx.Provider>;
