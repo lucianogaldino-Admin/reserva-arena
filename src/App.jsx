@@ -994,7 +994,10 @@ function ProfessorView({ usuario }) {
     } catch { return false; } 
   };
   const isDiaUrgente=(data)=>{ try { const [a2,m2,d2]=data.split("-").map(Number); const ev=new Date(a2,m2-1,d2,23,59,59); const diff=(ev-new Date())/3600000; return diff>=0&&diff<24; } catch { return false; } };
-  const agendarDia=(data)=>{ setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); };
+  const agendarDia=(data)=>{ 
+    if(!isDiaLetivo(data)){ alert("⚠️ Este dia é não letivo (feriado, recesso ou férias) e não pode ser agendado."); return; }
+    setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); 
+  };
 
   const handleSalvar=async()=>{
     setSalvando(true); setErro("");
@@ -1236,9 +1239,9 @@ function ProfessorView({ usuario }) {
               </div>
             </div>
             {/* Banner urgente — logo abaixo do header verde */}
-            {eDiaUrgente(diaMesSel)&&(
-              <div style={{ background:"#fff7ed", borderBottom:"2px solid #f97316", padding:"10px 16px", display:"flex", alignItems:"center", gap:10 }}>
-                <span style={{ fontSize:20, flexShrink:0 }}>⚠️</span>
+            {(!isDiaLetivo(diaMesSel)||eDiaUrgente(diaMesSel))&&(
+              <div style={{ background:!isDiaLetivo(diaMesSel)?"#fef2f2":"#fff7ed", borderBottom:`2px solid ${!isDiaLetivo(diaMesSel)?"#fca5a5":"#f97316"}`, padding:"10px 16px", display:"flex", alignItems:"center", gap:10 }}>
+                <span style={{ fontSize:20, flexShrink:0 }}>{!isDiaLetivo(diaMesSel)?"🚫":"⚠️"}</span>
                 <div>
                   <p style={{ fontSize:12.5, fontWeight:800, color:"#92400e" }}>Menos de 24h de antecedência</p>
                   <p style={{ fontSize:12, color:"#78350f", lineHeight:1.4 }}>Agendamentos neste dia ficam <strong>pendentes</strong> até aprovação. Contate a administração para garantir o espaço.</p>
@@ -1286,11 +1289,14 @@ function ProfessorView({ usuario }) {
                   {diaMesSel>=hoje&&(
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:14, marginTop:4 }}>
 
-                      <button onClick={()=>{ setDiaMesSel(null); setDataSel(diaMesSel); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:eDiaUrgente(diaMesSel)?"#d97706":"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:`0 4px 12px rgba(${diaMesSel===hoje?"217,119,6":"26,107,71"},.35)`, transition:"opacity .15s" }}
-                        onMouseEnter={e=>e.currentTarget.style.opacity=".9"}
-                        onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
-                        {eDiaUrgente(diaMesSel)?"⚠️ Agendar mesmo assim":"+ Agendar neste dia"}
-                      </button>
+                      {!isDiaLetivo(diaMesSel)
+                        ? <div style={{ width:"100%", padding:"13px", borderRadius:10, background:"#fef2f2", border:"1.5px solid #fca5a5", color:"#b91c1c", fontWeight:700, fontSize:13, textAlign:"center" }}>🚫 Agendamento não permitido neste dia</div>
+                        : <button onClick={()=>{ setDiaMesSel(null); agendarDia(diaMesSel); }} style={{ width:"100%", padding:"13px", borderRadius:10, border:"none", background:eDiaUrgente(diaMesSel)?"#d97706":"#1a6b47", color:"#fff", fontWeight:800, fontSize:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:`0 4px 12px rgba(${eDiaUrgente(diaMesSel)?"217,119,6":"26,107,71"},.35)`, transition:"opacity .15s" }}
+                            onMouseEnter={e=>e.currentTarget.style.opacity=".9"}
+                            onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
+                            {eDiaUrgente(diaMesSel)?"⚠️ Agendar mesmo assim":"+ Agendar neste dia"}
+                          </button>
+                      }
                     </div>
                   )}
                 </>);
