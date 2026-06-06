@@ -1089,8 +1089,12 @@ function ProfessorView({ usuario }) {
   const RRow=({r})=>{
     const isMeuR=r.professorId===usuario.uid;
     const isPend=r.status==="pendente";
+    // Fundo: meus=verde claro, pendente=laranja claro, outros=branco
+    const bgR=isMeuR?(isPend?"rgba(255,247,237,.6)":"rgba(226,244,234,.5)"):C.surface;
+    const borderR=isMeuR?(isPend?C.amberBorder:C.greenBorder):C.border;
+    const borderLeft=isMeuR?(isPend?C.amber:C.green):"#cbd5e1";
     return (
-    <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:C.surface, border:`1px solid ${C.border}`, marginBottom:4, borderLeft:`4px solid ${isMeuR?(isPend?C.amber:C.green):"#cbd5e1"}` }}>
+    <div className="row-hover" style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:8, background:bgR, border:`1px solid ${borderR}`, marginBottom:4, borderLeft:`4px solid ${borderLeft}` }}>
       <span style={{ fontSize:13, fontFamily:"'DM Mono',monospace", fontWeight:800, color:isMeuR?(isPend?C.amber:C.green):"#64748b", minWidth:42, flexShrink:0 }}>{r.horario}</span>
       <div style={{ width:1, height:32, background:C.borderLight, flexShrink:0 }} />
       <div style={{ flex:1, minWidth:0 }}>
