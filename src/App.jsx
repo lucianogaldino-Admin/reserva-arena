@@ -95,7 +95,7 @@ const isDiaLetivo=(data)=>{
 
 // Dias não letivos apenas para Anos Iniciais (1º ao 5º ano)
 const DIAS_NAO_LETIVOS_INICIAIS = new Set([
-  "2026-06-19", // Recesso organização Festa Junina (só Anos Iniciais 1º–5º)
+  "2026-06-19", // Recesso organização Festa Junina (só Anos Iniciais 1º-5º)
 ]);
 
 // Verifica se o dia é letivo considerando a turma (alguns dias bloqueiam só Anos Iniciais)
@@ -264,7 +264,7 @@ function DarkToggle() {
   const { dark, toggle } = useTheme();
   return <button onClick={toggle} className="btn-hover" style={{ position:"fixed", bottom:28, right:28, zIndex:999, width:52, height:52, borderRadius:"50%", background:dark?"#f1f5f9":"#0f172a", color:dark?"#0f172a":"#f1f5f9", border:"none", cursor:"pointer", fontSize:24, boxShadow:"0 6px 20px rgba(0,0,0,.3)", display:"flex", alignItems:"center", justifyContent:"center", transition:"all .3s cubic-bezier(.34,1.56,.64,1)" }} title={dark?"Modo claro":"Modo escuro"}>{dark?"☀️":"🌙"}</button>;
 }
-// ─── CORREÇÃO PRINCIPAL: HorariosOcupados ────────────────────────────────────
+// --- CORREÇÃO PRINCIPAL: HorariosOcupados ------------------------------------
 // excluirId="" como default evita undefined; r?.status com optional chaining
 function HorariosOcupados({ espaco, data, horarioSelecionado, onSelect, excluirId="", excluirHorarios=[] }) {
   const C = useC();
@@ -294,7 +294,7 @@ function HorariosOcupados({ espaco, data, horarioSelecionado, onSelect, excluirI
           const ocp=!!r||excluirHorarios.includes(h);
           const sel=h===horarioSelecionado;
           return (
-            <button key={h} className="slot-btn" title={ocp?`Reservado: ${r?.professor} — ${r?.turma}`:"Disponível"} onClick={()=>!ocp&&onSelect(h)} disabled={ocp}
+            <button key={h} className="slot-btn" title={ocp?`Reservado: ${r?.professor} - ${r?.turma}`:"Disponível"} onClick={()=>!ocp&&onSelect(h)} disabled={ocp}
               style={{ padding:"9px 4px", borderRadius:8, border:sel?"2px solid "+C.blueMid:ocp?"1.5px solid "+C.redBorder:"1.5px solid "+C.greenBorder, background:sel?C.greenBg.replace("dcf","dbea").replace("e7","fe"):ocp?C.redBg:C.greenBg, color:sel?C.blueMid:ocp?C.red:C.green, fontSize:12.5, fontWeight:700, cursor:ocp?"not-allowed":"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:3 }}>
               <span style={{ fontFamily:"'DM Mono',monospace", fontSize:12 }}>{h}</span>
               <span style={{ fontSize:9, fontWeight:600, opacity:.8 }}>{ocp?"● Ocupado":sel?"✓ Selecionado":"○ Livre"}</span>
@@ -307,7 +307,7 @@ function HorariosOcupados({ espaco, data, horarioSelecionado, onSelect, excluirI
           <p style={{ fontSize:11, color:C.textMuted, fontWeight:700, marginBottom:4, textTransform:"uppercase" }}>Ocupados nesta data</p>
           {ocupados.map((r,i)=>(
             <p key={i} style={{ fontSize:12, color:C.textMid, marginTop:3 }}>
-              <span style={{ color:C.red, fontWeight:700, fontFamily:"'DM Mono',monospace" }}>{r.horario}</span> — {r.professor} <span style={{ color:C.textMuted }}>({r.turma})</span>
+              <span style={{ color:C.red, fontWeight:700, fontFamily:"'DM Mono',monospace" }}>{r.horario}</span> - {r.professor} <span style={{ color:C.textMuted }}>({r.turma})</span>
             </p>
           ))}
         </div>
@@ -367,7 +367,7 @@ function CelulaCal({ reserva, isPast, C, onClick }) {
   const sc = reserva ? statusColorCal(reserva.status) : null;
   if (isPast && !reserva) return (
     <td style={{ padding:0, height:80, background:C.bg, opacity:.4, borderBottom:`1px solid ${C.borderLight}` }}>
-      <div style={{ height:"100%", display:"flex", alignItems:"center", justifyContent:"center" }}><span style={{ fontSize:9, color:C.textMuted }}>—</span></div>
+      <div style={{ height:"100%", display:"flex", alignItems:"center", justifyContent:"center" }}><span style={{ fontSize:9, color:C.textMuted }}>-</span></div>
     </td>
   );
   return (
@@ -466,7 +466,7 @@ function GradePorDiaCal({ reservas, semanaInicio, filtroEspaco, C, onCelulaClick
 }
 
 
-// ─── Calendário Mensal para o Admin (dentro de CalendarioSemanal modo=mês) ───
+// --- Calendário Mensal para o Admin (dentro de CalendarioSemanal modo=mês) ---
 function CalMensalAdmin({ reservas, filtroEspaco, hoje, C, onNovaReserva }) {
   const agora2 = new Date();
   const [mesCal,setMesCal] = useState({a:agora2.getFullYear(),m:agora2.getMonth()});
@@ -629,7 +629,7 @@ function CalendarioSemanal({ onNovaReserva }) {
           ))}
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
-          {/* Toggle Semana / Mês — só aparece no modo grade por dia */}
+          {/* Toggle Semana / Mês - só aparece no modo grade por dia */}
           <div style={{ display:"flex", background:C.bg, borderRadius:8, padding:2, border:`1px solid ${C.border}` }}>
             {[{id:"semana",label:"Semana"},{id:"mes",label:"Mês"}].map(op=>(
               <button key={op.id} onClick={()=>setModoPeriodo(op.id)} style={{ padding:"5px 14px", borderRadius:6, border:"none", background:modoPeriodo===op.id?C.navy:"transparent", color:modoPeriodo===op.id?"#fff":C.textMuted, fontWeight:700, fontSize:12.5, cursor:"pointer", transition:"all .15s" }}>{op.label}</button>
@@ -639,7 +639,7 @@ function CalendarioSemanal({ onNovaReserva }) {
           {modo==="dia" && modoPeriodo==="semana" && (
             <>
               <button onClick={()=>navSemana(-1)} style={{ ...inpStyle, padding:"7px 12px", fontWeight:800, fontSize:15 }}>‹</button>
-              <div style={{ background:C.surface, border:`1.5px solid ${C.border}`, borderRadius:8, padding:"6px 14px", fontSize:13, fontWeight:700, color:C.navy, whiteSpace:"nowrap" }}>{fmt3(semanaInicio)} – {fmt3(semanaFim)}</div>
+              <div style={{ background:C.surface, border:`1.5px solid ${C.border}`, borderRadius:8, padding:"6px 14px", fontSize:13, fontWeight:700, color:C.navy, whiteSpace:"nowrap" }}>{fmt3(semanaInicio)} - {fmt3(semanaFim)}</div>
               <button onClick={()=>navSemana(1)} style={{ ...inpStyle, padding:"7px 12px", fontWeight:800, fontSize:15 }}>›</button>
               <button onClick={()=>setSemana(getSegunda(hoje))} style={{ ...inpStyle, fontSize:12, fontWeight:700, color:C.blueMid, borderColor:C.blueMid }}>Hoje</button>
               <select value={filtroEspaco} onChange={e=>setFiltroEspaco(e.target.value)} style={{ ...inpStyle, minWidth:180 }}>
@@ -725,7 +725,7 @@ function ModalEdicao({ reserva, onClose, onSave, isAdmin }) {
             </select>
           </Field>
           <Field label="Conteúdo da Aula" required><textarea value={form.conteudo} onChange={(e)=>set("conteudo",e.target.value)} rows={3} style={{ ...inp, resize:"vertical", lineHeight:1.6 }} /></Field>
-          <Field label="Páginas do Livro" hint="Opcional"><input value={form.paginas} onChange={(e)=>set("paginas",e.target.value)} placeholder="Ex: pp. 45–62" style={inp} /></Field>
+          <Field label="Páginas do Livro" hint="Opcional"><input value={form.paginas} onChange={(e)=>set("paginas",e.target.value)} placeholder="Ex: pp. 45-62" style={inp} /></Field>
           <div style={{ display:"flex", gap:10, justifyContent:"flex-end", marginTop:4 }}>
             <Btn onClick={onClose} variant="ghost">Cancelar</Btn>
             <Btn onClick={handleSave} disabled={salvando||!form.horario} variant="primary">{salvando?"Salvando...":"Salvar alterações ✓"}</Btn>
@@ -777,7 +777,7 @@ function CalendarioMensal({ reservasPorData, onSelectDia, dataSelecionada }) {
   );
 }
 
-// ─── CORREÇÃO 2: BlocoAgendamento — excluirId="" + b?.horario ─────────────────
+// --- CORREÇÃO 2: BlocoAgendamento - excluirId="" + b?.horario -----------------
 function BlocoAgendamento({ idx, espaco, data, bloco, onChange, onRemove, ocupadosGlobal, C, inp, sel }) {
   const espacoObj = ESPACOS.find(e=>e.nome===espaco);
   const isLab = espacoObj?.tipo==="laboratorio"; const isEquip = espacoObj?.tipo==="equipamento";
@@ -787,7 +787,7 @@ function BlocoAgendamento({ idx, espaco, data, bloco, onChange, onRemove, ocupad
       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:14 }}>
         <div style={{ display:"flex", alignItems:"center", gap:8 }}>
           <div style={{ width:24, height:24, borderRadius:"50%", background:bloco.horario?"#40b07a":"#cbd5e1", color:"#fff", fontWeight:800, fontSize:12, display:"flex", alignItems:"center", justifyContent:"center" }}>{idx+1}</div>
-          <span style={{ fontSize:13, fontWeight:700, color:C.navy }}>{bloco.horario ? `Turma ${idx+1} · ${bloco.horario}` : `Turma ${idx+1} — selecione o horário`}</span>
+          <span style={{ fontSize:13, fontWeight:700, color:C.navy }}>{bloco.horario ? `Turma ${idx+1} · ${bloco.horario}` : `Turma ${idx+1} - selecione o horário`}</span>
           {bloco.horario&&bloco.turma&&<span style={{ fontSize:11, color:C.textMuted }}>· {bloco.turma}</span>}
         </div>
         {idx>0&&<button onClick={()=>onRemove(idx)} style={{ background:"none", border:"none", color:"#ef4444", cursor:"pointer", fontSize:18, lineHeight:1, padding:"2px 4px" }}>✕</button>}
@@ -814,7 +814,7 @@ function BlocoAgendamento({ idx, espaco, data, bloco, onChange, onRemove, ocupad
           </select>
         </Field>
         <Field label="Conteúdo da Aula" required><textarea value={bloco.conteudo} onChange={e=>set("conteudo",e.target.value)} placeholder="Descreva o conteúdo..." rows={2} style={{...inp,resize:"vertical",lineHeight:1.6}} /></Field>
-        <Field label="Páginas do Livro" hint="Opcional"><input value={bloco.paginas} onChange={e=>set("paginas",e.target.value)} placeholder="Ex: pp. 45–62" style={inp} /></Field>
+        <Field label="Páginas do Livro" hint="Opcional"><input value={bloco.paginas} onChange={e=>set("paginas",e.target.value)} placeholder="Ex: pp. 45-62" style={inp} /></Field>
       </div>
     </div>
   );
@@ -935,8 +935,8 @@ function ModalResumo({ espaco, data, blocos, onConfirmar, onCancelar, salvando, 
     </div>
   );
 }
-// ─── CORREÇÃO 3: ProfessorView — remove desestruturação inválida no modo mês,
-//                guarda r?.professor em todos os filtros de todasReservas ──────
+// --- CORREÇÃO 3: ProfessorView - remove desestruturação inválida no modo mês,
+//                guarda r?.professor em todos os filtros de todasReservas ------
 function ProfessorView({ usuario }) {
   const C = useC(); const inp = useInp();
   const [espacoSel, setEspacoSel] = useState("");
@@ -1015,7 +1015,7 @@ function ProfessorView({ usuario }) {
   };
   const isDiaUrgente=(data)=>{ try { const [a2,m2,d2]=data.split("-").map(Number); const ev=new Date(a2,m2-1,d2,23,59,59); const diff=(ev-new Date())/3600000; return diff>=0&&diff<24; } catch { return false; } };
   const agendarDia=(data)=>{ 
-    // Valida apenas se é dia letivo geral — validação por turma acontece no handleSalvar
+    // Valida apenas se é dia letivo geral - validação por turma acontece no handleSalvar
     if(!isDiaLetivo(data)){ alert("⚠️ Este dia é não letivo (feriado, recesso ou férias) e não pode ser agendado."); return; }
     setDataSel(data); setBlocos([blocoVazio()]); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth",block:"center"}),120); 
   };
@@ -1056,7 +1056,7 @@ function ProfessorView({ usuario }) {
       // Condição 1: menos de 24h até o primeiro horário do dia
       if(diff<24) return true;
       // Condição 2: agendado durante fim de semana sem T.E., mas APENAS para o próximo dia letivo
-      // (após 17h sexta até 07h segunda — só alerta para o dia imediatamente seguinte)
+      // (após 17h sexta até 07h segunda - só alerta para o dia imediatamente seguinte)
       const dowAgora=agora.getDay();
       const horaAgora=agora.getHours()+agora.getMinutes()/60;
       const semTE=(dowAgora===5&&horaAgora>=17)||(dowAgora===6)||(dowAgora===0&&horaAgora<7);
@@ -1138,7 +1138,7 @@ function ProfessorView({ usuario }) {
     <div style={{ maxWidth:600, margin:"0 auto", padding:"24px 16px" }}>
       {sucesso.status==="pendente" ? (
         <div className="fade-in">
-          {/* Card âmbar — pendente */}
+          {/* Card âmbar - pendente */}
           <div style={{ background:C.amberBg, border:`1.5px solid ${C.amberBorder}`, borderRadius:16, padding:"28px 24px", marginBottom:16 }}>
             <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:16 }}>
               <div style={{ width:52,height:52,borderRadius:"50%",background:"#f97316",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0 }}>⏳</div>
@@ -1157,8 +1157,8 @@ function ProfessorView({ usuario }) {
               <p style={{ fontSize:13, fontWeight:800, color:C.amber, marginBottom:8 }}>⚠️ O que você precisa fazer agora:</p>
               <p style={{ fontSize:13, color:"#92400e", lineHeight:1.65 }}>
                 {sucesso.motivo==="fimSemana"
-                  ? "Este agendamento está pendente pois ocorre em um fim de semana. Ele só será confirmado após aprovação do administrador — aguarde o retorno antes de usar o espaço."
-                  : "Este agendamento tem menos de 24h de antecedência. O espaço ou equipamento precisa ser preparado com antecedência pelo T.E. (Tecnologia Educacional). Entre em contato imediatamente com o T.E. para avisar sobre o uso — sem esse aviso, o espaço pode não estar pronto no horário."
+                  ? "Este agendamento está pendente pois ocorre em um fim de semana. Ele só será confirmado após aprovação do administrador - aguarde o retorno antes de usar o espaço."
+                  : "Este agendamento tem menos de 24h de antecedência. O espaço ou equipamento precisa ser preparado com antecedência pelo T.E. (Tecnologia Educacional). Entre em contato imediatamente com o T.E. para avisar sobre o uso - sem esse aviso, o espaço pode não estar pronto no horário."
                 }
               </p>
             </div>
@@ -1203,7 +1203,7 @@ function ProfessorView({ usuario }) {
         </div>
       )}
 
-      {/* ── Boas-vindas ── */}
+      {/* -- Boas-vindas -- */}
       {(()=>{
         const hr=new Date().getHours();
         const saudacao=hr<12?"Bom dia":"hr"<18?"Boa tarde":"Boa noite";
@@ -1242,7 +1242,7 @@ function ProfessorView({ usuario }) {
       {/* Card de agendamentos com calendário */}
       <div style={{ background:C.surface, borderRadius:14, marginBottom:20, border:`1px solid ${C.border}`, overflow:"hidden", boxShadow:C.cardShadow }}>
         {diaMesSel ? (
-          /* ══ VISÃO DE DIA — substitui o calendário ao clicar ══ */
+          /* == VISÃO DE DIA - substitui o calendário ao clicar == */
           <div className="fade-in">
             {/* Header verde do dia */}
             <div style={{ background:"#1a6b47", padding:"14px 16px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, flexWrap:"wrap" }}>
@@ -1258,7 +1258,7 @@ function ProfessorView({ usuario }) {
                 <button onClick={()=>setDiaMesSel(addDays(diaMesSel,1))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:32, height:32, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
               </div>
             </div>
-            {/* Banner urgente — logo abaixo do header verde */}
+            {/* Banner urgente - logo abaixo do header verde */}
 {(()=>{
               const [_a,_m,_d]=diaMesSel.split("-").map(Number);
               const dowSel=new Date(_a,_m-1,_d).getDay();
@@ -1320,7 +1320,7 @@ function ProfessorView({ usuario }) {
                       ); })}
                     </div>
                   )}
-                  {/* Botão de agendar — só para dias futuros */}
+                  {/* Botão de agendar - só para dias futuros */}
                   {diaMesSel>=hoje&&(
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:14, marginTop:4 }}>
 
@@ -1340,14 +1340,14 @@ function ProfessorView({ usuario }) {
           </div>
         ) : (
         <>
-        {/* Banner verde — navegação e filtros, só aparece no modo calendário */}
+        {/* Banner verde - navegação e filtros, só aparece no modo calendário */}
         {modoCard==="calendario"&&(
           <div className="banner-prof">
             {/* Navegação semana */}
             {modoVisu==="semana"&&(<>
               <div className="banner-prof-nav">
                 <button onClick={()=>setSemanaInicio(s=>addDays(s,-7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>‹</button>
-                <p style={{ fontSize:12, fontWeight:700, color:"#fff", minWidth:72, textAlign:"center" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}–${db}/${mb}`:`${da}/${ma}–${db}/${mb}`; })()}</p>
+                <p style={{ fontSize:12, fontWeight:700, color:"#fff", minWidth:72, textAlign:"center" }}>{(()=>{ const fim=addDays(semanaInicio,4); const [,ma,da]=semanaInicio.split("-"); const [,mb,db]=fim.split("-"); return ma===mb?`${da}-${db}/${mb}`:`${da}/${ma}-${db}/${mb}`; })()}</p>
                 <button onClick={()=>setSemanaInicio(s=>addDays(s,7))} style={{ background:"rgba(255,255,255,.15)", border:"1px solid rgba(255,255,255,.25)", borderRadius:7, color:"#fff", fontSize:15, width:30, height:30, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>›</button>
               </div>
               <div style={{ width:1, height:20, background:"rgba(255,255,255,.2)", margin:"0 2px", flexShrink:0 }} />
@@ -1369,7 +1369,7 @@ function ProfessorView({ usuario }) {
               <option value="" style={{ background:"#1a6b47" }}>Espaços</option>
               {ESPACOS.map(e=><option key={e.id} value={e.nome} style={{ background:"#1a6b47" }}>{e.nome}</option>)}
             </select>
-            {/* Legenda — linha separada quando Todos */}
+            {/* Legenda - linha separada quando Todos */}
             {filtroGrade==="todos"&&(
               <div style={{ width:"100%", display:"flex", gap:14, alignItems:"center" }}>
                 <span style={{ fontSize:11, color:"rgba(255,255,255,.65)" }}>Legenda:</span>
@@ -1420,7 +1420,7 @@ function ProfessorView({ usuario }) {
                         {naoLetivo&&<p style={{ fontSize:8, fontWeight:700, color:"#ef4444", marginTop:2, lineHeight:1 }}>não letivo</p>}
                       </div>
                       ); })()}
-                      {rsDodia.length===0 ? <p style={{ fontSize:9, color:C.textMuted, opacity:.5, textAlign:"center", marginTop:4 }}>—</p> : (
+                      {rsDodia.length===0 ? <p style={{ fontSize:9, color:C.textMuted, opacity:.5, textAlign:"center", marginTop:4 }}>-</p> : (
                         <div style={{ display:"grid", gap:3 }}>
                           {rsDodia.map(r=>{ const isMeu=ehMeuLocal(r); const isPend=r.status==="pendente"; return (
                             <div key={r.id||r.horario} style={{ background:isMeu?C.greenBg:C.surface, borderRadius:5, padding:"3px 5px", border:`1px solid ${isMeu?C.greenBorder:C.border}`, borderLeft:`3px solid ${isMeu?C.green:"#94a3b8"}` }}>
@@ -1457,7 +1457,7 @@ function ProfessorView({ usuario }) {
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:10, marginTop:4 }}>
                       {!espacoSel ? (
                         <div>
-                          <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>Agendar neste dia — selecione o espaço:</p>
+                          <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>Agendar neste dia - selecione o espaço:</p>
                           <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
                             <select defaultValue="" onChange={e=>{ if(!e.target.value) return; setDiaMesSel(null); setEspacoSel(e.target.value); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ flex:1, padding:"8px 10px", borderRadius:8, border:`1px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none", minWidth:180 }}>
                               <option value="">Selecione o espaço...</option>
@@ -1512,7 +1512,7 @@ function ProfessorView({ usuario }) {
                   if (!d) return <div key={i} />;
                   const dateStr=`${ano}-${String(mes+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
                   const isHoje=dateStr===hoje, isPast=dateStr<hoje;
-                  // CORREÇÃO: usa diaMesSel diretamente — sem desestruturação inválida
+                  // CORREÇÃO: usa diaMesSel diretamente - sem desestruturação inválida
                   const isSel=dateStr===diaMesSel;
                   const rs=porDataMes[dateStr]||[];
                   const dowMes=new Date(+ano,+mes-1,+d).getDay();
@@ -1556,7 +1556,7 @@ function ProfessorView({ usuario }) {
                   )}
                   {diaMesSel>=hoje&&(
                     <div style={{ borderTop:`1px solid ${C.borderLight}`, paddingTop:10, marginTop:4 }}>
-                      <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>Agendar neste dia — selecione o espaço:</p>
+                      <p style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8 }}>Agendar neste dia - selecione o espaço:</p>
                       <select defaultValue="" onChange={e=>{ if (!e.target.value) return; setDiaMesSel(null); setEspacoSel(e.target.value); agendarDia(diaMesSel); setTimeout(()=>document.getElementById("seletor-espaco")?.scrollIntoView({behavior:"smooth"}),100); }} style={{ width:"100%", padding:"8px 10px", borderRadius:8, border:`1px solid ${C.border}`, background:C.surface, color:C.navy, fontWeight:600, fontSize:12.5, cursor:"pointer", outline:"none" }}>
                         <option value="">Selecione o espaço...</option>
                         <optgroup label="🏛️ Espaços">{ESPACOS.filter(e=>e.tipo==="espaco").map(e=><option key={e.id} value={e.nome}>{e.nome}</option>)}</optgroup>
@@ -1616,7 +1616,7 @@ function ProfessorView({ usuario }) {
                     <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10 }}>
                       <span style={{ fontSize:16 }}>⏳</span>
                       <p style={{ fontSize:13, fontWeight:800, color:C.amber }}>
-                        {pendentes.length} agendamento{pendentes.length!==1?"s":""} pendente{pendentes.length!==1?"s":""} — aguardando aprovação
+                        {pendentes.length} agendamento{pendentes.length!==1?"s":""} pendente{pendentes.length!==1?"s":""} - aguardando aprovação
                       </p>
                     </div>
                     <div style={{ background:"rgba(255,255,255,.5)", borderRadius:8, padding:"10px 12px", marginBottom:10 }}>
@@ -1840,7 +1840,7 @@ function GerenciarUsuarios() {
 }
 
 
-// ─── Botão/Modal de Usuários no header ───────────────────────────────────────
+// --- Botão/Modal de Usuários no header ---------------------------------------
 function AdminUsuariosBtn() {
   const C = useC();
   const [aberto, setAberto] = useState(false);
@@ -1932,7 +1932,7 @@ function AdminView() {
     {label:"Urgentes",    val:urgentes.length,                                    bg:"#fff7ed",  c:"#c2410c"},
   ];
 
-  // ── Calendário mensal ──
+  // -- Calendário mensal --
   const nomeMes = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][mesCal.m];
   const primeiroDia = new Date(Date.UTC(mesCal.a,mesCal.m,1));
   const diasNoMes   = new Date(Date.UTC(mesCal.a,mesCal.m+1,0)).getUTCDate();
@@ -2007,7 +2007,7 @@ function AdminView() {
             {carregando?"Carregando...":`${reservas.length} reserva${reservas.length!==1?"s":""} · ${usuarios.length} professor${usuarios.length!==1?"es":""} ativos`}
           </p>
         </div>
-        {/* Toggle Calendário / Agenda — no header */}
+        {/* Toggle Calendário / Agenda - no header */}
         <div style={{ display:"flex", background:C.surface, borderRadius:10, padding:3, border:`1px solid ${C.border}`, gap:2, alignSelf:"center" }}>
           {[{id:"calendario",label:"📅 Calendário"},{id:"agenda",label:"☰ Agenda"}].map(op=>(
             <button key={op.id} onClick={()=>setModoVisu(op.id)} style={{ padding:"7px 20px", borderRadius:8, border:"none", background:modoVisu===op.id?C.navy:"transparent", color:modoVisu===op.id?"#fff":C.textMuted, fontWeight:700, fontSize:13, cursor:"pointer", transition:"all .15s" }}>{op.label}</button>
@@ -2021,7 +2021,7 @@ function AdminView() {
           <div style={{ width:44,height:44,borderRadius:12,background:"rgba(255,255,255,.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0 }}>⚡</div>
           <div style={{ flex:1 }}>
             <p style={{ fontSize:14, fontWeight:800, color:"#fff", margin:0 }}>{urgentes.length} agendamento{urgentes.length!==1?"s":""} urgente{urgentes.length!==1?"s":""} aguardando aprovação</p>
-            <p style={{ fontSize:12, color:"rgba(255,255,255,.8)", margin:"3px 0 0" }}>Menos de 24h para o horário — precisam de confirmação imediata</p>
+            <p style={{ fontSize:12, color:"rgba(255,255,255,.8)", margin:"3px 0 0" }}>Menos de 24h para o horário - precisam de confirmação imediata</p>
           </div>
           <button onClick={()=>{ setModoVisu("agenda"); setAbaAdmin("reservas"); setFiltroStatus("pendente"); }} style={{ background:"rgba(255,255,255,.2)", border:"2px solid rgba(255,255,255,.4)", borderRadius:10, color:"#fff", fontWeight:800, fontSize:13, padding:"8px 16px", cursor:"pointer", whiteSpace:"nowrap" }}>
             Ver urgentes →
@@ -2039,7 +2039,7 @@ function AdminView() {
         ))}
       </div>
 
-      {/* ── FILTROS (sempre visíveis) ── */}
+      {/* -- FILTROS (sempre visíveis) -- */}
       <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:"12px 16px", marginBottom:20 }}>
         <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center" }}>
           <span style={{ fontSize:11, fontWeight:700, color:C.textMuted, textTransform:"uppercase", letterSpacing:".4px", whiteSpace:"nowrap" }}>Filtrar:</span>
@@ -2081,9 +2081,9 @@ function AdminView() {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════
+      {/* ==============================================
           MODO CALENDÁRIO (default)
-      ══════════════════════════════════════════════ */}
+      ============================================== */}
       {modoVisu==="calendario"&&(
         <div className="fade-in">
           {/* Cabeçalho do mês */}
@@ -2187,9 +2187,9 @@ function AdminView() {
         </div>
       )}
 
-      {/* ══════════════════════════════════════════════
+      {/* ==============================================
           MODO AGENDA (lista)
-      ══════════════════════════════════════════════ */}
+      ============================================== */}
       {modoVisu==="agenda"&&(
         <div className="fade-in">
           {/* Sub-abas */}
@@ -2410,7 +2410,7 @@ function TelaPublica() {
               {diasSemana.map((d,i)=>{ const [,,dia]=d.split("-"); const isHoje=d===hoje; const rsDodia=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1); return (
                 <div key={d} style={{ background:isHoje?"rgba(255,255,255,.22)":"rgba(255,255,255,.1)", borderRadius:10, padding:"8px 6px", minHeight:80 }}>
                   <div style={{ textAlign:"center", marginBottom:6 }}><p style={{ fontSize:9.5, fontWeight:700, opacity:.75, textTransform:"uppercase" }}>{nomesDia[i]}</p><p style={{ fontSize:16, fontWeight:900, lineHeight:1 }}>{dia}</p>{isHoje&&<div style={{ width:4, height:4, borderRadius:"50%", background:"#fff", margin:"3px auto 0" }} />}</div>
-                  {rsDodia.length===0 ? <p style={{ fontSize:9, opacity:.4, textAlign:"center" }}>—</p> : <div style={{ display:"grid", gap:3 }}>{rsDodia.map((r,ri)=><div key={r.id||ri} style={{ background:"rgba(255,255,255,.18)", borderRadius:5, padding:"3px 5px" }}><p style={{ fontSize:9.5, fontWeight:800, fontFamily:"'DM Mono',monospace", opacity:.95 }}>{r.horario}</p><p style={{ fontSize:9, fontWeight:700, opacity:.9, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{espacoSel?r.professor.split(" ")[0]:r.espaco.split(" ")[0]}</p><p style={{ fontSize:8.5, opacity:.7 }}>{r.turma}</p></div>)}</div>}
+                  {rsDodia.length===0 ? <p style={{ fontSize:9, opacity:.4, textAlign:"center" }}>-</p> : <div style={{ display:"grid", gap:3 }}>{rsDodia.map((r,ri)=><div key={r.id||ri} style={{ background:"rgba(255,255,255,.18)", borderRadius:5, padding:"3px 5px" }}><p style={{ fontSize:9.5, fontWeight:800, fontFamily:"'DM Mono',monospace", opacity:.95 }}>{r.horario}</p><p style={{ fontSize:9, fontWeight:700, opacity:.9, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{espacoSel?r.professor.split(" ")[0]:r.espaco.split(" ")[0]}</p><p style={{ fontSize:8.5, opacity:.7 }}>{r.turma}</p></div>)}</div>}
                 </div>
               ); })}
             </div>
