@@ -1665,7 +1665,7 @@ function ProfessorView({ usuario }) {
 
       </div>
 
-      {/* Meus próximos — só aparece na tab agendamentos + modo calendário */}
+      {/* Meus proximos - so aparece no modo calendario */}
       {modoCard==="calendario"&&futuras.length>0&&(
         <div style={{ marginBottom:20, background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
           <div style={{ padding:"10px 16px", borderBottom:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
