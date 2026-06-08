@@ -633,6 +633,8 @@ function renderProfAgendar(){
   }
 
   html+=`</div>`;
+  // Agendar atualização dos botões após renderização
+  setTimeout(()=>{atualizarBotoesAgendar();},30);
   return html;
 }
 
@@ -802,21 +804,39 @@ window.maEspaco=v=>{
   if(_P.modoProf==="agendar"){re();}else{renderMA();}
 };
 window.maBack=()=>{if(_MA.step===3){_MA.data="";_MA.blocos=[bVazio()];}else if(_MA.step===2)_MA.espaco="";_MA.step--;if(_P.modoProf==="agendar"){re();}else{renderMA();}};
-window.maSetHorario=(i,h)=>{_MA.blocos[i].horario=h;if(_P.modoProf==="agendar"){re();}else{renderMA();}};
+window.maSetHorario=(i,h)=>{
+  _MA.blocos[i].horario=h;
+  if(_P.modoProf==="agendar"){re();}else{renderMA();}
+  // Atualizar botões após render
+  setTimeout(atualizarBotoesAgendar,50);
+};
 window.maSetBloco=(i,k,v)=>{_MA.blocos[i][k]=v;};
 window.maSetBlocoRe=(i,k,v)=>{
   _MA.blocos[i][k]=v;
-  // Revalidar sem re-renderizar tudo — só atualizar botões de confirmar
+  atualizarBotoesAgendar();
+};
+function atualizarBotoesAgendar(){
   const eo=ESPACOS.find(e=>e.nome===_MA.espaco);
   const bVal=b=>b.horario&&b.turma&&b.conteudo&&(eo?.tipo!=="laboratorio"||b.laboratorista);
   const todosVal=_MA.blocos.every(bVal);
   const ultVal=bVal(_MA.blocos[_MA.blocos.length-1]);
-  // Atualizar botão confirmar
   const btnConf=document.getElementById("btn-conf-inline");
-  if(btnConf){btnConf.disabled=!todosVal;btnConf.style.background=todosVal?"#40b07a":"#cbd5e1";btnConf.style.color=todosVal?"#fff":"#94a3b8";btnConf.textContent=todosVal?`Confirmar ${_MA.blocos.length} agendamento${_MA.blocos.length>1?"s":""}`:"Preencha todos os campos";}
+  if(btnConf){
+    btnConf.disabled=!todosVal;
+    btnConf.style.background=todosVal?"#40b07a":"#cbd5e1";
+    btnConf.style.color=todosVal?"#fff":"#94a3b8";
+    btnConf.style.cursor=todosVal?"pointer":"not-allowed";
+    btnConf.textContent=todosVal?`Confirmar ${_MA.blocos.length} agendamento${_MA.blocos.length>1?"s":""}`:"Preencha todos os campos";
+  }
   const btnAdd=document.getElementById("btn-add-inline");
-  if(btnAdd){btnAdd.disabled=!ultVal;btnAdd.style.borderColor=ultVal?"#40b07a":"#cbd5e1";btnAdd.style.color=ultVal?"#40b07a":"#cbd5e1";}
-};
+  if(btnAdd){
+    btnAdd.disabled=!ultVal;
+    btnAdd.style.borderColor=ultVal?"#40b07a":"#cbd5e1";
+    btnAdd.style.color=ultVal?"#40b07a":"#cbd5e1";
+    btnAdd.style.cursor=ultVal?"pointer":"not-allowed";
+    btnAdd.style.opacity=ultVal?"1":"0.5";
+  }
+}
 window.maAddBloco=()=>{_MA.blocos.push(bVazio());if(_P.modoProf==="agendar"){re();}else{renderMA();}};
 window.maRemBloco=i=>{_MA.blocos.splice(i,1);if(_P.modoProf==="agendar"){re();}else{renderMA();}};
 window.maConfirmar=()=>{_MA.resumo=true;if(_P.modoProf==="agendar"){re();}else{renderMA();}};
