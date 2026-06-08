@@ -382,7 +382,7 @@ window.doSignOut=()=>signOut(auth);
 // ════════════════════════════════════════════════════════════════════════════
 // PROFESSOR VIEW
 // ════════════════════════════════════════════════════════════════════════════
-let _P={modoCard:"calendario",modoVisu:"semana",filtroGrade:"meus",filtroEspaco:"",semIni:"",diaSel:null,mesCal:null};
+let _P={modoProf:"ver",modoCard:"calendario",modoVisu:"semana",filtroGrade:"meus",filtroEspaco:"",semIni:"",diaSel:null,mesCal:null};
 
 function renderProfessorView(){
   const c=C(),h=fmtHoje();
@@ -403,8 +403,23 @@ function renderProfessorView(){
 
   // Card principal
   html+=`<div style="background:${c.surface};border-radius:14px;border:1px solid ${c.border};overflow:hidden;margin-bottom:20px">`;
-  // Tabs
-  html+=`<div style="display:flex;gap:2px;background:${c.bg};border-radius:8px;padding:3px;border:1px solid ${c.border};margin:14px 14px 0;width:fit-content">
+  // Toggle principal Ver / Agendar
+  html+=`<div style="display:flex;gap:8px;align-items:center;padding:14px 14px 0;flex-wrap:wrap">
+    <div style="display:flex;background:${c.bg};border-radius:10px;padding:3px;border:1px solid ${c.border};gap:2px">
+      <button onclick="pSetModoProf('ver')" style="padding:8px 20px;border-radius:8px;border:none;background:${_P.modoProf==='ver'?c.navy:'transparent'};color:${_P.modoProf==='ver'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">📅 Ver agendamentos</button>
+      <button onclick="pSetModoProf('agendar')" style="padding:8px 20px;border-radius:8px;border:none;background:${_P.modoProf==='agendar'?'#1a6b47':'transparent'};color:${_P.modoProf==='agendar'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">＋ Agendar</button>
+    </div>
+  </div>`;
+
+  // Se modo Agendar, mostrar fluxo inline
+  if(_P.modoProf==="agendar"){
+    html+=renderProfAgendar();
+    html+=`</div>`;
+    return html;
+  }
+
+  // Tabs Ver
+  html+=`<div style="display:flex;gap:2px;background:${c.bg};border-radius:8px;padding:3px;border:1px solid ${c.border};margin:10px 14px 0;width:fit-content">
     ${[{id:"calendario",l:"📅 Calendário"},{id:"lista",l:"☰ Agendamentos"}].map(o=>`<button onclick="pSetModo('${o.id}')" style="${btn(_P.modoCard===o.id?"navy":"ghost","","sm")};padding:6px 14px">${o.l}</button>`).join("")}
   </div>`;
 
@@ -444,7 +459,7 @@ function renderProfessorView(){
         const[,,dia]=d.split("-");const isH=d===h;
         const rsD=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1);
         const naoL=!isDiaLetivo(d)&&d>=h&&new Date(d).getDay()!==0&&new Date(d).getDay()!==6;
-        html+=`<div style="background:${isH?"rgba(26,107,71,.06)":naoL?"rgba(239,68,68,.04)":c.bg};border:1px solid ${isH?c.blueMid:c.borderLight};border-radius:10px;padding:10px 8px;min-height:80px;cursor:pointer" onclick="pSetDia('${d}')">
+        html+=`<div style="background:${isH?"rgba(26,107,71,.06)":naoL?"rgba(239,68,68,.04)":c.bg};border:1px solid ${isH?c.blueMid:c.borderLight};border-radius:10px;padding:10px 8px;min-height:80px;cursor:pointer" onclick="pClicarDia('${d}')">
           <div style="text-align:center;margin-bottom:6px">
             <p style="font-size:10px;font-weight:700;color:${naoL?"#ef4444":c.textMuted};text-transform:uppercase">${nomes[i]}</p>
             <p style="font-size:18px;font-weight:900;line-height:1;color:${isH?c.blueMid:naoL?"#ef4444":c.navy}">${dia}</p>
@@ -528,10 +543,86 @@ function profRRow(r){
   </div>`;
 }
 
+
+function renderProfAgendar(){
+  const c=C(),m=_MA;
+  const titulos=["Selecione o espaço","Selecione a data","Preencha os horários"];
+  let html="";
+
+  if(m.sucesso){
+    html+=`<div style="padding:20px 14px;text-align:center">
+      <div style="width:64px;height:64px;border-radius:50%;background:${m.sucesso==="confirmado"?"#1a6b47":"#fff7ed"};color:${m.sucesso==="confirmado"?"#fff":"#7c2d12"};display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">${m.sucesso==="confirmado"?"✓":"⏳"}</div>
+      <h3 style="font-size:20px;font-weight:800;color:${m.sucesso==="confirmado"?c.green:c.amber};margin-bottom:8px">${m.sucesso==="confirmado"?"Confirmado!":"Pendente — aguardando aprovação"}</h3>
+      <p style="font-size:13px;color:${c.textMuted};margin-bottom:20px">${m.espaco} · ${m.data.split("-").reverse().join("/")}</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button onclick="pSetModoProf('agendar')" style="${btn("success")};padding:10px 24px">＋ Novo agendamento</button>
+        <button onclick="pSetModoProf('ver')" style="${btn("ghost")};padding:10px 24px">Ver agendamentos</button>
+      </div>
+    </div>`;
+    return html;
+  }
+
+  if(m.resumo){ html+=renderMAResumo(); return html; }
+
+  // Barra de progresso
+  html+=`<div style="padding:16px 14px 0">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      ${m.step>1?`<button onclick="maBack()" style="background:none;border:1px solid ${c.border};border-radius:8px;width:32px;height:32px;cursor:pointer;color:${c.textMid};font-size:15px;font-family:inherit">‹</button>`:""}
+      <div><p style="font-size:11px;color:${c.textMuted};font-weight:700;text-transform:uppercase">Passo ${m.step}/3</p><p style="font-size:16px;font-weight:800;color:${c.navy}">${titulos[m.step-1]}</p></div>
+    </div>
+    <div style="display:flex;gap:4px;margin-bottom:16px">
+      ${[1,2,3].map(s=>`<div style="flex:1;height:3px;border-radius:2px;background:${m.step>=s?"#40b07a":c.borderLight};transition:background .3s"></div>`).join("")}
+    </div>`;
+  if(m.erro)html+=alertHTML("error",m.erro);
+
+  if(m.step===1){
+    ["espaco","laboratorio","equipamento"].forEach(tipo=>{
+      const lbl={espaco:"🏛️ Espaços",laboratorio:"🔬 Laboratórios",equipamento:"💻 Equipamentos"}[tipo];
+      html+=`<p style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase;margin:14px 0 8px">${lbl}</p><div style="display:grid;gap:8px">`;
+      ESPACOS.filter(e=>e.tipo===tipo).forEach(e=>{
+        html+=`<button onclick="maEspaco('${e.nome}')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1.5px solid ${c.border};background:${c.surface};cursor:pointer;text-align:left;width:100%;font-family:inherit"><span style="font-size:20px">${tipoIcon(tipo)}</span><span style="font-size:14px;font-weight:700;color:${c.navy}">${e.nome}</span>${e.estoque?`<span style="font-size:11px;color:${c.textMuted};margin-left:auto">${e.estoque} disp.</span>`:""}</button>`;
+      });
+      html+=`</div>`;
+    });
+  }
+
+  if(m.step===2){
+    html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:${c.greenBg};border-radius:10px;margin-bottom:16px;border:1px solid ${c.greenBorder}"><span style="font-size:18px">${tipoIcon(ESPACOS.find(e=>e.nome===m.espaco)?.tipo)}</span><span style="font-size:13px;font-weight:700;color:${c.green}">${m.espaco}</span><button onclick="maBack()" style="margin-left:auto;background:none;border:none;color:${c.textMuted};cursor:pointer;font-size:12px;font-family:inherit">Trocar</button></div>`;
+    const porData={};_todas.filter(r=>r.espaco===m.espaco&&r.status!=="recusado").forEach(r=>{if(!porData[r.data])porData[r.data]=[];porData[r.data].push(r);});
+    html+=calMensalHTML("pagin",m.calA,m.calM,porData,m.data);
+    window._calClick=(cid,data)=>{if(!isDiaLetivo(data)){alert("Este dia não é letivo.");return;}_MA.data=data;_MA.step=3;_MA.blocos=[bVazio()];re();};
+    window._calNav=(cid,dir)=>{let nm=_MA.calM+dir,na=_MA.calA;if(nm>11){nm=0;na++;}if(nm<0){nm=11;na--;}_MA.calM=nm;_MA.calA=na;re();};
+  }
+
+  if(m.step===3){
+    html+=`<div style="background:linear-gradient(135deg,#1a6b47,#0f4c2b);padding:10px 14px;border-radius:10px;margin-bottom:14px"><p style="font-size:11px;color:rgba(255,255,255,.7);font-weight:700;text-transform:uppercase;margin-bottom:2px">Agendando em</p><p style="font-size:14px;font-weight:800;color:#fff">${tipoIcon(ESPACOS.find(e=>e.nome===m.espaco)?.tipo)} ${m.espaco} · ${m.data.split("-").reverse().join("/")}</p></div>`;
+    if(isDiaUrgente(m.data))html+=alertHTML("warning","⚠️ Menos de 24h de antecedência. Contate o T.E. para garantir disponibilidade.");
+    m.blocos.forEach((b,i)=>{html+=maBlocoHTML(b,i);});
+    const ult=m.blocos[m.blocos.length-1];
+    const eo=ESPACOS.find(e=>e.nome===m.espaco);
+    const bVal=b=>b.horario&&b.turma&&b.conteudo&&(eo?.tipo!=="laboratorio"||b.laboratorista);
+    const ultVal=bVal(ult),todosVal=m.blocos.every(bVal);
+    if(m.blocos.length<HORARIOS.length)html+=`<button onclick="maAddBloco()" ${!ultVal?"disabled":""} style="${btn(ultVal?"success":"ghost",!ultVal)};width:100%;margin-top:10px;padding:11px;border:2px dashed ${ultVal?"#40b07a":"#cbd5e1"}">+ Agendar outra turma neste dia</button>`;
+    html+=`<button onclick="maConfirmar()" ${!todosVal?"disabled":""} style="${btn("success",!todosVal)};width:100%;margin-top:14px;padding:14px;font-size:15px;border-radius:12px">${todosVal?`Confirmar ${m.blocos.length} agendamento${m.blocos.length>1?"s":""}`:"Preencha todos os campos"}</button>`;
+  }
+
+  html+=`</div>`;
+  return html;
+}
+
 function bindProf(){
-  window._calClick=(cid,data)=>{_P.diaSel=_P.diaSel===data?null:data;re();};
+  window._calClick=(cid,data)=>{
+  if(data>=fmtHoje()&&isDiaLetivo(data)&&_P.modoProf==="ver"){
+    _P.modoProf="agendar";
+    _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",calA:new Date().getFullYear(),calM:new Date().getMonth()};
+    re();
+  } else {
+    _P.diaSel=_P.diaSel===data?null:data;re();
+  }
+};
   window._calNav=(cid,dir)=>{let nm=_P.mesCal.m+dir,na=_P.mesCal.a;if(nm>11){nm=0;na++;}if(nm<0){nm=11;na--;}_P.mesCal={a:na,m:nm};re();};
 }
+window.pSetModoProf=v=>{_P.modoProf=v;if(v==='agendar'){_MA={step:1,espaco:"",data:"",blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",calA:new Date().getFullYear(),calM:new Date().getMonth()};}re();};
 window.pSetModo=v=>{_P.modoCard=v;re();};
 window.pSetVisu=v=>{_P.modoVisu=v;re();};
 window.pSetGrade=v=>{_P.filtroGrade=v;re();};
@@ -539,6 +630,16 @@ window.pSetEspaco=v=>{_P.filtroEspaco=v;re();};
 window.pNavSem=dir=>{_P.semIni=addDias(_P.semIni,dir*7);re();};
 window.pNavMes=dir=>{let nm=_P.mesCal.m+dir,na=_P.mesCal.a;if(nm>11){nm=0;na++;}if(nm<0){nm=11;na--;}_P.mesCal={a:na,m:nm};re();};
 window.pSetDia=data=>{_P.diaSel=_P.diaSel===data?null:data;re();};
+window.pClicarDia=data=>{
+  if(data>=fmtHoje()&&isDiaLetivo(data)){
+    // Entra no modo agendar com data preenchida (pula para step 2 se espaco já selecionado ou step 1)
+    _P.modoProf="agendar";
+    _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",calA:new Date().getFullYear(),calM:new Date().getMonth()};
+    re();
+  } else {
+    _P.diaSel=_P.diaSel===data?null:data;re();
+  }
+};
 window.cancelarR=async id=>{if(!confirm("Cancelar esta reserva?"))return;await deleteDoc(doc(db,"reservas",id));};
 
 // ════════════════════════════════════════════════════════════════════════════
