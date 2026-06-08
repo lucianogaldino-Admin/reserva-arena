@@ -1663,7 +1663,6 @@ function ProfessorView({ usuario }) {
         )}
       </div>
 
-      </div>
 
       
       {modoCard==="calendario"&&futuras.length>0&&(
