@@ -394,11 +394,16 @@ function renderProfessorView(){
 
   let html=`<div>`;
 
-  // KPIs
+  // KPIs clicáveis
   const semDias=Array.from({length:5},(_,i)=>addDias(getSegunda(h),i));
   const semCount=_minhas.filter(r=>semDias.includes(r.data)&&r.status!=="recusado").length;
+  const kpiData=[
+    {l:"Minhas futuras",v:futuras.length,bg:"#e2f4ea",col:"#0f4c2b",click:"pSetModo('lista')"},
+    {l:"Pendentes",v:pendentes.length,bg:"#fff7ed",col:"#7c2d12",click:"pSetModo('lista')"},
+    {l:"Esta semana",v:semCount,bg:"#e0e7ff",col:"#3730a3",click:"pSetModo('calendario')"}
+  ];
   html+=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
-    ${[{l:"Minhas futuras",v:futuras.length,bg:"#e2f4ea",col:"#0f4c2b"},{l:"Pendentes",v:pendentes.length,bg:"#fff7ed",col:"#7c2d12"},{l:"Esta semana",v:semCount,bg:"#e0e7ff",col:"#3730a3"}].map(k=>`<div style="background:${k.bg};border-radius:12px;padding:14px 16px"><p style="font-size:10px;font-weight:700;color:${k.col};text-transform:uppercase;margin-bottom:4px">${k.l}</p><p style="font-size:28px;font-weight:800;color:${k.col};line-height:1">${k.v}</p></div>`).join("")}
+    ${kpiData.map(k=>`<div onclick="${k.click}" style="background:${k.bg};border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform .15s,box-shadow .15s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''"><p style="font-size:10px;font-weight:700;color:${k.col};text-transform:uppercase;margin-bottom:4px">${k.l}</p><p style="font-size:28px;font-weight:800;color:${k.col};line-height:1">${k.v}</p><p style="font-size:9px;color:${k.col};opacity:.6;margin-top:3px">toque para ver →</p></div>`).join("")}
   </div>`;
 
   // Card principal
@@ -578,7 +583,8 @@ function renderProfAgendar(){
       const lbl={espaco:"🏛️ Espaços",laboratorio:"🔬 Laboratórios",equipamento:"💻 Equipamentos"}[tipo];
       html+=`<p style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase;margin:14px 0 8px">${lbl}</p><div style="display:grid;gap:8px">`;
       ESPACOS.filter(e=>e.tipo===tipo).forEach(e=>{
-        html+=`<button onclick="maEspaco('${e.nome}')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1.5px solid ${c.border};background:${c.surface};cursor:pointer;text-align:left;width:100%;font-family:inherit"><span style="font-size:20px">${tipoIcon(tipo)}</span><span style="font-size:14px;font-weight:700;color:${c.navy}">${e.nome}</span>${e.estoque?`<span style="font-size:11px;color:${c.textMuted};margin-left:auto">${e.estoque} disp.</span>`:""}</button>`;
+        const eidx=ESPACOS.indexOf(e);
+        html+=`<button onclick="maEspaco(${eidx})" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1.5px solid ${c.border};background:${c.surface};cursor:pointer;text-align:left;width:100%;font-family:inherit"><span style="font-size:20px">${tipoIcon(tipo)}</span><span style="font-size:14px;font-weight:700;color:${c.navy}">${e.nome}</span>${e.estoque?`<span style="font-size:11px;color:${c.textMuted};margin-left:auto">${e.estoque} disp.</span>`:""}</button>`;
       });
       html+=`</div>`;
     });
@@ -707,7 +713,8 @@ function renderMA(){
         const lbl={espaco:"🏛️ Espaços",laboratorio:"🔬 Laboratórios",equipamento:"💻 Equipamentos"}[tipo];
         body+=`<p style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase;margin:14px 0 8px">${lbl}</p><div style="display:grid;gap:8px">`;
         ESPACOS.filter(e=>e.tipo===tipo).forEach(e=>{
-          body+=`<button onclick="maEspaco('${e.nome}')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1.5px solid ${c.border};background:${c.surface};cursor:pointer;text-align:left;width:100%"><span style="font-size:20px">${tipoIcon(tipo)}</span><span style="font-size:14px;font-weight:700;color:${c.navy}">${e.nome}</span>${e.estoque?`<span style="font-size:11px;color:${c.textMuted};margin-left:auto">${e.estoque} disp.</span>`:""}</button>`;
+          const midx=ESPACOS.indexOf(e);
+          body+=`<button onclick="maEspaco(${midx})" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1.5px solid ${c.border};background:${c.surface};cursor:pointer;text-align:left;width:100%"><span style="font-size:20px">${tipoIcon(tipo)}</span><span style="font-size:14px;font-weight:700;color:${c.navy}">${e.nome}</span>${e.estoque?`<span style="font-size:11px;color:${c.textMuted};margin-left:auto">${e.estoque} disp.</span>`:""}</button>`;
         });
         body+=`</div>`;
       });
@@ -789,8 +796,9 @@ function renderMAResumo(){
 }
 
 window.maEspaco=v=>{
-  _MA.espaco=v;_MA.step=2;
-  // Se modo inline (prof view), usa re(); senão usa renderMA()
+  // Aceita índice numérico ou string
+  _MA.espaco = (typeof v==="number"||(!isNaN(v)&&v!=="")) ? ESPACOS[parseInt(v)].nome : v;
+  _MA.step=2;
   if(_P.modoProf==="agendar"){re();}else{renderMA();}
 };
 window.maBack=()=>{if(_MA.step===3){_MA.data="";_MA.blocos=[bVazio()];}else if(_MA.step===2)_MA.espaco="";_MA.step--;if(_P.modoProf==="agendar"){re();}else{renderMA();}};
