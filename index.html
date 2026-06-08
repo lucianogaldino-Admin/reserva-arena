@@ -792,7 +792,7 @@ function renderMAResumo(){
     html+=`<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:${c.surface};border:1px solid ${isUrg?"#fed7aa":c.border};border-radius:8px;border-left:3px solid ${isUrg?"#f97316":"#40b07a"}"><div style="min-width:42px"><span style="font-family:'DM Mono',monospace;font-weight:800;color:${isUrg?"#c2410c":"#40b07a"};font-size:13px">${b.horario}</span>${isUrg?`<p style="font-size:9px;color:#c2410c;font-weight:700">urgente</p>`:""}</div><div><p style="font-size:13px;font-weight:700;color:${c.navy}">${b.turma}</p><p style="font-size:12px;color:${c.textMuted};margin-top:2px">${b.conteudo}</p></div></div>`;
   });
   html+=`</div>`;
-  if(precisaCiencia)html+=`<label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;cursor:pointer;padding:12px 14px;background:${c.surface};border:1.5px solid ${c.border};border-radius:10px"><input type="checkbox" id="chk-ciente" onchange="$('btn-conf').disabled=!this.checked;$('btn-conf').style.background=this.checked?'#1a6b47':'#cbd5e1'" style="width:18px;height:18px;margin-top:1px;accent-color:#1a6b47;flex-shrink:0;cursor:pointer"><span style="font-size:12px;color:${c.navy};line-height:1.5">${fimSem?"Estou ciente: agendamento em fim de semana fica pendente até aprovação do administrador.":"Estou ciente de que este agendamento tem menos de 24h. Entrarei em contato com o T.E. para garantir disponibilidade."}</span></label>`;
+  if(precisaCiencia)html+=`<label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;cursor:pointer;padding:12px 14px;background:${c.surface};border:1.5px solid ${c.border};border-radius:10px"><input type="checkbox" id="chk-ciente" onchange="cienteChanged(this.checked)" style="width:18px;height:18px;margin-top:1px;accent-color:#1a6b47;flex-shrink:0;cursor:pointer"><span style="font-size:12px;color:${c.navy};line-height:1.5">${fimSem?"Estou ciente: agendamento em fim de semana fica pendente até aprovação do administrador.":"Estou ciente de que este agendamento tem menos de 24h. Entrarei em contato com o T.E. para garantir disponibilidade."}</span></label>`;
   html+=`<div style="display:flex;gap:10px"><button onclick="_MA.resumo=false;renderMA()" style="${btn("ghost")};flex:1;padding:11px">← Revisar</button><button id="btn-conf" onclick="maSalvar()" ${precisaCiencia?"disabled":""} style="${btn("success",precisaCiencia)};flex:2;padding:11px;font-size:13.5px">${m.salvando?"Salvando...":"✓ Confirmar"}</button></div></div>`;
   return html;
 }
@@ -811,6 +811,18 @@ window.maSetHorario=(i,h)=>{
   setTimeout(atualizarBotoesAgendar,50);
 };
 window.maSetBloco=(i,k,v)=>{_MA.blocos[i][k]=v;};
+window.cienteChanged=function(checked){
+  // Tenta btn-conf (modal) e btn-conf-inline (inline)
+  ['btn-conf','btn-conf-inline'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){
+      b.disabled=!checked;
+      b.style.background=checked?'#1a6b47':'#cbd5e1';
+      b.style.color=checked?'#fff':'#94a3b8';
+      b.style.cursor=checked?'pointer':'not-allowed';
+    }
+  });
+};
 window.maSetBlocoRe=(i,k,v)=>{
   _MA.blocos[i][k]=v;
   atualizarBotoesAgendar();
