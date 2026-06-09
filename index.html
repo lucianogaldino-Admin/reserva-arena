@@ -435,6 +435,7 @@ function renderApp(){
   isAdmin?bindAdmin():bindProf();
 }
 window.doSignOut=()=>signOut(auth);
+window.setBibAV=v=>{_MA.bibAV=v;atualizarBotoesAgendar();re();};
 window.irInicio=()=>{
   _P.modoProf="ver";_P.modoCard="calendario";_P.modoVisu="semana";
   _P.semIni=getSegunda(fmtHoje());_P.diaSel=null;_P.filtroGrade="meus";
@@ -732,8 +733,8 @@ function renderProfAgendar(){
         html+=`<div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:10px;padding:12px 14px;margin-bottom:14px">
           <p style="font-size:13px;font-weight:800;color:#0369a1;margin-bottom:8px">🎙️ Precisa de Áudio/Visual na Biblioteca?</p>
           <div style="display:flex;gap:8px;margin-bottom:6px">
-            <button onclick="_MA.bibAV=true;atualizarBotoesAgendar()" style="flex:1;padding:9px;border-radius:8px;border:2px solid ${_MA.bibAV===true?'#0369a1':'#bae6fd'};background:${_MA.bibAV===true?'#e0f2fe':'#fff'};font-weight:700;font-size:13px;cursor:pointer;color:#0369a1">✓ Sim</button>
-            <button onclick="_MA.bibAV=false;atualizarBotoesAgendar()" style="flex:1;padding:9px;border-radius:8px;border:2px solid ${_MA.bibAV===false?'#64748b':'#e2e8f0'};background:${_MA.bibAV===false?'#f1f5f9':'#fff'};font-weight:700;font-size:13px;cursor:pointer;color:#64748b">✕ Não</button>
+            <button onclick="setBibAV(true)" style="flex:1;padding:9px;border-radius:8px;border:2px solid ${_MA.bibAV===true?'#0369a1':'#bae6fd'};background:${_MA.bibAV===true?'#e0f2fe':'#fff'};font-weight:700;font-size:13px;cursor:pointer;color:#0369a1">✓ Sim</button>
+            <button onclick="setBibAV(false)" style="flex:1;padding:9px;border-radius:8px;border:2px solid ${_MA.bibAV===false?'#64748b':'#e2e8f0'};background:${_MA.bibAV===false?'#f1f5f9':'#fff'};font-weight:700;font-size:13px;cursor:pointer;color:#64748b">✕ Não</button>
           </div>
           ${_MA.bibAV===true?"<p style=\"font-size:11px;color:#0369a1\">O Áudio/Visual será agendado automaticamente no mesmo horário.</p>":""}
         </div>`;
