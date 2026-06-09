@@ -1420,17 +1420,21 @@ function renderGU(){
   const c=C();
   const profs=_usuarios.filter(u=>u.perfil!=="admin");
   const admins=_usuarios.filter(u=>u.perfil==="admin");
+  const iStyle=inp(), sStyle=sel(), navyBtn=btn("navy"), ghostBtn=btn("ghost"), successBtn=btn("success"), amberBtnStyle=btn("ghost")+"color:"+c.amber+";border-color:"+c.amberBorder+";background:"+c.amberBg, greenBtnStyle=btn("ghost")+";color:"+c.green+";border-color:"+c.greenBorder+";background:"+c.greenBg;
   let html="";
   if(_GU.flash){html+=alertHTML(_GU.flash.t,_GU.flash.m);_GU.flash=null;}
-  html+=`<p style="font-size:13px;font-weight:800;color:${c.navy};margin-bottom:14px;text-transform:uppercase">Cadastrar Professor</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:8px">
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Nome *</label><br><input id="gu-nome" placeholder="Ex: Maria Silva" value="${_GU.nome}" style="${inp()};margin-top:5px"></div>
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">E-mail *</label><br><input id="gu-email" type="email" placeholder="prof@escola.edu.br" value="${_GU.email}" style="${inp()};margin-top:5px"></div>
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Senha *</label><br><input id="gu-senha" type="password" placeholder="Mín. 6 caracteres" value="${_GU.senha}" style="${inp()};margin-top:5px"></div>
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Perfil</label><br><select id="gu-perfil-sel" style="${sel()};margin-top:5px"><option value="professor">👨‍🏫 Professor</option><option value="fotografo" ${_GU.perfil==="fotografo"?"selected":""}>📸 Fotógrafo</option></select></div>
-    <button id="gu-btn-criar" style="${btn("navy")};height:42px;white-space:nowrap">+ Cadastrar</button>
-  </div>
-  <p style="font-size:11.5px;color:${c.textMuted};margin-bottom:20px">💡 Informe a senha ao professor. Ele pode alterá-la via "Esqueci minha senha".</p>`;
+  html+='<p style="font-size:13px;font-weight:800;color:'+c.navy+';margin-bottom:14px;text-transform:uppercase">Cadastrar</p>';
+  html+='<div style="display:grid;gap:10px;margin-bottom:8px">';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  html+='<div><label style="font-size:11px;font-weight:700;color:'+c.textMuted+';text-transform:uppercase">Nome *</label><br><input id="gu-nome" placeholder="Ex: Maria Silva" value="'+(_GU.nome||'')+'" style="'+iStyle+';margin-top:5px"></div>';
+  html+='<div><label style="font-size:11px;font-weight:700;color:'+c.textMuted+';text-transform:uppercase">E-mail *</label><br><input id="gu-email" type="email" placeholder="prof@escola.edu.br" value="'+(_GU.email||'')+'" style="'+iStyle+';margin-top:5px"></div>';
+  html+='</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:end">';
+  html+='<div><label style="font-size:11px;font-weight:700;color:'+c.textMuted+';text-transform:uppercase">Senha *</label><br><input id="gu-senha" type="password" placeholder="Mín. 6 chars" value="'+(_GU.senha||'')+'" style="'+iStyle+';margin-top:5px"></div>';
+  html+='<div><label style="font-size:11px;font-weight:700;color:'+c.textMuted+';text-transform:uppercase">Perfil</label><br><select id="gu-perfil-sel" style="'+sStyle+';margin-top:5px"><option value="professor">👨‍🏫 Professor</option><option value="fotografo"'+(_GU.perfil==="fotografo"?' selected':'')+'>📸 Fotógrafo</option></select></div>';
+  html+='<button id="gu-btn-criar" style="'+navyBtn+';height:42px">+ Cadastrar</button>';
+  html+='</div></div>';
+  html+='<p style="font-size:11px;color:'+c.textMuted+';margin-bottom:20px">💡 A senha será informada ao usuário. Ele pode alterá-la pelo app.</p>';
   html+=`<p style="font-size:13px;font-weight:800;color:${c.navy};margin-bottom:14px;text-transform:uppercase">Professores (${profs.length})</p>`;
   if(!profs.length)html+=`<p style="font-size:13px;color:${c.textMuted};text-align:center;padding:24px 0">Nenhum professor cadastrado.</p>`;
   else{
