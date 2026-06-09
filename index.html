@@ -725,7 +725,7 @@ function renderProfAgendar(){
       } else {
         if(data>=fmtHoje()&&isDiaLetivo(data)&&_P.modoProf==="ver"){
           _P.modoProf="agendar";
-          _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",calA:new Date().getFullYear(),calM:new Date().getMonth()};
+          _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",bibAV:null,calA:new Date().getFullYear(),calM:new Date().getMonth()};
           re();
         } else {
           _P.diaSel=_P.diaSel===data?null:data;re();
@@ -775,7 +775,16 @@ function renderProfAgendar(){
 }
 
 function bindProf(){
-  // _calClick já definido em renderProfAgendar de forma unificada
+  // _calClick para o modo "ver" (calendário de mês)
+  window._calClick=(cid,data)=>{
+    if(data>=fmtHoje()&&isDiaLetivo(data)){
+      _P.modoProf="agendar";
+      _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",bibAV:null,calA:new Date().getFullYear(),calM:new Date().getMonth(),bibAV:null};
+      re();
+    } else {
+      _P.diaSel=_P.diaSel===data?null:data;re();
+    }
+  };
 
   window._calNav=(cid,dir)=>{let nm=_P.mesCal.m+dir,na=_P.mesCal.a;if(nm>11){nm=0;na++;}if(nm<0){nm=11;na--;}_P.mesCal={a:na,m:nm};re();};
 }
@@ -802,7 +811,7 @@ window.pClicarDia=data=>{
   if(data>=fmtHoje()&&isDiaLetivo(data)){
     // Entra no modo agendar com data preenchida (pula para step 2 se espaco já selecionado ou step 1)
     _P.modoProf="agendar";
-    _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",calA:new Date().getFullYear(),calM:new Date().getMonth()};
+    _MA={step:1,espaco:"",data:data,blocos:[bVazio()],resumo:false,salvando:false,sucesso:null,erro:"",bibAV:null,calA:new Date().getFullYear(),calM:new Date().getMonth()};
     re();
   } else {
     _P.diaSel=_P.diaSel===data?null:data;re();
@@ -1452,11 +1461,11 @@ function renderGU(){
   if(_GU.flash){html+=alertHTML(_GU.flash.t,_GU.flash.m);_GU.flash=null;}
   html+=`<p style="font-size:13px;font-weight:800;color:${c.navy};margin-bottom:14px;text-transform:uppercase">Cadastrar Professor</p>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:8px">
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Nome *</label><br><input id="gu-nome" placeholder="Ex: Maria Silva" value="${_GU.nome}" onchange="_GU.nome=this.value" style="${inp()};margin-top:5px"></div>
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">E-mail *</label><br><input id="gu-email" type="email" placeholder="prof@escola.edu.br" value="${_GU.email}" onchange="_GU.email=this.value" style="${inp()};margin-top:5px"></div>
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Senha *</label><br><input id="gu-senha" type="password" placeholder="Mín. 6 caracteres" value="${_GU.senha}" onchange="_GU.senha=this.value" style="${inp()};margin-top:5px"></div>
-    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Perfil *</label><br><select onchange="_GU.perfil=this.value" style="${sel()};margin-top:5px"><option value="professor">Professor</option><option value="fotografo">📸 Fotógrafo</option></select></div>
-    <button onclick="guCriar()" style="${btn("navy")};height:42px;white-space:nowrap">+ Cadastrar</button>
+    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Nome *</label><br><input id="gu-nome" placeholder="Ex: Maria Silva" value="${_GU.nome}" style="${inp()};margin-top:5px"></div>
+    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">E-mail *</label><br><input id="gu-email" type="email" placeholder="prof@escola.edu.br" value="${_GU.email}" style="${inp()};margin-top:5px"></div>
+    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Senha *</label><br><input id="gu-senha" type="password" placeholder="Mín. 6 caracteres" value="${_GU.senha}" style="${inp()};margin-top:5px"></div>
+    <div><label style="font-size:11px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Perfil *</label><br><select id="gu-perfil" style="${sel()};margin-top:5px"><option value="professor" ${_GU.perfil==="professor"?"selected":""}>Professor</option><option value="fotografo" ${_GU.perfil==="fotografo"?"selected":""}>📸 Fotógrafo</option></select></div>
+    <button id="gu-btn-criar" style="${btn("navy")};height:42px;white-space:nowrap">+ Cadastrar</button>
   </div>
   <p style="font-size:11.5px;color:${c.textMuted};margin-bottom:20px">💡 Informe a senha ao professor. Ele pode alterá-la via "Esqueci minha senha".</p>`;
   html+=`<p style="font-size:13px;font-weight:800;color:${c.navy};margin-bottom:14px;text-transform:uppercase">Professores (${profs.length})</p>`;
@@ -1484,6 +1493,19 @@ function renderGU(){
     html+=`</div>`;
   }
   render("mod-gu-body",html);
+  // Bind via addEventListener (evita problema com innerHTML)
+  setTimeout(()=>{
+    const n=document.getElementById("gu-nome");
+    const e=document.getElementById("gu-email");
+    const s=document.getElementById("gu-senha");
+    const p=document.getElementById("gu-perfil");
+    const b=document.getElementById("gu-btn-criar");
+    if(n)n.addEventListener("input",ev=>{_GU.nome=ev.target.value;});
+    if(e)e.addEventListener("input",ev=>{_GU.email=ev.target.value;});
+    if(s)s.addEventListener("input",ev=>{_GU.senha=ev.target.value;});
+    if(p)p.addEventListener("change",ev=>{_GU.perfil=ev.target.value;});
+    if(b)b.addEventListener("click",guCriar);
+  },30);
 }
 
 window.guCriar=async()=>{
