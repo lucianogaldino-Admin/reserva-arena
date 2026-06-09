@@ -7,10 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;overflow-x:hidden}
-body{font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;transition:background .3s,color .3s;padding-bottom:env(safe-area-inset-bottom,16px);overflow-x:hidden;width:100%}
-input,select,textarea,button{font-family:inherit;max-width:100%}
+*{box-sizing:border-box;margin:0;padding:0;max-width:100%}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden;max-width:100vw}
+body{font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;transition:background .3s,color .3s;padding-bottom:env(safe-area-inset-bottom,16px);overflow-x:hidden;width:100%;max-width:100vw;position:relative}
+input,select,textarea,button{font-family:inherit}
 img{max-width:100%;height:auto}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:#c7dfd4;border-radius:3px}
@@ -27,15 +27,28 @@ select option{font-family:'DM Sans',system-ui,sans-serif}
   #main-content{padding:16px 12px!important}
 }
 @media(max-width:640px){
-  #main-content{padding:10px 8px!important}
-  header{padding:0 10px!important}
-  h1{font-size:18px!important}
+  #main-content{padding:10px 8px!important;width:100%!important}
+  header{padding:0 8px!important}
+  h1{font-size:17px!important}
   .row-hover{gap:6px!important}
   select,input[type=date],input[type=email],input[type=password],input[type=text],input[type=number],textarea{font-size:16px!important}
   #mod-ag-inner{border-radius:16px 16px 0 0!important;max-height:95vh!important}
+  /* Grade semana professor — 3 dias visíveis, scroll */
+  .prof-semana-grid{grid-template-columns:repeat(5,minmax(90px,1fr))!important}
+  /* KPIs em coluna no mobile */
+  .kpi-3col{grid-template-columns:1fr 1fr!important}
+  /* Filtros admin em coluna */
+  #adm-sel-espaco,#adm-sel-prof,#adm-sel-status{width:100%!important;min-width:0!important}
+  /* Header — ocultar nome em telas pequenas */
+  .header-nome{display:none!important}
+  /* Tabs wrap */
+  .tabs-row{flex-wrap:wrap!important;gap:4px!important}
+  /* Calendário admin menor */
+  .adm-cal-day{min-height:60px!important;padding:4px!important}
 }
 @media(max-width:420px){
-  #main-content{padding:8px 6px!important}
+  #main-content{padding:6px 4px!important}
+  h1{font-size:15px!important}
 }
 </style>
 </head>
@@ -406,7 +419,7 @@ function renderApp(){
   const c=C(),isAdmin=_usuario?.perfil==="admin";
   $("app").innerHTML=`
   <div style="min-height:100vh;background:${c.bg}" translate="no" lang="pt-BR">
-    <header style="background:${c.headerBg};border-bottom:1px solid ${c.border};padding:0 12px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(19,35,24,.07);overflow:hidden">
+    <header style="background:${c.headerBg};border-bottom:1px solid ${c.border};padding:0 12px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(19,35,24,.07);overflow:hidden;width:100%;max-width:100vw">
       <div style="display:flex;align-items:center;gap:10px">
         ${logoHTML(36)}
         <div><p style="font-size:13px;font-weight:800;color:${c.navy}">Reserva de Salas</p><p style="font-size:10px;color:${c.textMuted}">Colégio Arena</p></div>
@@ -415,12 +428,12 @@ function renderApp(){
       <div style="display:flex;align-items:center;gap:8px">
         ${!isAdmin?`<button onclick="irInicio()" title="Início" style="background:${c.surface};border:1.5px solid ${c.border};border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🏠</button>`:""}
         ${avatarHTML(_usuario?.nome,30,isAdmin?"purple":"navy")}
-        <div style="line-height:1.2"><p style="font-size:13px;font-weight:700;color:${c.navy}">${_usuario?.nome||""}</p><p style="font-size:10px;color:${isAdmin?"#6d28d9":c.blueMid};font-weight:700;text-transform:uppercase">${_usuario?.perfil||""}</p></div>
+        <div class="header-nome" style="line-height:1.2"><p style="font-size:13px;font-weight:700;color:${c.navy}">${_usuario?.nome||""}</p><p style="font-size:10px;color:${isAdmin?"#6d28d9":c.blueMid};font-weight:700;text-transform:uppercase">${_usuario?.perfil||""}</p></div>
         <button onclick="toggleDark()" style="background:${_dark?"#f1f5f9":"#0f172a"};color:${_dark?"#0f172a":"#f1f5f9"};border:none;border-radius:20px;padding:5px 10px;cursor:pointer;font-size:12px;font-weight:700">${_dark?"☀️":"🌙"}</button>
         <button onclick="doSignOut()" style="${btn("ghost","","sm")}">Sair</button>
       </div>
     </header>
-    <div id="main-content" id="main-content" style="max-width:1040px;margin:0 auto;padding:20px 14px;overflow-x:hidden">
+    <div id="main-content" id="main-content" style="max-width:1040px;margin:0 auto;padding:20px 14px;overflow-x:hidden;width:100%">
       ${isAdmin?renderAdminView():renderProfessorView()}
     </div>
     <footer style="margin-top:40px;padding:16px 24px;border-top:1px solid ${c.border};background:${c.surface};text-align:center">
@@ -471,7 +484,7 @@ function renderProfessorView(){
   // Card principal
   html+=`<div style="background:${c.surface};border-radius:14px;border:1px solid ${c.border};overflow:hidden;margin-bottom:20px">`;
   // ── LINHA 1: Agendar | Pendentes | Próximos ──────────────────────────
-  html+=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:12px 12px 0">
+  html+=`<div class="kpi-3col" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:12px 12px 0">
     <button onclick="pSetModoProf('agendar')"
       style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 8px;border-radius:12px;border:2px solid ${_P.modoProf==='agendar'?'#1a6b47':c.border};background:${_P.modoProf==='agendar'?'#1a6b47':c.surface};cursor:pointer;font-family:inherit;transition:all .15s">
       <span style="font-size:20px">＋</span>
@@ -540,7 +553,7 @@ function renderProfessorView(){
     if(_P.modoVisu==="semana"){
       const dias=Array.from({length:5},(_,i)=>addDias(_P.semIni,i));
       const nomes=["Seg.","Ter.","Qua.","Qui.","Sex."];
-      html+=`<div style="display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:4px;padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch">`;
+      html+=`<div style="display:grid;grid-template-columns:repeat(5,minmax(100px,1fr));gap:4px;padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%">`;
       dias.forEach((d,i)=>{
         const[,,dia]=d.split("-");const isH=d===h;
         const rsD=fonte.filter(r=>r.data===d).sort((a,b)=>a.horario>b.horario?1:-1);
