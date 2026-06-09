@@ -559,6 +559,8 @@ function renderProfessorView(){
               <p style="font-size:10px;font-weight:800;font-family:'DM Mono',monospace;color:${isMeu?c.green:"#64748b"}">${r.horario}</p>
               <p style="font-size:10px;font-weight:700;color:${c.navy};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.espaco.split(" ")[0]}</p>
               ${isMeu&&isPend?`<span style="font-size:9px;color:${c.amber}">⏳</span>`:""}
+              ${r.precisaFoto?`<span style="font-size:9px">📸</span>`:""}
+              ${r.espaco==="Áudio/Visual"||r.localMontagem?`<span style="font-size:9px">🎙️</span>`:""}
             </div>
             <p style="font-size:9px;color:${c.textMuted};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.turma}·${nomeProf(r.professor)}</p>
           </div>`;
@@ -1198,9 +1200,9 @@ function renderAdminView(){
           ${naoL?`<span style="font-size:7.5px;font-weight:700;color:#ef4444;background:rgba(239,68,68,.1);border-radius:3px;padding:1px 3px">não letivo</span>`:""}
         </div>
         <div style="display:flex;flex-direction:column;gap:2px">
-          ${urg.slice(0,1).map(r=>`<div style="background:#fff7ed;border:1px solid #f97316;border-radius:4px;padding:2px 5px;font-size:9px;font-weight:700;color:#c2410c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">⚡${r.horario} ${r.espaco.split(" ")[0]}</div>`).join("")}
-          ${pend.slice(0,1).map(r=>`<div style="background:${c.amberBg};border:1px solid ${c.amberBorder};border-radius:4px;padding:2px 5px;font-size:9px;font-weight:700;color:${c.amber};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">⏳${r.horario} ${r.espaco.split(" ")[0]}</div>`).join("")}
-          ${conf.slice(0,2).map(r=>`<div style="background:${c.greenBg};border:1px solid ${c.greenBorder};border-radius:4px;padding:2px 5px;font-size:9px;font-weight:600;color:${c.green};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.horario} ${r.espaco.split(" ")[0]}</div>`).join("")}
+          ${urg.slice(0,1).map(r=>`<div style="background:#fff7ed;border:1px solid #f97316;border-radius:4px;padding:2px 5px;font-size:9px;font-weight:700;color:#c2410c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">⚡${r.horario} ${r.espaco.split(" ")[0]}${r.precisaFoto?" 📸":""}</div>`).join("")}
+          ${pend.slice(0,1).map(r=>`<div style="background:${c.amberBg};border:1px solid ${c.amberBorder};border-radius:4px;padding:2px 5px;font-size:9px;font-weight:700;color:${c.amber};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">⏳${r.horario} ${r.espaco.split(" ")[0]}${r.precisaFoto?" 📸":""}</div>`).join("")}
+          ${conf.slice(0,2).map(r=>`<div style="background:${c.greenBg};border:1px solid ${c.greenBorder};border-radius:4px;padding:2px 5px;font-size:9px;font-weight:600;color:${c.green};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.horario} ${r.espaco.split(" ")[0]}${r.precisaFoto?" 📸":""}${r.espaco==="Áudio/Visual"?" 🎙️":""}</div>`).join("")}
           ${rsdia.length>3?`<div style="font-size:9px;color:${c.blueMid};font-weight:700;padding-left:2px">+${rsdia.length-3} mais</div>`:""}
         </div>
       </div>`;
