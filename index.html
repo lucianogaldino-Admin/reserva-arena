@@ -413,30 +413,44 @@ function renderProfessorView(){
 
   let html=`<div>`;
 
-  // KPIs — só Pendentes e Esta Semana (Minhas Futuras vai no botão Agendar)
+  // KPIs removidos — substituídos pela linha de botões abaixo
   const semDias=Array.from({length:5},(_,i)=>addDias(getSegunda(h),i));
   const semCount=_minhas.filter(r=>semDias.includes(r.data)&&r.status!=="recusado").length;
-  const kpiData=[
-    {l:"Pendentes",v:pendentes.length,bg:"#fff7ed",col:"#7c2d12",click:"pFiltroRapido('pendente')"},
-    {l:"Esta semana",v:semCount,bg:"#e0e7ff",col:"#3730a3",click:"pFiltroRapido('semana')"}
-  ];
-  html+=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px">
-    ${kpiData.map(k=>`<div onclick="${k.click}" style="background:${k.bg};border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform .15s,box-shadow .15s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''"><p style="font-size:10px;font-weight:700;color:${k.col};text-transform:uppercase;margin-bottom:4px">${k.l}</p><p style="font-size:28px;font-weight:800;color:${k.col};line-height:1">${k.v}</p><p style="font-size:9px;color:${k.col};opacity:.6;margin-top:3px">toque para ver →</p></div>`).join("")}
-  </div>`;
 
   // Card principal
   html+=`<div style="background:${c.surface};border-radius:14px;border:1px solid ${c.border};overflow:hidden;margin-bottom:20px">`;
-  // Barra unificada
-  html+=`<div style="display:flex;gap:6px;align-items:center;padding:14px 14px 0;flex-wrap:wrap">
-    <div style="display:flex;background:${c.bg};border-radius:10px;padding:3px;border:1px solid ${c.border};gap:2px;flex-wrap:wrap">
-      <button onclick="pSetModoProf('ver');pSetGrade('meus')" style="padding:7px 14px;border-radius:8px;border:none;background:${_P.modoProf==='ver'&&_P.filtroGrade==='meus'?c.navy:'transparent'};color:${_P.modoProf==='ver'&&_P.filtroGrade==='meus'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">📅 Meus</button>
-      <button onclick="pSetModoProf('ver');pSetGrade('todos')" style="padding:7px 14px;border-radius:8px;border:none;background:${_P.modoProf==='ver'&&_P.filtroGrade==='todos'?c.navy:'transparent'};color:${_P.modoProf==='ver'&&_P.filtroGrade==='todos'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">🌐 Todos</button>
-      <button onclick="pSetModoProf('agendar')" style="padding:7px 14px;border-radius:8px;border:none;background:${_P.modoProf==='agendar'?'#1a6b47':'transparent'};color:${_P.modoProf==='agendar'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">＋ Agendar${futuras.length>0?` <span style='background:rgba(255,255,255,.25);border-radius:10px;padding:1px 7px;font-size:11px'>${futuras.length}</span>`:''}</button>
-    </div>
-    ${_P.modoProf==='ver'?`<div style="display:flex;background:${c.bg};border-radius:10px;padding:3px;border:1px solid ${c.border};gap:2px">
-      ${[{id:"calendario",l:"🗓 Cal."},{id:"lista",l:"☰ Agenda"}].map(o=>`<button onclick="pSetModo('${o.id}')" style="padding:7px 12px;border-radius:8px;border:none;background:${_P.modoCard===o.id?c.navy:'transparent'};color:${_P.modoCard===o.id?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">${o.l}</button>`).join("")}
-    </div>`:''}
+  // ── LINHA 1: Agendar | Pendentes | Próximos ──────────────────────────
+  html+=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 14px 0">
+    <button onclick="pSetModoProf('agendar')"
+      style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 8px;border-radius:12px;border:2px solid ${_P.modoProf==='agendar'?'#1a6b47':c.border};background:${_P.modoProf==='agendar'?'#1a6b47':c.surface};cursor:pointer;font-family:inherit;transition:all .15s">
+      <span style="font-size:20px">＋</span>
+      <span style="font-size:11px;font-weight:800;color:${_P.modoProf==='agendar'?'#fff':c.navy}">Agendar</span>
+    </button>
+    <button onclick="pFiltroRapido('pendente')"
+      style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 8px;border-radius:12px;border:2px solid ${pendentes.length>0?c.amberBorder:c.border};background:${pendentes.length>0?c.amberBg:c.surface};cursor:pointer;font-family:inherit;transition:all .15s">
+      <span style="font-size:20px;font-weight:800;color:${pendentes.length>0?c.amber:c.textMuted}">${pendentes.length}</span>
+      <span style="font-size:11px;font-weight:800;color:${pendentes.length>0?c.amber:c.textMuted}">⏳ Pendentes</span>
+    </button>
+    <button onclick="pFiltroRapido('proximos')"
+      style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 8px;border-radius:12px;border:2px solid ${c.border};background:${c.surface};cursor:pointer;font-family:inherit;transition:all .15s">
+      <span style="font-size:20px;font-weight:800;color:${c.blueMid}">${futuras.length}</span>
+      <span style="font-size:11px;font-weight:800;color:${c.blueMid}">📅 Próximos</span>
+    </button>
   </div>`;
+
+  `;
+  if(_P.modoProf!=='agendar'){
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0;gap:8px;flex-wrap:wrap">
+      <div style="display:flex;background:${c.bg};border-radius:10px;padding:3px;border:1px solid ${c.border};gap:2px">
+        <button onclick="pSetGrade('meus')" style="padding:6px 16px;border-radius:8px;border:none;background:${_P.filtroGrade==='meus'?c.navy:'transparent'};color:${_P.filtroGrade==='meus'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">Meus</button>
+        <button onclick="pSetGrade('todos')" style="padding:6px 16px;border-radius:8px;border:none;background:${_P.filtroGrade==='todos'?c.navy:'transparent'};color:${_P.filtroGrade==='todos'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">Todos</button>
+      </div>
+      <div style="display:flex;background:${c.bg};border-radius:10px;padding:3px;border:1px solid ${c.border};gap:2px">
+        <button onclick="pSetModo('calendario')" style="padding:6px 16px;border-radius:8px;border:none;background:${_P.modoCard==='calendario'?c.navy:'transparent'};color:${_P.modoCard==='calendario'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">🗓 Calendário</button>
+        <button onclick="pSetModo('lista')" style="padding:6px 16px;border-radius:8px;border:none;background:${_P.modoCard==='lista'?c.navy:'transparent'};color:${_P.modoCard==='lista'?'#fff':c.textMuted};font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">☰ Agenda</button>
+      </div>
+    </div>`;
+  }
 
   // Modo Agendar inline
   if(_P.modoProf==="agendar"){
@@ -520,6 +534,7 @@ function renderProfessorView(){
 
   if(_P.modoCard==="lista"){
     html+=`<div style="padding:14px">`;
+    html+=`<div id="lista-futuras"></div>`;
     if(!futuras.length)html+=`<p style="text-align:center;color:${c.textMuted};padding:32px 0;font-size:13px">Nenhum agendamento futuro.</p>`;
     // Banner de pendentes no topo da lista se houver
     if(pendentes.length&&_P.modoCard==='lista')html+=`<div data-filtro="pendente" style="background:${c.amberBg};border:1.5px solid ${c.amberBorder};border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">⏳</span><div><p style="font-size:12px;font-weight:800;color:${c.amber}">${pendentes.length} agendamento${pendentes.length!==1?"s":""} pendente${pendentes.length!==1?"s":""}</p><p style="font-size:11px;color:${c.amber};opacity:.8">Aguardando aprovação do administrador</p></div></div>`;
@@ -669,10 +684,12 @@ window.pSetModo=v=>{_P.modoCard=v;re();};
 window.pFiltroRapido=tipo=>{
   if(tipo==='pendente'){
     _P.modoProf='ver';_P.modoCard='lista';re();
-    // Destacar pendentes — scroll suave
     setTimeout(()=>{const el=document.querySelector('[data-filtro="pendente"]');if(el)el.scrollIntoView({behavior:'smooth'});},200);
   } else if(tipo==='semana'){
     _P.modoProf='ver';_P.modoCard='calendario';_P.modoVisu='semana';_P.semIni=getSegunda(fmtHoje());re();
+  } else if(tipo==='proximos'){
+    _P.modoProf='ver';_P.modoCard='lista';re();
+    setTimeout(()=>{const el=document.getElementById('lista-futuras');if(el)el.scrollIntoView({behavior:'smooth'});},200);
   }
 };
 window.pSetVisu=v=>{_P.modoVisu=v;re();};
