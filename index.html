@@ -1036,11 +1036,11 @@ function renderAdminView(){
   // Filtros
   html+=`<div style="background:${c.surface};border-radius:12px;border:1px solid ${c.border};padding:12px 16px;margin-bottom:20px">
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%">
-      <select onchange="_A.fEspaco=this.value;re()" style="${sel()};width:auto;font-size:12.5px;padding:6px 10px;flex:1;min-width:100px"><option value="">🏛️ Todos os espaços</option>${ESPACOS.map(e=>`<option value="${e.nome}" ${_A.fEspaco===e.nome?"selected":""}>${e.nome}</option>`).join("")}</select>
-      <select onchange="_A.fProf=this.value;re()" style="${sel()};width:auto;font-size:12.5px;padding:6px 10px;flex:1;min-width:100px"><option value="">👤 Todos os professores</option>${_usuarios.map(u=>`<option value="${u.nome}" ${_A.fProf===u.nome?"selected":""}>${u.nome}</option>`).join("")}</select>
-      <select onchange="_A.fStatus=this.value;re()" style="${sel()};width:auto;font-size:12.5px;padding:6px 10px;min-width:100px"><option value="">● Todos status</option><option value="confirmado" ${_A.fStatus==="confirmado"?"selected":""}>✅ Confirmado</option><option value="pendente" ${_A.fStatus==="pendente"?"selected":""}>⏳ Pendente</option><option value="recusado" ${_A.fStatus==="recusado"?"selected":""}>❌ Recusado</option></select>
-      ${_A.fEspaco||_A.fProf||_A.fStatus?`<button onclick="_A.fEspaco='';_A.fProf='';_A.fStatus='';re()" style="${btn("ghost")};padding:6px 12px;font-size:12px">✕ Limpar</button>`:""}
-      <button onclick="_A.historico=!_A.historico;re()" style="background:${_A.historico?c.navy:"transparent"};border:1.5px solid ${_A.historico?c.navy:c.border};border-radius:8px;color:${_A.historico?"#fff":c.textMuted};font-size:12px;padding:6px 12px;cursor:pointer;font-weight:600;white-space:nowrap;margin-left:auto">🕐 ${_A.historico?"Ocultar hist.":"Ver histórico"}</button>
+      <select id="adm-sel-espaco" style="${sel()};width:auto;font-size:12.5px;padding:6px 10px;flex:1;min-width:100px"><option value="">🏛️ Todos os espaços</option>${ESPACOS.map(e=>`<option value="${e.nome}" ${_A.fEspaco===e.nome?"selected":""}>${e.nome}</option>`).join("")}</select>
+      <select id="adm-sel-prof" style="${sel()};width:auto;font-size:12.5px;padding:6px 10px;flex:1;min-width:100px"><option value="">👤 Todos os professores</option>${_usuarios.map(u=>`<option value="${u.nome}" ${_A.fProf===u.nome?"selected":""}>${u.nome}</option>`).join("")}</select>
+      <select id="adm-sel-status" style="${sel()};width:auto;font-size:12.5px;padding:6px 10px;min-width:100px"><option value="">● Todos status</option><option value="confirmado" ${_A.fStatus==="confirmado"?"selected":""}>✅ Confirmado</option><option value="pendente" ${_A.fStatus==="pendente"?"selected":""}>⏳ Pendente</option><option value="recusado" ${_A.fStatus==="recusado"?"selected":""}>❌ Recusado</option></select>
+      ${_A.fEspaco||_A.fProf||_A.fStatus?`<button id="adm-btn-limpar" style="${btn("ghost")};padding:6px 12px;font-size:12px">✕ Limpar</button>`:""}
+      <button id="adm-btn-hist" style="background:${_A.historico?c.navy:"transparent"};border:1.5px solid ${_A.historico?c.navy:c.border};border-radius:8px;color:${_A.historico?"#fff":c.textMuted};font-size:12px;padding:6px 12px;cursor:pointer;font-weight:600;white-space:nowrap;margin-left:auto">🕐 ${_A.historico?"Ocultar hist.":"Ver histórico"}</button>
     </div>
   </div>`;
 
@@ -1221,7 +1221,19 @@ function admRow(r,showDate=false){
 }
 
 function bindAdmin(){
-  // Admin usa re() globalmente
+  // Bind selects de filtro via addEventListener
+  setTimeout(()=>{
+    const se=document.getElementById("adm-sel-espaco");
+    const sp=document.getElementById("adm-sel-prof");
+    const ss=document.getElementById("adm-sel-status");
+    const bl=document.getElementById("adm-btn-limpar");
+    const bh=document.getElementById("adm-btn-hist");
+    if(se)se.addEventListener("change",e=>{_A.fEspaco=e.target.value;re();});
+    if(sp)sp.addEventListener("change",e=>{_A.fProf=e.target.value;re();});
+    if(ss)ss.addEventListener("change",e=>{_A.fStatus=e.target.value;re();});
+    if(bl)bl.addEventListener("click",()=>{_A.fEspaco="";_A.fProf="";_A.fStatus="";re();});
+    if(bh)bh.addEventListener("click",()=>{_A.historico=!_A.historico;re();});
+  },50);
 }
 
 // Tooltip do dia no admin
