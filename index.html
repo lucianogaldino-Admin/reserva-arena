@@ -486,7 +486,9 @@ function renderProfessorView(){
   let html=`<div>`;
 
   // KPIs removidos — substituídos pela linha de botões abaixo
-  const semDias=Array.from({length:5},(_,i)=>addDias(getSegunda(h),i));
+  // Próximos 5 dias letivos para KPI
+  const semDias=[];let _sd=h;
+  while(semDias.length<5){const _dw=new Date(_sd+"T12:00:00").getDay();if(_dw!==0&&_dw!==6&&isDiaLetivo(_sd))semDias.push(_sd);_sd=addDias(_sd,1);if(semDias.length===0&&_sd>addDias(h,30))break;}
   const semCount=fonteBase.filter(r=>semDias.includes(r.data)&&r.status!=="recusado").length;
 
   // Card principal
@@ -534,13 +536,15 @@ function renderProfessorView(){
     // Banner verde
     html+=`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:#1a6b47;margin-top:10px">`;
     if(_P.modoVisu==="semana"){
-      const fim=addDias(_P.semIni,4);
-      const[,ma,da]=_P.semIni.split("-");const[,mb,db]=fim.split("-");
+      // Range dinâmico baseado nos dias letivos exibidos
+      const _d0=h,_d4=addDias(h,14); // busca nos próximos 14 dias
+      const _dlRange=[];let _dc=h;
+      while(_dlRange.length<5&&_dc<=_d4){const _dw=new Date(_dc+"T12:00:00").getDay();if(_dw!==0&&_dw!==6&&isDiaLetivo(_dc))_dlRange.push(_dc);_dc=addDias(_dc,1);}
+      const fim=_dlRange[_dlRange.length-1]||addDias(h,4);
+      const[,ma,da]=h.split("-");const[,mb,db]=fim.split("-");
       const rng=ma===mb?`${da}-${db}/${mb}`:`${da}/${ma}-${db}/${mb}`;
       html+=`<div style="display:flex;align-items:center;gap:6px">
-        <button onclick="pNavSem(-1)" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:7px;color:#fff;font-size:15px;width:30px;height:30px;cursor:pointer">‹</button>
-        <p style="font-size:12px;font-weight:700;color:#fff;min-width:72px;text-align:center">${rng}</p>
-        <button onclick="pNavSem(1)" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:7px;color:#fff;font-size:15px;width:30px;height:30px;cursor:pointer">›</button>
+        <p style="font-size:12px;font-weight:700;color:#fff;min-width:72px;text-align:center">📅 ${rng}</p>
       </div>`;
     }
     html+=`<div style="display:flex;background:rgba(0,0,0,.18);border-radius:8px;padding:2px">
@@ -559,8 +563,22 @@ function renderProfessorView(){
     const fonte=_todas.filter(r=>r?.professor&&r?.status!=="recusado"&&(_P.filtroGrade==="meus"?ehMeu(r):true)&&(!_P.filtroEspaco||r.espaco===_P.filtroEspaco));
 
     if(_P.modoVisu==="semana"){
-      const dias=Array.from({length:5},(_,i)=>addDias(_P.semIni,i));
-      const nomes=["Seg.","Ter.","Qua.","Qui.","Sex."];
+      // Mostrar hoje + próximos 4 dias letivos
+      const diasLetivos=[];
+      let dCursor=h;
+      while(diasLetivos.length<5){
+        const dow=new Date(dCursor+"T12:00:00").getDay();
+        if(dow!==0&&dow!==6&&isDiaLetivo(dCursor))diasLetivos.push(dCursor);
+        else if(dow===0||dow===6||!isDiaLetivo(dCursor)){
+          // pula
+        }
+        dCursor=addDias(dCursor,1);
+        if(diasLetivos.length===0&&dCursor>addDias(h,30))break; // safety
+      }
+      // Completar se necessário
+      while(diasLetivos.length<5)diasLetivos.push(addDias(diasLetivos[diasLetivos.length-1],1));
+      const dias=diasLetivos;
+      const nomes=dias.map(d=>{const dow=new Date(d+"T12:00:00").getDay();return["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"][dow]+"."});
       html+=`<div style="display:grid;grid-template-columns:repeat(5,minmax(100px,1fr));gap:4px;padding:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%">`;
       dias.forEach((d,i)=>{
         const[,,dia]=d.split("-");const isH=d===h;
