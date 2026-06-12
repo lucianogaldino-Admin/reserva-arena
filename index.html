@@ -89,8 +89,8 @@ const ADMIN_EMAIL = "luciano.galdino@colegioarena.com.br";
 const HORARIOS    = ["07:10","08:00","09:10","10:00","11:10","12:00","12:50","13:40","14:30","15:20","16:10","17:00"];
 const ESPACOS     = [
   {id:1, nome:"Biblioteca",                     tipo:"espaco"},
-  {id:2, nome:"Maker A. Iniciais",              tipo:"espaco"},
-  {id:3, nome:"Maker A. Finais",                tipo:"espaco"},
+  {id:2, nome:"Maker 1",              tipo:"espaco"},
+  {id:3, nome:"Maker 2",                tipo:"espaco"},
   {id:4, nome:"Ateliê de Artes",                tipo:"espaco"},
   {id:5, nome:"Sala de Dança",                  tipo:"espaco"},
   {id:6, nome:"Sala Multifuncional",            tipo:"espaco"},
@@ -193,8 +193,8 @@ function getSegunda(s){
 }
 const ESPACO_ICON={
   "Biblioteca":"📚",
-  "Maker A. Iniciais":"🔧",
-  "Maker A. Finais":"🤖",
+  "Maker 1":"🔧",
+  "Maker 2":"🤖",
   "Ateliê de Artes":"🎨",
   "Sala de Dança":"💃",
   "Sala Multifuncional":"🖥️📖",
@@ -756,14 +756,16 @@ function renderProfAgendar(){
   if(m.step===3){
     html+=`<div style="background:linear-gradient(135deg,#1a6b47,#0f4c2b);padding:10px 14px;border-radius:10px;margin-bottom:14px"><p style="font-size:11px;color:rgba(255,255,255,.7);font-weight:700;text-transform:uppercase;margin-bottom:2px">Agendando em</p><p style="font-size:14px;font-weight:800;color:#fff">${tipoIcon(ESPACOS.find(e=>e.nome===m.espaco)?.tipo,m.espaco)} ${m.espaco} · ${m.data.split("-").reverse().join("/")}</p></div>`;
     if(isDiaUrgente(m.data))html+=alertHTML("warning","⚠️ Menos de 24h de antecedência. Contate o T.E. para garantir disponibilidade.");
-      if(m.espaco==="Biblioteca"){
+      const _espacosComAV=["Biblioteca","Sala Multifuncional","Sala de Dança","Ateliê de Artes"];
+      if(_espacosComAV.includes(m.espaco)){
         html+=`<div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:10px;padding:12px 14px;margin-bottom:14px">
-          <p style="font-size:13px;font-weight:800;color:#0369a1;margin-bottom:8px">🎙️ Precisa de Áudio/Visual na Biblioteca?</p>
+          <p style="font-size:13px;font-weight:800;color:#0369a1;margin-bottom:8px">🎙️ Precisa de equipamentos de Áudio/Visual?</p>
+          <p style="font-size:11px;color:#64748b;margin-bottom:8px">Microfone, caixa de som ou projetor para a aula.</p>
           <div style="display:flex;gap:8px;margin-bottom:6px">
             <button onclick="setBibAV(true)" style="flex:1;padding:9px;border-radius:8px;border:2px solid ${_MA.bibAV===true?'#0369a1':'#bae6fd'};background:${_MA.bibAV===true?'#e0f2fe':'#fff'};font-weight:700;font-size:13px;cursor:pointer;color:#0369a1">✓ Sim</button>
             <button onclick="setBibAV(false)" style="flex:1;padding:9px;border-radius:8px;border:2px solid ${_MA.bibAV===false?'#64748b':'#e2e8f0'};background:${_MA.bibAV===false?'#f1f5f9':'#fff'};font-weight:700;font-size:13px;cursor:pointer;color:#64748b">✕ Não</button>
           </div>
-          ${_MA.bibAV===true?"<p style=\"font-size:11px;color:#0369a1\">O Áudio/Visual será agendado automaticamente no mesmo horário.</p>":""}
+          ${_MA.bibAV===true?"<p style=\"font-size:11px;color:#0369a1\">O Áudio/Visual será agendado automaticamente no mesmo horário, se disponível.</p>":""}
         </div>`;
       }
     m.blocos.forEach((b,i)=>{html+=maBlocoHTML(b,i);});
@@ -925,12 +927,13 @@ function maBlocoHTML(b,i){
       <div><label style="font-size:12px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Turma *</label><br><select onchange="maSetBlocoRe(${i},'turma',this.value)" style="${sel()};margin-top:5px"><option value="">Selecione...</option><optgroup label="Anos Iniciais">${TURMAS.filter(t=>parseInt(t)<=5).map(t=>`<option ${b.turma===t?"selected":""}>${t}</option>`).join("")}</optgroup><optgroup label="Anos Finais">${TURMAS.filter(t=>parseInt(t)>=6).map(t=>`<option ${b.turma===t?"selected":""}>${t}</option>`).join("")}</optgroup></select></div>
       <div><label style="font-size:12px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Conteúdo da Aula *</label><br><textarea oninput="maSetBlocoRe(${i},'conteudo',this.value)" rows="2" placeholder="Descreva o conteúdo..." style="${inp()};resize:vertical;line-height:1.6;margin-top:5px">${b.conteudo}</textarea></div>
       <div><label style="font-size:12px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Páginas do Livro</label><br><input value="${b.paginas}" oninput="maSetBlocoRe(${i},'paginas',this.value)" placeholder="Ex: pp. 45-62" style="${inp()};margin-top:5px"></div>
+      ${(m.espaco==="Maker 1"||m.espaco==="Maker 2")?`<div><label style="font-size:12px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Tipo de Atividade *</label><br><select oninput="maSetBlocoRe(${i},'tipoAtividade',this.value)" style="${inp()};margin-top:5px"><option value="">Selecione...</option><option value="Nave a Vela" ${b.tipoAtividade==="Nave a Vela"?"selected":""}>🚀 Nave a Vela</option><option value="Outros" ${b.tipoAtividade==="Outros"?"selected":""}>📋 Outros</option></select></div>`:""}
       ${m.espaco==="Fazendinha"?`<div><label style="font-size:12px;font-weight:700;color:${c.textMuted};text-transform:uppercase">Observações</label><br><textarea oninput="maSetBlocoRe(${i},'observacoes',this.value)" rows="2" placeholder="Ex: Piquenique, área sombreada necessária..." style="${inp()};resize:none;margin-top:5px">${b.observacoes||""}</textarea></div>`:""}
       ${m.espaco==="Sala Multifuncional"?`<div style="background:${c.bg};border-radius:10px;padding:12px;border:1px solid ${c.border};display:grid;gap:10px">
         <p style="font-size:12px;font-weight:700;color:${c.navy}">💻 Equipamentos para a aula</p>
         <p style="font-size:11px;color:${c.textMuted}">Se precisar de tablets ou notebooks, selecione abaixo. A reserva será feita automaticamente.</p>
         <div style="display:grid;gap:8px">
-          ${[{k:"multTablets",l:"📱 Tablets",max:18},{k:"multNotebooks",l:"💻 Notebooks",max:16}].map(eq=>`
+          ${[{k:"multTablets",l:"📱 Tablets",max:18},{k:"multNotebooks",l:"💻 Notebooks",max:16},{k:"multProjetor",l:"📽️ Projetor",max:3}].map(eq=>`
             <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${c.surface};border-radius:8px;border:1.5px solid ${b[eq.k]>0?c.blueMid:c.border}">
               <span style="font-size:16px">${eq.l.split(" ")[0]}</span>
               <div style="flex:1">
@@ -982,11 +985,12 @@ function renderMAResumo(){
     if(Number(b.quantidade)>0)extras.push("📦 "+b.quantidade+" un.");
     if(Number(b.multTablets)>0)extras.push("📱 "+b.multTablets+" tablet"+(b.multTablets>1?"s":""));
     if(Number(b.multNotebooks)>0)extras.push("💻 "+b.multNotebooks+" notebook"+(b.multNotebooks>1?"s":""));
+    if(Number(b.multProjetor)>0)extras.push("📽️ "+b.multProjetor+" projetor"+(b.multProjetor>1?"es":""));
     if(Number(b.microfones)>0)extras.push("🎤 "+b.microfones+" mic.");
     if(Number(b.caixasom)>0)extras.push("🔊 "+b.caixasom+" caixa");
     if(Number(b.projetor)>0)extras.push("📽️ "+b.projetor+" proj.");
     if(b.localMontagem)extras.push("📍 "+b.localMontagem);
-    if(b.observacoes)extras.push("💬 "+b.observacoes);
+    if(b.tipoAtividade)extras.push("🏷️ "+b.tipoAtividade);    if(b.observacoes)extras.push("💬 "+b.observacoes);
     if(b.precisaFoto)extras.push("📸 Fotógrafo solicitado");
     html+=`<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:${c.surface};border:1px solid ${isUrg?"#fed7aa":c.border};border-radius:8px;border-left:3px solid ${isUrg?"#f97316":"#40b07a"}">
       <div style="min-width:42px"><span style="font-family:'DM Mono',monospace;font-weight:800;color:${isUrg?"#c2410c":"#40b07a"};font-size:13px">${b.horario}</span>${isUrg?`<p style="font-size:9px;color:#c2410c;font-weight:700">urgente</p>`:""}</div>
@@ -1075,7 +1079,7 @@ window.maSalvar=async()=>{
       const dow=new Date(Date.UTC(a,m-1,d)).getUTCDay();
       const st=(urg||dow===0||dow===6)?"pendente":"confirmado";
       if(st==="pendente")algPend=true;
-      await addDoc(collection(db,"reservas"),{professor:_usuario.nome,professorId:_usuario.uid,professorEmail:_usuario.email,turma:b.turma,espaco,data,horario:b.horario,conteudo:b.conteudo,paginas:b.paginas||"",laboratorista:b.laboratorista||"",quantidade:eo?.tipo==="equipamento"?Number(b.quantidade):null,status:st,criadoEm:Timestamp.now(),precisaFoto:b.precisaFoto||false,observacoes:b.observacoes||"",localMontagem:b.localMontagem||"",microfones:Number(b.microfones)||0,caixasom:Number(b.caixasom)||0,projetor:Number(b.projetor)||0,multTablets:Number(b.multTablets)||0,multNotebooks:Number(b.multNotebooks)||0});
+      await addDoc(collection(db,"reservas"),{professor:_usuario.nome,professorId:_usuario.uid,professorEmail:_usuario.email,turma:b.turma,espaco,data,horario:b.horario,conteudo:b.conteudo,paginas:b.paginas||"",laboratorista:b.laboratorista||"",quantidade:eo?.tipo==="equipamento"?Number(b.quantidade):null,status:st,criadoEm:Timestamp.now(),precisaFoto:b.precisaFoto||false,observacoes:b.observacoes||"",localMontagem:b.localMontagem||"",microfones:Number(b.microfones)||0,caixasom:Number(b.caixasom)||0,projetor:Number(b.projetor)||0,multTablets:Number(b.multTablets)||0,multNotebooks:Number(b.multNotebooks)||0,multProjetor:Number(b.multProjetor)||0,tipoAtividade:b.tipoAtividade||""});
     }
     // Sala Multifuncional: criar reservas automáticas de tablets/notebooks
     if(espaco==="Sala Multifuncional"){
@@ -1107,7 +1111,7 @@ window.maSalvar=async()=>{
       }
     }
     // Biblioteca + bibAV=true: criar reserva de A/V no mesmo horário
-    if(espaco==="Biblioteca"&&_MA.bibAV===true){
+    if(["Biblioteca","Sala Multifuncional","Sala de Dança","Ateliê de Artes"].includes(espaco)&&_MA.bibAV===true){
       for(const b of blocos){
         const avSnap=await getDocs(query(collection(db,"reservas"),where("espaco","==","Áudio/Visual"),where("data","==",data),where("horario","==",b.horario)));
         const avOcup=avSnap.docs.find(d=>d.data()?.status!=="recusado");
